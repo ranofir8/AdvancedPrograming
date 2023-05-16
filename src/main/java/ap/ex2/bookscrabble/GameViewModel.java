@@ -8,4 +8,8 @@ public class GameViewModel extends Observable implements ViewModel {
         this.myModel = myModel;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        //To-Do
+    }
 }

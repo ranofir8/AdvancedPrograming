@@ -12,10 +12,14 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         // this will contain the code
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+        // first screen: choose which type of game
+        // 1. host a new game 2. join exist game
+        // HostModel
 
-        GameViewModel gvm = fxmlLoader.getController();
-        gvm.set
+        GameModel gm = new GameModel();
+        GameViewModel gvm = new GameViewModel(gm);
+        GameView gv = fxmlLoader.getController();
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
@@ -23,6 +27,8 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
+
+
         launch();
     }
 }
