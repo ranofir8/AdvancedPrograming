@@ -13,6 +13,10 @@ public class HelloApplication extends Application {
         // this will contain the code
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+
+        GameViewModel gvm = fxmlLoader.getController();
+        gvm.set
+
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
