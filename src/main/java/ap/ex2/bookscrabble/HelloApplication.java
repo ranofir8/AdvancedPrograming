@@ -20,6 +20,7 @@ public class HelloApplication extends Application {
         GameModel gm = new GameModel();
         GameViewModel gvm = new GameViewModel(gm);
         GameView gv = fxmlLoader.getController();
+        gv.setStage(stage);
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
