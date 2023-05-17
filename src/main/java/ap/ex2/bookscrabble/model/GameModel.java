@@ -1,5 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.scrabble.Player;
+
 import java.net.Socket;
 import java.util.Observable;
 

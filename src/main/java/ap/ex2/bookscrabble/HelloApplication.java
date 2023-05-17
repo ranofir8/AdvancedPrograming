@@ -18,7 +18,8 @@ public class HelloApplication extends Application {
         // 1. host a new game 2. join exist game
         // HostModel
 
-        GameModel gm = new GameModel();
+        GameModel gm = null;
+        //new GameModel()
         GameViewModel gvm = new GameViewModel(gm);
         GameView gv = fxmlLoader.getController();
         gv.setStage(stage);

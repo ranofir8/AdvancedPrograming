@@ -16,7 +16,7 @@ public class HostGameModel extends GameModel {
     public HostGameModel(int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
         this.hostServer = new GenericServer(hostPort, new HostGameHandler(), 4);
-        new ServerSocket(this.port)
+        new ServerSocket(this.port);
     }
 
     public void startHostServer() {
