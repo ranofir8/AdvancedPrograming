@@ -23,8 +23,8 @@ public class Board {
 		}
 	}
 	
-	private static final int COL_NUM = 15;
-	private static final int ROW_NUM = 15;
+	public static final int COL_NUM = 15;
+	public static final int ROW_NUM = 15;
 	
 	// multipliers[col][row], \/	->
 	private static final Multiplier[][] multipliers = Board.generateMultipliers();
@@ -46,7 +46,7 @@ public class Board {
 		m[0][0] = m[3][3] = m[4][4] = m[5][5] = m[6][6] = new Multiplier(2, true);
 		
 		// double word score
-		m[7][0] = m[0][7] = new Multiplier(3, true);
+		m[7][7] = m[7][0] = m[0][7] = new Multiplier(3, true);
 		
 		// double letter score
 		m[4][0] = m[1][1] = m[5][1] = m[7][4] = new Multiplier(2, false);
@@ -55,6 +55,11 @@ public class Board {
 		m[2][2] = m[6][2] = new Multiplier(3, false);
 		
 		return m;
+	}
+
+	public int getMultiplierAtInt(int row, int col) {
+		Multiplier mult = this.getMultiplierAt(row, col);
+		return mult.multiplyLetterBy + mult.multiplyWordBy * 10;
 	}
 
 	public Tile[][] getTiles() {

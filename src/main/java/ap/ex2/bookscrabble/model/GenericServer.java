@@ -43,7 +43,7 @@ public class GenericServer {
             while (!this.stop) {
                 try {
                     Socket client = server.accept();
-                    ClientHandler newHandler = ap.ex2.BookScrabbleServer.GenericServer.cloneHandler(this.ch);
+                    ClientHandler newHandler = GenericServer.cloneHandler(this.ch);
 
                     if (newHandler != null) {
                         Runnable r = () -> {
