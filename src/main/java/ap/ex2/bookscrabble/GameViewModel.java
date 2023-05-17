@@ -1,5 +1,7 @@
 package ap.ex2.bookscrabble;
 
+import ap.ex2.bookscrabble.model.Model;
+
 import java.util.Observable;
 
 public class GameViewModel extends Observable implements ViewModel {

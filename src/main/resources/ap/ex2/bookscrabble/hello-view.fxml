@@ -15,9 +15,9 @@
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
     <center>
-        <VBox alignment="CENTER" prefHeight="792.0" prefWidth="898.0" style="-fx-background-image: url('C:\Users\savorag\2.jpg');" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" prefHeight="792.0" prefWidth="898.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" text="Welcome to Scrabble Book!! " textAlignment="CENTER" textFill="#4eb9c3">
+                <Label alignment="CENTER" text="Welcome to Book Scrabble!! " textAlignment="CENTER" textFill="#4eb9c3">
                     <font>
                         <Font size="50.0" />
                     </font></Label>

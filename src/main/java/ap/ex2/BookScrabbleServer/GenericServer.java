@@ -10,7 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MyServer {
+public class GenericServer {
     private final int port;
     private final ClientHandler ch;
     private int threadsLimit;
@@ -19,7 +19,7 @@ public class MyServer {
 
     private ExecutorService es;
 
-    public MyServer(int port, ClientHandler ch, int threadsLimit) {
+    public GenericServer(int port, ClientHandler ch, int threadsLimit) {
         this.port = port;
         this.ch = ch;
         this.threadsLimit = threadsLimit;
@@ -42,7 +42,7 @@ public class MyServer {
             while (!this.stop) {
                 try {
                     Socket client = server.accept();
-                    ClientHandler newHandler = MyServer.cloneHandler(this.ch);
+                    ClientHandler newHandler = GenericServer.cloneHandler(this.ch);
 
                     if (newHandler != null) {
                         Runnable r = () -> {

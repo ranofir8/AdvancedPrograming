@@ -1,4 +1,4 @@
-package ap.ex2.bookscrabble;
+package ap.ex2.bookscrabble.model;
 
 import java.util.Observable;
 import java.util.Observer;

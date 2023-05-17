@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble;
 
+import ap.ex2.bookscrabble.model.GameModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
