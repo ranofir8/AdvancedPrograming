@@ -6,6 +6,7 @@ import ap.ex2.BookScrabbleServer.GenericServer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.Observable;
 
 public class HostGameModel extends GameModel {
     private BookScrabbleClient myBookScrabbleClient;
@@ -15,14 +16,17 @@ public class HostGameModel extends GameModel {
 
     public HostGameModel(int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
-        this.hostServer = new GenericServer(hostPort, new HostGameHandler(), 4);
+        this.hostServer = new GenericServer(hostPort, null, 4);
 
     }
 
     public void startHostServer() {
-        GenericServer s =new GenericServer(port, new BookScrabbleHandler(),1);
+
     }
 
 
+    @Override
+    public void update(Observable o, Object arg) {
 
+    }
 }
