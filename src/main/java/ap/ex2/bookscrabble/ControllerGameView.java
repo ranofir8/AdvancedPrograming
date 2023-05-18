@@ -55,7 +55,9 @@ public class ControllerGameView extends View {
             throw new RuntimeException(e);
         }
         isHost.set(false); //transmitted to vm and m(?)
-        System.out.println("join");
+        setChanged();
+        notifyObservers(false);
+        //System.out.println("join");
     }
 
     public void setStage(Stage stage) {
@@ -88,7 +90,9 @@ public class ControllerGameView extends View {
         }
         isHost.set(true); //transmitted to vm and m(?)
         myPort.set(new Random().nextInt(10000));
-        System.out.println("host");
+        setChanged();
+        notifyObservers(false);
+        //System.out.println("host");
     }
 
     @FXML

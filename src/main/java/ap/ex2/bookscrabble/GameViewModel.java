@@ -16,15 +16,17 @@ public class GameViewModel extends Observable implements ViewModel {
         this.myModel = myModel;
         this.isHost = new SimpleBooleanProperty();
         this.isHost.addListener((o,ov,nv)->myModel.isHost=(boolean)nv);
-        if(this.isHost.get()) {
-            this.myPort = new SimpleIntegerProperty();
-            this.myPort.addListener((o,ov,nv) -> myModel.myPort=(int)nv);
-        }
+        this.myPort = new SimpleIntegerProperty();
+        this.myPort.addListener((ob,ov,nv) -> myModel.myPort=(int)nv);
+
         //notify the observer (the model) that we are ready to start a game?
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        //To-Do
+        System.out.println(o+" "+arg);
+        if(this.isHost.get()) {
+           int x=0;//change
+        }
     }
 }
