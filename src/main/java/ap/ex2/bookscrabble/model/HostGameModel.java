@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Observable;
 
 public class HostGameModel extends GameModel {
-    private BookScrabbleClient myBookScrabbleClient;
+    private BookScrabbleClient myBookScrabbleClient; //Client for
 
     private GenericServer hostServer;
     private List<Socket> guestSockets;
