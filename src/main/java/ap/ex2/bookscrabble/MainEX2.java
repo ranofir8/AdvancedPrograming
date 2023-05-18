@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Observable;
 
 public class MainEX2 extends Application {
     @Override
@@ -18,10 +19,17 @@ public class MainEX2 extends Application {
         // 1. host a new game 2. join exist game
         // HostModel
 
-        GameModel gm = null;
+        GameModel gm = new GameModel() {
+            @Override
+            public void update(Observable o, Object arg) {
+
+            }
+        };
+
         //new GameModel()
         GameViewModel gvm = new GameViewModel(gm);
         ControllerGameView gv = fxmlLoader.getController();
+        gv.init(gvm);
         gv.setStage(stage);
 
         stage.setTitle("Hello!");

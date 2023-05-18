@@ -6,6 +6,9 @@ import java.util.Observable;
 public abstract class GameModel extends Model {
     protected GameInstance gi;
     //protected Socket outSocket; //both have sockets but with different usage
+    public GameModel() {
+
+    }
     @Override
     public abstract void update(Observable o, Object arg);
 }
