@@ -1,29 +1,44 @@
 package ap.ex2.bookscrabble;
 
 import ap.ex2.scrabble.Board;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
 
-public class GameView extends View {
-    public TextField joinGameIP;
-    public TextField joinGamePort;
+public class ControllerGameView extends View {
+    public TextField joinGameIP; //for guest
+    public TextField joinGamePort; //for guest
+    private BooleanProperty isHost;
+    private IntegerProperty myPort; //for host
+
+    GameViewModel gvm;
 
     @FXML
     private Stage stage;
     private final static String SCENE_HELLO_FXML = "hello-view.fxml";
     private final static String SCENE_GAME_FXML = "game-view.fxml";
-
+    public ControllerGameView() {
+        myPort = new SimpleIntegerProperty();
+        isHost = new SimpleBooleanProperty();
+    }
+    public void init(GameViewModel gvm) {
+        this.gvm=gvm;
+        gvm.isHost.bind(isHost);
+        gvm.myPort.bind(myPort);
+    }
 
     /**
      * @author Ran Ofir
@@ -39,7 +54,7 @@ public class GameView extends View {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        isHost.set(false); //transmitted to vm and m(?)
         System.out.println("join");
     }
 
@@ -71,6 +86,8 @@ public class GameView extends View {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        isHost.set(true); //transmitted to vm and m(?)
+        myPort.set(new Random().nextInt(10000));
         System.out.println("host");
     }
 
