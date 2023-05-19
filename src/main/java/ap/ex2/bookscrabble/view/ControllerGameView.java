@@ -1,6 +1,9 @@
 package ap.ex2.bookscrabble.view;
 
 import ap.ex2.scrabble.Board;
+import ap.ex2.scrabble.Tile;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -64,11 +67,12 @@ public class ControllerGameView extends GameView implements Initializable {
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
-        Board b = new Board();
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
-
+        //fill board with words for test:
+        test_ControllerGameView t_board = new test_ControllerGameView();
+        t_board.testBoard(b);
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
@@ -96,6 +100,10 @@ public class ControllerGameView extends GameView implements Initializable {
                 gc.setFill(toFill);
                 gc.fillRect(row * square, col * square, square, square);
                 gc.strokeRect(row * square, col * square, square, square);
+                Tile t = b.getTileAt(row,col);
+                if(t != null) {
+                    gc.fillText(""+t.letter,col*square+10,row*square-10);
+                }
             }
         }
 
