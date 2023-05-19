@@ -71,7 +71,7 @@ public class Board {
 	}
 	
 	// returns the tile at the specified position
-	private Tile getTileAt(int row, int col) {
+	public Tile getTileAt(int row, int col) {
 		if (0 > row || row >= Board.ROW_NUM)
 			return null;
 		if (0 > col || col >= Board.COL_NUM)

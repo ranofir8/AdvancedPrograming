@@ -6,6 +6,7 @@ import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import ap.ex2.bookscrabble.viewModel.ViewModel;
 import ap.ex2.scrabble.Board;
+import ap.ex2.scrabble.Tile;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -33,6 +34,8 @@ public class ControllerGameView implements View, Initializable {
     private GameViewModel gameViewModel;
     public BooleanProperty isHost;
 
+    Board b;
+
     @FXML
     private Stage stage;
     @FXML
@@ -44,6 +47,8 @@ public class ControllerGameView implements View, Initializable {
     public ControllerGameView() {
         System.out.println("controller createed");
         this.isHost = new SimpleBooleanProperty();
+        b = new Board();
+
     }
 
     public void setGameViewModel(GameViewModel gvm) {
@@ -129,11 +134,12 @@ public class ControllerGameView implements View, Initializable {
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
-        Board b = new Board();
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
-
+        //fill board with words for test:
+        test_ControllerGameView t_board = new test_ControllerGameView();
+        t_board.testBoard(b);
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
@@ -161,6 +167,10 @@ public class ControllerGameView implements View, Initializable {
                 gc.setFill(toFill);
                 gc.fillRect(row * square, col * square, square, square);
                 gc.strokeRect(row * square, col * square, square, square);
+                Tile t = b.getTileAt(row,col);
+                if(t != null) {
+                    gc.fillText(""+t.letter,col*square+10,row*square-10);
+                }
             }
         }
 
