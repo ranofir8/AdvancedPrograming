@@ -67,7 +67,7 @@ public class ControllerGameView extends GameView implements Initializable {
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
-
+        Board b = new Board();
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
         //fill board with words for test:
