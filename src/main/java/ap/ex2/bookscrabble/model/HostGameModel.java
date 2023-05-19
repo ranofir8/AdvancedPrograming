@@ -18,11 +18,12 @@ import java.util.Observable;
 
 public class HostGameModel extends GameModel {
     private BookScrabbleClient myBookScrabbleClient; //for Client
-
-    private GenericServer hostServer;
+    private int hostPort;
+    private Socket hostSocket;
     private List<Socket> guestSockets;
 
-    public HostGameModel(int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
+    public HostGameModel(int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) { //String configFileName
+        this.hostPort = hostPort;
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
     }
 

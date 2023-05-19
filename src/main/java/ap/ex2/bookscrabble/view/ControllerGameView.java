@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Observable;
-import java.util.Random;
 
 public class ControllerGameView implements View {
     public TextField joinGameIP; //for guest
@@ -63,7 +62,6 @@ public class ControllerGameView implements View {
     }
 
     /**
-     * @author Gilad, Ran
      * @param sceneFXML the relevant scene (FXML window) to change to
      */
     private void switchToScene(String sceneFXML) {

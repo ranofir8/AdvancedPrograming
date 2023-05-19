@@ -29,8 +29,14 @@ public class HelloApplication extends Application {
         MainScreenModel gm = new MyMainScreenModel(configsFN);
         GameViewModel gvm = new GameViewModel(gm);
         ControllerGameView gv = fxmlLoader.getController();
-        gv.init(gvm);
+
+        gv.initBind(gvm);
         gv.setStage(stage);
+
+        gm.addObserver(gvm);
+        gvm.addObserver(gv);
+
+
 
 
         stage.setTitle("Hello!");

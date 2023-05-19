@@ -1,11 +1,10 @@
 package ap.ex2.bookscrabble.viewModel;
 
+import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.model.MainScreenModel;
-import ap.ex2.bookscrabble.view.guiMessage;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import ap.ex2.bookscrabble.common.guiMessage;
+import javafx.beans.property.*;
+import javafx.scene.control.Alert;
 
 import java.util.Observable;
 
@@ -14,7 +13,8 @@ public class GameViewModel extends ViewModel {
 
     // creating/joining game
     public BooleanProperty isHost;
-    public IntegerProperty hostPort;
+    public StringProperty hostPort;
+    public StringProperty hostIP;
 
     public GameViewModel(MainScreenModel myModel) {
         this.myModel = myModel;
