@@ -34,7 +34,7 @@ public class ControllerGameView implements View {
     @FXML
     private Stage stage;
     @FXML
-    private Label myLabel;
+    private Label portNum;
 
     private final static String SCENE_HELLO_FXML = "hello-view.fxml";
     private final static String SCENE_GAME_FXML = "game-view.fxml";
