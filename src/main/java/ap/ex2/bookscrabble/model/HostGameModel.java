@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Observable;
 
 public class HostGameModel extends GameModel {
-    private BookScrabbleClient myBookScrabbleClient; //Client for
+    private BookScrabbleClient myBookScrabbleClient; //for Client
 
     private GenericServer hostServer;
     private List<Socket> guestSockets;
@@ -30,11 +30,6 @@ public class HostGameModel extends GameModel {
     public void startHostServer() {
     }
 
-
-    @Override
-    public void update(Observable o, Object arg) {
-        // todo
-    }
 
     static class HostGameHandler implements ClientHandler {
     // todo in seperate file

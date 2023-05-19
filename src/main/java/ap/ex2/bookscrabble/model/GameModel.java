@@ -5,7 +5,14 @@ import java.util.Observable;
 
 public abstract class GameModel extends Model {
     protected GameInstance gi;
+
+    public int myPort;
+
     //protected Socket outSocket; //both have sockets but with different usage
-    @Override
-    public abstract void update(Observable o, Object arg);
+    public GameModel() {
+
+    }
+
+    public void establishConnection() {
+    }
 }

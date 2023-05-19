@@ -6,8 +6,5 @@ import java.util.Observable;
 public class GuestGameModel extends GameModel {
     private Socket hostSocket;
 
-    @Override
-    public void update(Observable o, Object arg) {
-        // todo
-    }
+
 }

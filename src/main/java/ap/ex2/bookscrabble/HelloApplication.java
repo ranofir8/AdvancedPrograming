@@ -1,6 +1,10 @@
 package ap.ex2.bookscrabble;
 
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.MainScreenModel;
+import ap.ex2.bookscrabble.model.MyMainScreenModel;
+import ap.ex2.bookscrabble.view.ControllerGameView;
+import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,8 +13,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-// needs to migrate good code to this branch. if this message is here, this is not the latest change.
 public class HelloApplication extends Application {
+
+    static final String configsFN = "configs.txt";
+
+
     @Override
     public void start(Stage stage) throws IOException {
         // this will contain the code
@@ -20,11 +27,14 @@ public class HelloApplication extends Application {
         // 1. host a new game 2. join exist game
         // HostModel
 
-        GameModel gm = null;
+        MainScreenModel gm = new MyMainScreenModel(configsFN);
+
         //new GameModel()
         GameViewModel gvm = new GameViewModel(gm);
-        GameView gv = fxmlLoader.getController();
+        ControllerGameView gv = fxmlLoader.getController();
+        gv.init(gvm);
         gv.setStage(stage);
+
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
