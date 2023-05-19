@@ -27,8 +27,6 @@ public class HelloApplication extends Application {
         // HostModel
 
         MainScreenModel gm = new MyMainScreenModel(configsFN);
-
-        //new GameModel()
         GameViewModel gvm = new GameViewModel(gm);
         ControllerGameView gv = fxmlLoader.getController();
         gv.init(gvm);

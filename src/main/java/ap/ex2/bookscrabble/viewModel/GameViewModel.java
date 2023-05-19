@@ -20,23 +20,19 @@ public class GameViewModel extends ViewModel {
         this.myModel = myModel;
 
         this.isHost = new SimpleBooleanProperty();
-        this.hostPort = new SimpleIntegerProperty();
-        this.isHost.addListener((o, ov, nv) -> {
-            //create a host/guest model?
-        });
-
-
-//
+        this.hostPort = new SimpleStringProperty();
+        this.hostIP = new SimpleStringProperty();
 //        this.isHost.addListener((o, ov, nv) -> {
-//            myModel.isHost=(boolean) nv;
+//            //create a host/guest model?
 //            if(nv){
-//                System.out.println("Host is opened, with port: "+this.hostPort.get());
+//                //start host?
+//            } else {
+//                //start guest?
 //            }
 //        });
-//        this.hostPort.addListener((ob, ov, nv) -> this.myModel.myPort=(int)nv);
-
-        //notify the observer (the model) that we are ready to start a game?
     }
+
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -44,9 +40,32 @@ public class GameViewModel extends ViewModel {
             if (arg instanceof String[]) {
                 String[] args = (String[]) arg;
                 if (args[0].equals("MSG")) {
-                    notifyObservers(new guiMessage(args[1]));
+                    setChanged();
+                    notifyObservers(new guiMessage(args[1], Alert.AlertType.INFORMATION));
                 }
+            } else if (arg instanceof Command) {
+                setChanged();
+                notifyObservers(arg);
             }
         }
+    }
+
+    @Override
+    public void startGameModel() {
+        if (this.isHost.get()) {
+            this.myModel.startHostGameModel();
+        } else {
+            try {
+                int hostIntPort = Integer.parseInt(this.hostPort.get());
+                this.myModel.startGuestGameModel(this.hostIP.get(), hostIntPort);
+            } catch (NumberFormatException e) {
+                setChanged();
+                notifyObservers(new guiMessage("Host port is invalid!", Alert.AlertType.ERROR));
+            }
+
+
+        }
+
+
     }
 }

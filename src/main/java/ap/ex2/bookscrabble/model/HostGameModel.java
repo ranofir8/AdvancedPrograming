@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -23,26 +24,23 @@ public class HostGameModel extends GameModel {
 
     public HostGameModel(int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
-        this.hostServer = new GenericServer(hostPort, new HostGameHandler(), 4);
-
-    }
-
-    public void startHostServer() {
     }
 
 
-    static class HostGameHandler implements ClientHandler {
-    // todo in seperate file
-        @Override
-        public void handleClient(InputStream inFromclient, OutputStream outToClient) {
+    @Override
+    public void establishConnection() throws IOException {
+        // bind to host port
+        ServerSocket server = new ServerSocket(this.hostPort);
+        server.setSoTimeout(1000); //1s
+    }
 
+    protected void finalize() {
+        if (this.hostSocket != null && !this.hostSocket.isClosed()) {
+            try {
+                this.hostSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-        @Override
-        public void close() {
-
-        }
     }
-
-
 }

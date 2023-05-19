@@ -1,5 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.common.Command;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +14,7 @@ public class MyMainScreenModel extends MainScreenModel {
 
     public static final String BOOK_SCRABBLE_IP_KEY = "book_scrabble_ip";
     public static final String BOOK_SCRABBLE_PORT_KEY = "book_scrabble_port";
+    public static final String HOST_PORT_KEY = "host_port";
 
     public MyMainScreenModel(String configFileName) {
         this.configs = new HashMap<String, String>();
@@ -28,20 +31,28 @@ public class MyMainScreenModel extends MainScreenModel {
     }
 
     @Override
-    public void startGameModel(boolean isHost) {
-        if (isHost) {
-            int hostPort = getAvailableHostPort();
-            this.gameModel = new HostGameModel(hostPort, this.configs.get(BOOK_SCRABBLE_IP_KEY),Integer.parseInt(this.configs.get(BOOK_SCRABBLE_PORT_KEY)));
+    public void startHostGameModel() {
+        this.gameModel = new HostGameModel(Integer.parseInt(this.configs.get(HOST_PORT_KEY)), this.configs.get(BOOK_SCRABBLE_IP_KEY), Integer.parseInt(this.configs.get(BOOK_SCRABBLE_PORT_KEY)));
+        this.afterStartingModel();
+    }
 
-        } else {
-            this.gameModel = new GuestGameModel();
-        }
+    private void afterStartingModel() {
         try {
             this.gameModel.establishConnection();
         } catch (Exception e) {
             // display to GUI "unable to establish connection, try again"
+            setChanged();
             notifyObservers(new String[]{"MSG", "Unable to establish connection"});
         }
+
+        setChanged();
+        notifyObservers(Command.GO_TO_GAME_SCENE);
+    }
+
+    @Override
+    public void startGuestGameModel(String hostIPinput, int hostPortInput) {
+        this.gameModel = new GuestGameModel(hostIPinput,hostPortInput);
+        this.afterStartingModel();
     }
 
     private int getAvailableHostPort() {

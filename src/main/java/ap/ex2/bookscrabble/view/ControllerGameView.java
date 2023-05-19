@@ -1,12 +1,12 @@
 package ap.ex2.bookscrabble.view;
 
 import ap.ex2.bookscrabble.R;
+import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import ap.ex2.scrabble.Board;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,10 +26,9 @@ import java.util.Random;
 public class ControllerGameView implements View {
     public TextField joinGameIP; //for guest
     public TextField joinGamePort; //for guest
-    private BooleanProperty isHost;
-    private IntegerProperty myPort; //for host
 
     GameViewModel gameViewModel;
+    public BooleanProperty isHost;
 
     @FXML
     private Stage stage;
@@ -40,13 +39,15 @@ public class ControllerGameView implements View {
     private final static String SCENE_GAME_FXML = "game-view.fxml";
 
     public ControllerGameView() {
-        myPort = new SimpleIntegerProperty();
-        isHost = new SimpleBooleanProperty();
+        this.isHost = new SimpleBooleanProperty();
     }
-    public void init(GameViewModel gvm) {
-        this.gameViewModel =gvm;
+
+    public void initBind(GameViewModel gvm) {
+        this.gameViewModel = gvm;
+
+        gvm.hostPort.bind(this.joinGamePort.textProperty());
+        gvm.hostIP.bind(this.joinGameIP.textProperty());
         gvm.isHost.bind(this.isHost);
-        gvm.hostPort.bind(this.myPort);
     }
 
     /**
@@ -54,21 +55,7 @@ public class ControllerGameView implements View {
      * join game button function in opening window -
      * opens a game if a valid connection to the inserted ip and port is foun
      */
-    @FXML
-    protected void joinExistingGameClick() {
-        try {
-            String ip = joinGameIP.getText();
-            String port = joinGamePort.getText();
-            this.switchToScene(SCENE_GAME_FXML);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        isHost.set(false); //transmitted to vm and m(?)
 
-        //setChanged();
-        //notifyObservers(false);
-        //System.out.println("join");
-    }
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -79,12 +66,17 @@ public class ControllerGameView implements View {
      * @author Gilad, Ran
      * @param sceneFXML the relevant scene (FXML window) to change to
      */
-    private void switchToScene(String sceneFXML) throws IOException {
-        Parent root = FXMLLoader.load(R.getResource(sceneFXML));
+    private void switchToScene(String sceneFXML) {
+        try {
+            Parent root = FXMLLoader.load(R.getResource(sceneFXML));
+            Scene newScene = new Scene(root);
+            this.stage.setScene(newScene);
+            this.stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        Scene newScene = new Scene(root);
-        this.stage.setScene(newScene);
-        this.stage.show();
+
     }
 
     /**
@@ -93,22 +85,33 @@ public class ControllerGameView implements View {
      */
     @FXML
     protected void hostNewGameClick() {
+        this.isHost.set(true);
+        this.gameViewModel.startGameModel();
 
-        myPort.set(new Random().nextInt(10000));
-        isHost.set(true);
-        //idk if needed - i tried to use update in the observer and didn't update.
+//        try {
+//            this.switchToScene(SCENE_GAME_FXML);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+    }
+
+    @FXML
+    protected void joinExistingGameClick() {
+        this.isHost.set(false); //transmitted to vm and m(?)
+        this.gameViewModel.startGameModel();
+
+//        try {
+//            this.switchToScene(SCENE_GAME_FXML);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         //setChanged();
         //notifyObservers(false);
-        //System.out.println("host");
-        try {
-            this.switchToScene(SCENE_GAME_FXML);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //System.out.println("join");
     }
 
     public String getPortText() {
-        return "Port: "+ this.myPort;
+        return "Port: "+ this.portNum;
     }
 
     @FXML
@@ -154,7 +157,7 @@ public class ControllerGameView implements View {
     }
 
     private void displayMSG(guiMessage messageToDisplay) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(messageToDisplay.alert);
         alert.setTitle("Message");
         //alert.setHeaderText("message");
         alert.setContentText(messageToDisplay.message);
@@ -166,6 +169,8 @@ public class ControllerGameView implements View {
         if (o == this.gameViewModel) {
             if (arg instanceof guiMessage) {
                 this.displayMSG((guiMessage) arg);
+            } else if (arg instanceof Command) {
+                this.switchToScene(SCENE_GAME_FXML);
             }
         }
     }

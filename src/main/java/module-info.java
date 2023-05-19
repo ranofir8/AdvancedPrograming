@@ -7,4 +7,6 @@ module ap.ex2.bookscrabble {
     exports ap.ex2.bookscrabble;
     exports ap.ex2.bookscrabble.view;
     opens ap.ex2.bookscrabble.view to javafx.fxml;
+    exports ap.ex2.bookscrabble.common;
+    opens ap.ex2.bookscrabble.common to javafx.fxml;
 }

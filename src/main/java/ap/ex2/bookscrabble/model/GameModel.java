@@ -13,6 +13,5 @@ public abstract class GameModel extends Model {
 
     }
 
-    public void establishConnection() {
-    }
+    public abstract void establishConnection() throws Exception;
 }
