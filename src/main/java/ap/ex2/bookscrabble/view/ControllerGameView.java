@@ -34,8 +34,10 @@ public class ControllerGameView implements View {
     private Stage stage;
     @FXML
     private Label myLabel;
+
     private final static String SCENE_HELLO_FXML = "hello-view.fxml";
     private final static String SCENE_GAME_FXML = "game-view.fxml";
+
     public ControllerGameView() {
         myPort = new SimpleIntegerProperty();
         isHost = new SimpleBooleanProperty();
@@ -76,7 +78,7 @@ public class ControllerGameView implements View {
      * @author Gilad, Ran
      * @param sceneFXML the relevant scene (FXML window) to change to
      */
-    private void switchToScene(String sceneFXML,int port) throws IOException {
+    private void switchToScene(String sceneFXML) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(sceneFXML));
 
         Scene newScene = new Scene(root);
@@ -98,7 +100,7 @@ public class ControllerGameView implements View {
         //notifyObservers(false);
         //System.out.println("host");
         try {
-            this.switchToScene(SCENE_GAME_FXML,myPort.get());
+            this.switchToScene(SCENE_GAME_FXML);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

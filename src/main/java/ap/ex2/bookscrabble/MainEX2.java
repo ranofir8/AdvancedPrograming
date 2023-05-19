@@ -26,12 +26,7 @@ public class MainEX2 extends Application {
         // 1. host a new game 2. join exist game
         // HostModel
 
-        GameModel gm = new GameModel() {
-            @Override
-            public void update(Observable o, Object arg) {
-
-            }
-        };
+        MainScreenModel gm = new MyMainScreenModel(configsFN);
 
         //new GameModel()
         GameViewModel gvm = new GameViewModel(gm);
