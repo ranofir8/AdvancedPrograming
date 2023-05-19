@@ -1,6 +1,5 @@
 package ap.ex2.bookscrabble;
 
-import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.MyMainScreenModel;
 import ap.ex2.bookscrabble.view.ControllerGameView;
@@ -21,7 +20,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // this will contain the code
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(R.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
         // first screen: choose which type of game
         // 1. host a new game 2. join exist game

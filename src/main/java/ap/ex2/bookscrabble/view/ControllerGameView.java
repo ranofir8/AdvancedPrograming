@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble.view;
 
+import ap.ex2.bookscrabble.R;
 import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import ap.ex2.scrabble.Board;
 import javafx.beans.property.BooleanProperty;
@@ -79,7 +80,7 @@ public class ControllerGameView implements View {
      * @param sceneFXML the relevant scene (FXML window) to change to
      */
     private void switchToScene(String sceneFXML) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(sceneFXML));
+        Parent root = FXMLLoader.load(R.getResource(sceneFXML));
 
         Scene newScene = new Scene(root);
         this.stage.setScene(newScene);
