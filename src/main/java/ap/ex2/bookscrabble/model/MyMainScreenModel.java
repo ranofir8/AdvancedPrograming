@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,6 +48,8 @@ public class MyMainScreenModel extends MainScreenModel {
 
         setChanged();
         notifyObservers(Command.GO_TO_GAME_SCENE);
+        setChanged();
+        notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.myPort));
     }
 
     @Override
@@ -55,8 +58,4 @@ public class MyMainScreenModel extends MainScreenModel {
         this.afterStartingModel();
     }
 
-    private int getAvailableHostPort() {
-        int gilad = 100;
-        return gilad;
-    }
 }

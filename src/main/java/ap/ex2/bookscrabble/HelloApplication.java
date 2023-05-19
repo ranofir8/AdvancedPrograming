@@ -30,7 +30,7 @@ public class HelloApplication extends Application {
         GameViewModel gvm = new GameViewModel(gm);
         ControllerGameView gv = fxmlLoader.getController();
 
-        gv.initBind(gvm);
+        gv.setGameViewModel(gvm);
         gv.setStage(stage);
 
         gm.addObserver(gvm);

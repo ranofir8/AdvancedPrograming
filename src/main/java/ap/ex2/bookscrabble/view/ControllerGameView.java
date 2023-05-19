@@ -4,11 +4,13 @@ import ap.ex2.bookscrabble.R;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.viewModel.GameViewModel;
+import ap.ex2.bookscrabble.viewModel.ViewModel;
 import ap.ex2.scrabble.Board;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -20,13 +22,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
+import java.util.ResourceBundle;
 
-public class ControllerGameView implements View {
+public class ControllerGameView implements View, Initializable {
     public TextField joinGameIP; //for guest
     public TextField joinGamePort; //for guest
 
-    GameViewModel gameViewModel;
+    private GameViewModel gameViewModel;
     public BooleanProperty isHost;
 
     @FXML
@@ -38,15 +42,24 @@ public class ControllerGameView implements View {
     private final static String SCENE_GAME_FXML = "game-view.fxml";
 
     public ControllerGameView() {
+        System.out.println("controller createed");
         this.isHost = new SimpleBooleanProperty();
     }
 
-    public void initBind(GameViewModel gvm) {
+    public void setGameViewModel(GameViewModel gvm) {
         this.gameViewModel = gvm;
+        this.initHelloSceneBind();
+    }
+    public void initHelloSceneBind() {
+        if (this.gameViewModel == null)
+            return;
+        this.gameViewModel.hostPort.bind(this.joinGamePort.textProperty());
+        this.gameViewModel.hostIP.bind(this.joinGameIP.textProperty());
+        this.gameViewModel.isHost.bind(this.isHost);
+    }
 
-        gvm.hostPort.bind(this.joinGamePort.textProperty());
-        gvm.hostIP.bind(this.joinGameIP.textProperty());
-        gvm.isHost.bind(this.isHost);
+    public void initGameSceneBind() {
+        this.portNum.textProperty().bind(this.gameViewModel.resultHostPort);
     }
 
     /**
@@ -58,7 +71,6 @@ public class ControllerGameView implements View {
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        System.out.println("stage is now" + stage);
     }
 
     /**
@@ -169,7 +181,17 @@ public class ControllerGameView implements View {
                 this.displayMSG((guiMessage) arg);
             } else if (arg instanceof Command) {
                 this.switchToScene(SCENE_GAME_FXML);
+                this.initGameSceneBind();
             }
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if (url.equals(R.getResource(SCENE_HELLO_FXML))) {
+            this.initHelloSceneBind();
+        } else if (url.equals(R.getResource(SCENE_GAME_FXML))) {
+            this.initGameSceneBind();
         }
     }
 }

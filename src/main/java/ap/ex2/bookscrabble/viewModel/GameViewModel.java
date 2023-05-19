@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.viewModel;
 
 import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.common.guiMessage;
 import javafx.beans.property.*;
@@ -16,12 +17,16 @@ public class GameViewModel extends ViewModel {
     public StringProperty hostPort;
     public StringProperty hostIP;
 
+    public StringProperty resultHostPort;
+
     public GameViewModel(MainScreenModel myModel) {
         this.myModel = myModel;
 
         this.isHost = new SimpleBooleanProperty();
         this.hostPort = new SimpleStringProperty();
         this.hostIP = new SimpleStringProperty();
+
+        this.resultHostPort = new SimpleStringProperty();
 //        this.isHost.addListener((o, ov, nv) -> {
 //            //create a host/guest model?
 //            if(nv){
@@ -46,6 +51,13 @@ public class GameViewModel extends ViewModel {
             } else if (arg instanceof Command) {
                 setChanged();
                 notifyObservers(arg);
+            } else if (arg instanceof Command2VM) {
+                Command2VM cmd = (Command2VM) arg;
+                switch (cmd.command) {
+                    case DISPLAY_PORT:
+                        this.resultHostPort.setValue((String) cmd.args);
+                        break;
+                }
             }
         }
     }
