@@ -1,5 +1,6 @@
-package ap.ex2.bookscrabble;
+package ap.ex2.bookscrabble.view;
 
+import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import ap.ex2.scrabble.Board;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -11,21 +12,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.Random;
 
-public class ControllerGameView extends View {
+public class ControllerGameView implements View {
     public TextField joinGameIP; //for guest
     public TextField joinGamePort; //for guest
     private BooleanProperty isHost;
     private IntegerProperty myPort; //for host
 
-    GameViewModel gvm;
+    GameViewModel gameViewModel;
 
     @FXML
     private Stage stage;
@@ -38,9 +41,9 @@ public class ControllerGameView extends View {
         isHost = new SimpleBooleanProperty();
     }
     public void init(GameViewModel gvm) {
-        this.gvm=gvm;
-        gvm.isHost.bind(isHost);
-        gvm.myPort.bind(myPort);
+        this.gameViewModel =gvm;
+        gvm.isHost.bind(this.isHost);
+        gvm.hostPort.bind(this.myPort);
     }
 
     /**
@@ -53,13 +56,14 @@ public class ControllerGameView extends View {
         try {
             String ip = joinGameIP.getText();
             String port = joinGamePort.getText();
-            this.switchToScene(SCENE_GAME_FXML,-1);
+            this.switchToScene(SCENE_GAME_FXML);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         isHost.set(false); //transmitted to vm and m(?)
-        setChanged();
-        notifyObservers(false);
+
+        //setChanged();
+        //notifyObservers(false);
         //System.out.println("join");
     }
 
@@ -90,8 +94,8 @@ public class ControllerGameView extends View {
         myPort.set(new Random().nextInt(10000));
         isHost.set(true);
         //idk if needed - i tried to use update in the observer and didn't update.
-        setChanged();
-        notifyObservers(false);
+        //setChanged();
+        //notifyObservers(false);
         //System.out.println("host");
         try {
             this.switchToScene(SCENE_GAME_FXML,myPort.get());
@@ -144,5 +148,22 @@ public class ControllerGameView extends View {
             }
         }
 
+    }
+
+    private void displayMSG(guiMessage messageToDisplay) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Message");
+        //alert.setHeaderText("message");
+        alert.setContentText(messageToDisplay.message);
+        alert.showAndWait();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o == this.gameViewModel) {
+            if (arg instanceof guiMessage) {
+                this.displayMSG((guiMessage) arg);
+            }
+        }
     }
 }

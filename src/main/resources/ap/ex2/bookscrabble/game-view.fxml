@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
+<!--${controller.getPortText()}-->
 <?import javafx.scene.control.Label?>
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.ControllerGameView">
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <children>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label text="${controller.getPortText()}" />
+            <Label text="port" />
          </children>
       </HBox>
       <Button mnemonicParsing="false" onAction="#drawBoardTest" prefHeight="25.0" prefWidth="130.0" text="Button" />

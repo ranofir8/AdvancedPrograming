@@ -1,6 +1,11 @@
 package ap.ex2.bookscrabble;
 
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.MainScreenModel;
+import ap.ex2.bookscrabble.model.Model;
+import ap.ex2.bookscrabble.model.MyMainScreenModel;
+import ap.ex2.bookscrabble.view.ControllerGameView;
+import ap.ex2.bookscrabble.viewModel.GameViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +15,8 @@ import java.io.IOException;
 import java.util.Observable;
 
 public class MainEX2 extends Application {
+    static final String configsFN = "configs.txt";
+
     @Override
     public void start(Stage stage) throws IOException {
         // this will contain the code

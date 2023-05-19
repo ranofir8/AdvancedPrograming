@@ -1,0 +1,2 @@
+book_scrabble_ip,127.0.0.1
+book_scrabble_port,61000

@@ -9,6 +9,7 @@ public abstract class GameModel extends Model {
     public GameModel() {
 
     }
-    @Override
-    public abstract void update(Observable o, Object arg);
+
+    public void establishConnection() {
+    }
 }

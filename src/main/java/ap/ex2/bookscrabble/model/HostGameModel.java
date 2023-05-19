@@ -31,11 +31,6 @@ public class HostGameModel extends GameModel {
     }
 
 
-    @Override
-    public void update(Observable o, Object arg) {
-        // todo
-    }
-
     static class HostGameHandler implements ClientHandler {
     // todo in seperate file
         @Override
