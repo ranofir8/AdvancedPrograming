@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
+// needs to migrate good code to this branch. if this message is here, this is not the latest change.
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
