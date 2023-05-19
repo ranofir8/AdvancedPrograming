@@ -16,6 +16,11 @@ public class GuestGameModel extends GameModel {
     }
 
     @Override
+    public int getDisplayPort() {
+        return this.hostPort;
+    }
+
+    @Override
     public void establishConnection() throws Exception {
         this.hostSocket = new Socket(this.hostIP, this.hostPort);
     }

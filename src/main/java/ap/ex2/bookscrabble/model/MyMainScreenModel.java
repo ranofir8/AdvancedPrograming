@@ -47,14 +47,14 @@ public class MyMainScreenModel extends MainScreenModel {
         }
 
         setChanged();
-        notifyObservers(Command.GO_TO_GAME_SCENE);
+        notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
         setChanged();
-        notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.myPort));
+        notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
     }
 
     @Override
     public void startGuestGameModel(String hostIPinput, int hostPortInput) {
-        this.gameModel = new GuestGameModel(hostIPinput,hostPortInput);
+        this.gameModel = new GuestGameModel(hostIPinput, hostPortInput);
         this.afterStartingModel();
     }
 

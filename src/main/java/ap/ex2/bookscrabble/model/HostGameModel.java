@@ -29,6 +29,11 @@ public class HostGameModel extends GameModel {
 
 
     @Override
+    public int getDisplayPort() {
+        return this.hostPort;
+    }
+
+    @Override
     public void establishConnection() throws IOException {
         // bind to host port
         ServerSocket server = new ServerSocket(this.hostPort);

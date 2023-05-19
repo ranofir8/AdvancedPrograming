@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 
 import java.util.Observable;
 
-public class GameViewModel extends ViewModel {
+public class MyViewModel extends ViewModel {
     private MainScreenModel myModel;
 
     // creating/joining game
@@ -19,7 +19,7 @@ public class GameViewModel extends ViewModel {
 
     public StringProperty resultHostPort;
 
-    public GameViewModel(MainScreenModel myModel) {
+    public MyViewModel(MainScreenModel myModel) {
         this.myModel = myModel;
 
         this.isHost = new SimpleBooleanProperty();
@@ -54,8 +54,13 @@ public class GameViewModel extends ViewModel {
             } else if (arg instanceof Command2VM) {
                 Command2VM cmd = (Command2VM) arg;
                 switch (cmd.command) {
+                    case GO_TO_GAME_SCENE:
+                        this.showGameScene();
+                        break;
                     case DISPLAY_PORT:
-                        this.resultHostPort.setValue((String) cmd.args);
+                        String s = "port is: "+(int) cmd.args;
+                        System.out.println(s);
+                        this.resultHostPort.set(s);
                         break;
                 }
             }
