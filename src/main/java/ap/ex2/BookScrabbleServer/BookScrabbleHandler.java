@@ -35,6 +35,9 @@ public class BookScrabbleHandler implements SimpleClientHandler {
             case 'c':
                 answer = ""+dm.challenge(parameters);
                 break;
+            case 'p':
+                answer = "pong";
+                break;
             default:
                 answer = "invalid query";
                 break;

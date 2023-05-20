@@ -49,10 +49,14 @@ public class MyMainScreenModel extends MainScreenModel {
     private void afterStartingModel() {
         try {
             this.gameModel.establishConnection();
-            setChanged();
-            notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
-            setChanged();
-            notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
+
+            if (this.gameModel instanceof HostGameModel) {
+                setChanged();
+                notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
+                setChanged();
+                notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
+            }
+
         } catch (Exception e) {
             // display to GUI "unable to establish connection, try again"
             setChanged();
@@ -64,7 +68,7 @@ public class MyMainScreenModel extends MainScreenModel {
 
     @Override
     public void startGuestGameModel(String nickname, String hostIPinput, int hostPortInput) {
-        this.gameModel = new GuestGameModel(nickname,hostIPinput, hostPortInput);
+        this.gameModel = new GuestGameModel(nickname, hostIPinput, hostPortInput);
         this.afterStartingModel();
     }
 

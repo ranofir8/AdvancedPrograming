@@ -1,7 +1,5 @@
 package ap.ex2.bookscrabble.model;
 
-import ap.ex2.BookScrabbleServer.SimpleClientHandler;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,13 +7,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Observable;
 
-public class HostClientHandler extends Observable implements SocketClientHandler {
+public class MyClientHandler extends Observable implements SocketClientHandler {
     private Socket mySocket;
     private BufferedReader inFromClient;
     private PrintWriter outToClient;
     private volatile boolean isStop;
 
-    public HostClientHandler(Socket clientSocket) {
+    public MyClientHandler(Socket clientSocket) {
         this.mySocket = clientSocket;
         this.isStop = true;
     }
@@ -56,6 +54,7 @@ public class HostClientHandler extends Observable implements SocketClientHandler
 
     @Override
     public void close() {
+        System.out.println("closed client handler");
         this.isStop = true;
         this.outToClient.close();
         try {

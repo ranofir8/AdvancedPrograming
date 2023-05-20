@@ -16,7 +16,6 @@ import java.util.function.BiConsumer;
 
 public class HostServer implements Observer {
     private final int hostPort;
-
     private final int threadsLimit;
     private boolean stop;
 
@@ -62,7 +61,7 @@ public class HostServer implements Observer {
                 try {
                     Socket client = server.accept();
 
-                    HostClientHandler clientHandler = new HostClientHandler(client);  // todo on a new thread?
+                    MyClientHandler clientHandler = new MyClientHandler(client);  // todo on a new thread?
                     clientHandler.addObserver(this);  // listen to notifications from this client
                     clientHandler.startHandlingClient();
 
@@ -79,7 +78,7 @@ public class HostServer implements Observer {
     // got a message from one of the clients
     @Override
     public void update(Observable o, Object arg) {
-        HostClientHandler client = (HostClientHandler) o;
+        MyClientHandler client = (MyClientHandler) o;
         String[] nickname = {null}; //array in order to change in forEach loop
         this.playersSockets.forEach((s, socketClientHandler) -> {
             if (socketClientHandler == client) {
@@ -92,17 +91,51 @@ public class HostServer implements Observer {
             if (this.onMsgReceivedConsumer != null)
                 this.onMsgReceivedConsumer.accept(nickname[0], (String) arg);
         } else {
-            // client is new!
+            // client socket is new!
 
+            String sentMsg = (String) arg;
+
+            char msgProtocol = sentMsg.charAt(0);
+            String msgExtra = sentMsg.substring(1, sentMsg.length());
+
+            if (msgProtocol != Protocol.GUEST_LOGIN_REQUEST) {
+                // reject socket because he is not playing by the protocol
+                client.close();
+            }
+
+            String chosenNickname = msgExtra;
+
+
+            if (this.hasPlayerNamed(chosenNickname)) {
+
+                // kick this player
+                client.sendMsg(Protocol.HOST_LOGIN_REJECT + "");
+                client.close();
+
+            } else {
+                // welcome him to the game
+                this.playersSockets.put(chosenNickname, client);
+                client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");
+            }
         }
 
-        if (this.onMsgReceivedConsumer != null)
-            this.onMsgReceivedConsumer.accept(nickname[0], (String) arg);
     }
 
     public void close() {
         this.stop = true;
     }
 
+    public boolean hasPlayerNamed(String nickName) {
+        return this.playersSockets.containsKey(nickName);
+    }
+
+    /**
+     * this method adds a pair of <nickname, null> to the playerSockets map.
+     *  this null dummy value allows the model to know how the host is called and prevent guests from getting this name
+     * @param nickname
+     */
+    public void setMyNickname(String nickname) {
+        this.playersSockets.put(nickname, null);
+    }
 }
 

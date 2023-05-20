@@ -22,9 +22,6 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Label nickname;
 
-    public ControllerGameView() {
-        System.out.println("game controller created");
-    }
 
     public void initSceneBind() {
         if (this.myViewModel == null)

@@ -44,6 +44,8 @@ public class HostGameModel extends GameModel {
                 }
         );
 
+        this.hostServer.setMyNickname(this.gi.getNickname());
+
         //new BiFunction<>()
         this.hostServer.start();
 
@@ -55,6 +57,17 @@ public class HostGameModel extends GameModel {
     }
 
     public void onRecvMessage(String nickname, String msgRecv) {
+        if (nickname == null) {
+            // a new player has joined
+            if (this.hostServer.hasPlayerNamed(msgRecv)) {
+                // welcome him to the game
+
+            } else {
+                // kick this player
+
+            }
+
+        }
         System.out.println("The player " + nickname+" sent: "+msgRecv);
     }
 

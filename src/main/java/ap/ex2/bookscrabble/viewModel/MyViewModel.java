@@ -45,7 +45,7 @@ public class MyViewModel extends ViewModel {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (o == this.myModel) {
+        if (o == this.myModel || o == this.myModel.getGameModel()) {
             if (arg instanceof String[]) {
                 String[] args = (String[]) arg;
                 if (args[0].equals("MSG")) {
@@ -87,13 +87,16 @@ public class MyViewModel extends ViewModel {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
                 this.myModel.startGuestGameModel(this.nickname.get(),this.hostIP.get(), hostIntPort);
+
             } catch (NumberFormatException e) {
                 setChanged();
                 notifyObservers(new guiMessage("Host port is invalid!", Alert.AlertType.ERROR));
             }
-
-
         }
+
+        GameModel gm = this.myModel.getGameModel();
+        if (gm != null)
+            gm.addObserver(this);
 
 
     }

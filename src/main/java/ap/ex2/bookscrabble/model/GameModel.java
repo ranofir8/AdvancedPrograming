@@ -1,5 +1,9 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.common.Protocol;
+
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;

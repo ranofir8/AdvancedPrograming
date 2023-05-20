@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GuestGameModel extends GameModel {
+public class GuestGameModel extends GameModel implements Observer {
     private String hostIP;
     private int hostPort;
 
@@ -32,26 +32,20 @@ public class GuestGameModel extends GameModel {
     @Override
     public void establishConnection() throws Exception {
         System.out.println("GUEST");
-        this.hostSocket = new Socket(this.hostIP, this.hostPort);
+        Socket mySocket = new Socket(this.hostIP, this.hostPort);
+        this.myHandler = new MyClientHandler(mySocket);
+        this.myHandler.addObserver(this);
+        this.myHandler.startHandlingClient();
+        this.myHandler.sendMsg(Protocol.GUEST_LOGIN_REQUEST + this.gi.getNickname());
+    }
 
-
-
-        // temp code here - check connection
-        PrintWriter pw = new PrintWriter(this.hostSocket.getOutputStream());
-        pw.println(this.gi.getNickname());
-        pw.flush();
-
-        // close socket! todo
+    @Override
+    public void closeConnection() {
+        this.myHandler.close();
     }
 
     protected void finalize() {
-        if (this.hostSocket != null && !this.hostSocket.isClosed()) {
-            try {
-                this.hostSocket.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        this.myHandler.close();
     }
 
 

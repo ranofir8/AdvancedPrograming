@@ -25,7 +25,6 @@ public class ControllerHelloView extends GameView implements Initializable {
     private TextField nickname;
 
     public ControllerHelloView() {
-        System.out.println("hello controller created");
         this.isHost = new SimpleBooleanProperty();
     }
 

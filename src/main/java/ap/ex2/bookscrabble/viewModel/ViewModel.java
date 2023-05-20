@@ -19,10 +19,14 @@ public abstract class ViewModel extends Observable implements Observer {
     }
 
     public void showHelloScene() {
-        this.stage.setScene(this.sceneH);
+        this.setScene(this.sceneH);
+    }
+
+    private void setScene(Scene s) {
+        Platform.runLater(()->this.stage.setScene(s));
     }
 
     public void showGameScene() {
-        this.stage.setScene(this.sceneG);
+        this.setScene(this.sceneG);
     }
 }
