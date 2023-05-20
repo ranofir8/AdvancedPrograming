@@ -55,12 +55,12 @@
                                 </Button>
                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <TextField fx:id="joinGameIP" promptText="ip">
+                                        <TextField fx:id="joinGameIP" promptText="ip" text="127.0.0.1">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </TextField>
-                                        <TextField fx:id="joinGamePort" promptText="port">
+                                        <TextField fx:id="joinGamePort" promptText="port" text="8020">
                                             <HBox.margin>
                                                 <Insets left="20.0" />
                                             </HBox.margin>

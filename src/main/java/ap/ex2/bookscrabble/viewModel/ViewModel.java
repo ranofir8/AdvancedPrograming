@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble.viewModel;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 

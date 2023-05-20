@@ -1,8 +1,10 @@
-package ap.ex2.bookscrabble.model;
+package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
+import ap.ex2.bookscrabble.model.GameModel;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.function.BiConsumer;
 
 public class HostGameModel extends GameModel {
@@ -47,6 +49,11 @@ public class HostGameModel extends GameModel {
 
     }
 
+    @Override
+    protected void closeConnection() {
+        this.hostServer.close();
+    }
+
     public void onRecvMessage(String nickname, String msgRecv) {
         System.out.println("The player " + nickname+" sent: "+msgRecv);
     }
@@ -61,6 +68,7 @@ public class HostGameModel extends GameModel {
     protected void finalize() {
         this.hostServer.close();
     }
+
 
 
 }

@@ -1,15 +1,21 @@
-package ap.ex2.bookscrabble.model;
+package ap.ex2.bookscrabble.model.guest;
+
+import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.MyClientHandler;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Observable;
+import java.util.Observer;
 
 public class GuestGameModel extends GameModel {
     private String hostIP;
     private int hostPort;
 
-    private Socket hostSocket;
+    private MyClientHandler myHandler;
 
 
     public GuestGameModel(String nickname, String hostIP, int hostPort) {
@@ -47,4 +53,6 @@ public class GuestGameModel extends GameModel {
             }
         }
     }
+
+
 }

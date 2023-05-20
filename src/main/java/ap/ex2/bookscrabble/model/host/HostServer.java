@@ -1,5 +1,8 @@
-package ap.ex2.bookscrabble.model;
+package ap.ex2.bookscrabble.model.host;
 
+import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.model.SocketClientHandler;
+import ap.ex2.bookscrabble.model.MyClientHandler;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +21,7 @@ public class HostServer implements Observer {
     private boolean stop;
 
     private Thread.UncaughtExceptionHandler exceptionHandler;
-    private HashMap<String, SocketClientHandler> guestSockets;
+    private HashMap<String, SocketClientHandler> playersSockets;
 
     private BiConsumer<String, String> onMsgReceivedConsumer;
 
@@ -29,6 +32,7 @@ public class HostServer implements Observer {
         this.threadsLimit = threadsLimit;
         this.stop = true;
         this.exceptionHandler = exceptionHandler;
+        this.playersSockets = new HashMap<>();
     }
 
     public void setOnMsgReceivedCallback(BiConsumer<String, String> func) {
@@ -36,7 +40,7 @@ public class HostServer implements Observer {
     }
 
     public void sendMsgToGuest(String nickName, String msgToSend) {
-        this.guestSockets.get(nickName).sendMsg(msgToSend);
+        this.playersSockets.get(nickName).sendMsg(msgToSend);
     }
 
     public void start() {
@@ -77,14 +81,16 @@ public class HostServer implements Observer {
     public void update(Observable o, Object arg) {
         HostClientHandler client = (HostClientHandler) o;
         String[] nickname = {null}; //array in order to change in forEach loop
-        this.guestSockets.forEach((s, socketClientHandler) -> {
+        this.playersSockets.forEach((s, socketClientHandler) -> {
             if (socketClientHandler == client) {
                 nickname[0] = s; //the nickname is found and set
             }
         });
 
         if (nickname[0] != null) {
-            // client is already recognized
+            // client socket is already recognized, just forward this message to the Host model
+            if (this.onMsgReceivedConsumer != null)
+                this.onMsgReceivedConsumer.accept(nickname[0], (String) arg);
         } else {
             // client is new!
 

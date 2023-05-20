@@ -2,13 +2,13 @@ package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.model.guest.GuestGameModel;
+import ap.ex2.bookscrabble.model.host.HostGameModel;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Observable;
 
 public class MyMainScreenModel extends MainScreenModel {
     private HashMap<String, String> configs;
