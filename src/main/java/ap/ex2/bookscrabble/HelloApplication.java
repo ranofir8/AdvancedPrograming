@@ -34,28 +34,28 @@ public class HelloApplication extends Application {
         // HostModel
 
         MainScreenModel gm = new MyMainScreenModel(configsFN);
-        MyViewModel gvm = new MyViewModel(gm);
-        gvm.setStages(stage, sceneH, sceneG);
+        MyViewModel viewModel = new MyViewModel(gm);
+        viewModel.setStages(stage, sceneH, sceneG);
 
-        ControllerGameView gv = fxmlLoaderG.getController();
-        ControllerHelloView hv = fxmlLoaderH.getController();
+        ControllerGameView gView = fxmlLoaderG.getController();
+        ControllerHelloView hView = fxmlLoaderH.getController();
 
-        gv.setGameViewModel(gvm);
-        hv.setGameViewModel(gvm);
+        gView.setGameViewModel(viewModel);
+        hView.setGameViewModel(viewModel);
 
         //for start i implement it in both controllers (can be done by using abstract controller probably..
 //        hv.setStage(stage);
 //        gv.setStage(stage);
 
-        gm.addObserver(gvm);
-        gvm.addObserver(gv);
-        gvm.addObserver(hv);
+        gm.addObserver(viewModel);
+        viewModel.addObserver(gView);
+        viewModel.addObserver(hView);
         //cursor parking:
         //|    |    |
 
 
         stage.setTitle("Hello!");
-        gvm.showHelloScene();
+        viewModel.showHelloScene();
         stage.show();
     }
 

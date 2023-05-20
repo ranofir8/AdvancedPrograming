@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
-public class GuestGameModel extends GameModel implements Observer {
+public class GuestGameModel extends GameModel {
     private String hostIP;
     private int hostPort;
 

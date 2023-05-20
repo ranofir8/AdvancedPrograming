@@ -12,8 +12,6 @@ public class HostGameModel extends GameModel {
     private int hostPort;
     private HostServer hostServer;
 
-
-
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName
         this.hostPort = hostPort;
