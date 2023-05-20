@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Observable;
 
@@ -9,6 +10,7 @@ public class GuestGameModel extends GameModel {
     private int hostPort;
 
     private Socket hostSocket;
+
 
     public GuestGameModel(String nickname, String hostIP, int hostPort) {
         super(nickname);
@@ -23,7 +25,17 @@ public class GuestGameModel extends GameModel {
 
     @Override
     public void establishConnection() throws Exception {
+        System.out.println("GUEST");
         this.hostSocket = new Socket(this.hostIP, this.hostPort);
+
+
+
+        // temp code here - check connection
+        PrintWriter pw = new PrintWriter(this.hostSocket.getOutputStream());
+        pw.println(this.gi.getNickname());
+        pw.flush();
+
+        // close socket! todo
     }
 
     protected void finalize() {

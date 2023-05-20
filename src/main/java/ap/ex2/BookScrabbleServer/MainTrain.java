@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class MainTrain {
 
-	public static class ClientHandler1 implements ClientHandler{
+	public static class ClientHandler1 implements SimpleClientHandler {
 		PrintWriter out;
 		Scanner in;
 

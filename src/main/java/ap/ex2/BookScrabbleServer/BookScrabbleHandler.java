@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class BookScrabbleHandler implements ClientHandler {
+public class BookScrabbleHandler implements SimpleClientHandler {
     private PrintWriter out;
     private BufferedReader in;
 

@@ -16,6 +16,8 @@ public class MyMainScreenModel extends MainScreenModel {
     public static final String BOOK_SCRABBLE_IP_KEY = "book_scrabble_ip";
     public static final String BOOK_SCRABBLE_PORT_KEY = "book_scrabble_port";
     public static final String HOST_PORT_KEY = "host_port";
+    public static final String DEFAULT_GUEST_IP_KEY = "default_guest_ip";
+    public static final String DEFAULT_GUEST_PORT_KEY = "default_guest_port";
 
     public MyMainScreenModel(String configFileName) {
         this.configs = new HashMap<String, String>();
@@ -29,6 +31,13 @@ public class MyMainScreenModel extends MainScreenModel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        this.updateDefaultValues();
+    }
+
+    private void updateDefaultValues() {
+        setChanged();
+        notifyObservers(new Command2VM(Command.DEFAULT_GUEST_VALUES, new String[]{this.configs.get(DEFAULT_GUEST_IP_KEY), this.configs.get(DEFAULT_GUEST_PORT_KEY)}));
     }
 
     @Override
@@ -40,16 +49,17 @@ public class MyMainScreenModel extends MainScreenModel {
     private void afterStartingModel() {
         try {
             this.gameModel.establishConnection();
+            setChanged();
+            notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
+            setChanged();
+            notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
         } catch (Exception e) {
             // display to GUI "unable to establish connection, try again"
             setChanged();
-            notifyObservers(new String[]{"MSG", "Unable to establish connection"});
+            notifyObservers(new String[]{"MSG", "Unable to establish connection: " + e.getMessage()});
         }
 
-        setChanged();
-        notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
-        setChanged();
-        notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
+
     }
 
     @Override

@@ -19,6 +19,7 @@ public class HostGameModel extends GameModel {
     }
 
 
+
     @Override
     public int getDisplayPort() {
         return this.hostPort;
@@ -26,6 +27,7 @@ public class HostGameModel extends GameModel {
 
     @Override
     public void establishConnection() throws IOException {
+        System.out.println("HOST");
         // bind to host port
         this.hostServer = new HostServer(this.hostPort, 5, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());

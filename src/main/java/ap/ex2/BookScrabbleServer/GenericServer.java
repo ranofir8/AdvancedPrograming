@@ -12,14 +12,14 @@ import java.util.concurrent.Executors;
 
 public class GenericServer {
     private final int port;
-    private final ClientHandler ch;
+    private final SimpleClientHandler ch;
     private int threadsLimit;
     private boolean stop;
     private int threadsAmount;
 
     private ExecutorService es;
 
-    public GenericServer(int port, ClientHandler ch, int threadsLimit) {
+    public GenericServer(int port, SimpleClientHandler ch, int threadsLimit) {
         this.port = port;
         this.ch = ch;
         this.threadsLimit = threadsLimit;
@@ -42,7 +42,7 @@ public class GenericServer {
             while (!this.stop) {
                 try {
                     Socket client = server.accept();
-                    ClientHandler newHandler = GenericServer.cloneHandler(this.ch);
+                    SimpleClientHandler newHandler = GenericServer.cloneHandler(this.ch);
 
                     if (newHandler != null) {
                         Runnable r = () -> {
@@ -75,11 +75,11 @@ public class GenericServer {
     // Creates and returns a new instance of ClientHandler ch type.
     // if any exception occurred, null will be returned.
     // the client handler instance is created with no constructor parameters.
-    private static ClientHandler cloneHandler(ClientHandler givenClientHandler) {
-        ClientHandler newClientHandler = null;
+    private static SimpleClientHandler cloneHandler(SimpleClientHandler givenClientHandler) {
+        SimpleClientHandler newClientHandler = null;
         try {
             Constructor<?> ctor = givenClientHandler.getClass().getConstructor();
-            newClientHandler = (ClientHandler) ctor.newInstance();
+            newClientHandler = (SimpleClientHandler) ctor.newInstance();
         } catch (NoSuchMethodException | InstantiationException | InvocationTargetException | IllegalAccessException e) {
             return null;
         }

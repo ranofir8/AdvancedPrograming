@@ -65,6 +65,12 @@ public class MyViewModel extends ViewModel {
                         System.out.println(s);
                         this.resultHostPort.set(s);
                         break;
+                    case DEFAULT_GUEST_VALUES:
+                        String[] vals = (String[]) cmd.args;
+                        this.hostIP.set(vals[0]);
+                        this.hostPort.set(vals[0]);
+                        System.out.println("got defaults: "+ vals[0] + ", "+vals[1]);
+                        break;
                 }
             }
         }
