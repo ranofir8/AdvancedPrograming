@@ -12,7 +12,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.util.Observable;
@@ -68,6 +70,8 @@ public class ControllerGameView extends GameView implements Initializable {
         //fill board with words for test:
         test_ControllerGameView t_board = new test_ControllerGameView();
         t_board.testBoard(b);
+        Tile t;
+        gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
@@ -93,11 +97,12 @@ public class ControllerGameView extends GameView implements Initializable {
                         break;
                 }
                 gc.setFill(toFill);
-                gc.fillRect(row * square, col * square, square, square);
-                gc.strokeRect(row * square, col * square, square, square);
-                Tile t = b.getTileAt(row,col);
+                gc.fillRect(col * square, row * square, square, square);
+                gc.strokeRect(col * square, row * square, square, square);
+                t = b.getTileAt(row,col);
                 if(t != null) {
-                    gc.fillText(""+t.letter,col*square+10,row*square-10);
+                    gc.setFill(Color.BLACK); // Set the text color to black
+                    gc.fillText("" + t.letter, col * square + 10, row * square + square - 10);
                 }
             }
         }
@@ -132,5 +137,4 @@ public class ControllerGameView extends GameView implements Initializable {
         //this.scoreBoard.itemsProperty().bind();
 
     }
-
 }

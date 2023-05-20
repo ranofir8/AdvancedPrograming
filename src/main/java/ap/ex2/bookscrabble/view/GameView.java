@@ -5,6 +5,8 @@ import ap.ex2.bookscrabble.viewModel.MyViewModel;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 public abstract class GameView implements View{
