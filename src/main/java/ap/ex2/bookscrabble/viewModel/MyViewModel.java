@@ -17,6 +17,8 @@ public class MyViewModel extends ViewModel {
     public StringProperty hostPort;
     public StringProperty hostIP;
 
+    public StringProperty nickname;
+
     public StringProperty resultHostPort;
 
     public MyViewModel(MainScreenModel myModel) {
@@ -27,6 +29,7 @@ public class MyViewModel extends ViewModel {
         this.hostIP = new SimpleStringProperty();
 
         this.resultHostPort = new SimpleStringProperty();
+        this.nickname = new SimpleStringProperty();
 //        this.isHost.addListener((o, ov, nv) -> {
 //            //create a host/guest model?
 //            if(nv){
@@ -69,12 +72,14 @@ public class MyViewModel extends ViewModel {
 
     @Override
     public void startGameModel() {
+        //nickName handling:
+        //port handling:
         if (this.isHost.get()) {
-            this.myModel.startHostGameModel();
+            this.myModel.startHostGameModel(this.nickname.get());
         } else {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
-                this.myModel.startGuestGameModel(this.hostIP.get(), hostIntPort);
+                this.myModel.startGuestGameModel(this.nickname.get(),this.hostIP.get(), hostIntPort);
             } catch (NumberFormatException e) {
                 setChanged();
                 notifyObservers(new guiMessage("Host port is invalid!", Alert.AlertType.ERROR));

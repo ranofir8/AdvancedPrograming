@@ -7,25 +7,43 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <!--Oh no :(-->
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<VBox alignment="CENTER" prefHeight="413.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Label fx:id="nickname" alignment="TOP_LEFT" text="Nickname">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="109.0" prefWidth="500.0">
          <children>
-            <Label fx:id="portNum" text="no">
+            <Label fx:id="portNum" text="Port">
                <HBox.margin>
                   <Insets right="50.0" />
                </HBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
             </Label>
-            <Button mnemonicParsing="false" onAction="#drawBoardTest" text="Button">
+            <Label text="Players in game">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
                <HBox.margin>
                   <Insets left="50.0" />
                </HBox.margin>
             </Button>
          </children>
          <VBox.margin>
-            <Insets top="100.0" />
+            <Insets />
          </VBox.margin>
       </HBox>
         <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />

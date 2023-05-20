@@ -43,4 +43,6 @@ public class GameInstance {
     public void updateBoard(String recentPlayerName, Word newWord) {
         this.updateScoreBoard(recentPlayerName, this.gameBoard.tryPlaceWord(newWord));
     }
+
+    public String getNickname() {return this.myPlayer.nickName;}
 }

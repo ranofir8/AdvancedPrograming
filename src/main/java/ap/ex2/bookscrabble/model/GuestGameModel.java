@@ -10,7 +10,8 @@ public class GuestGameModel extends GameModel {
 
     private Socket hostSocket;
 
-    public GuestGameModel(String hostIP, int hostPort) {
+    public GuestGameModel(String nickname, String hostIP, int hostPort) {
+        super(nickname);
         this.hostIP = hostIP;
         this.hostPort = hostPort;
     }

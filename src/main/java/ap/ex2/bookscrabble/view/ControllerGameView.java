@@ -19,6 +19,9 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Label portNum;
 
+    @FXML
+    private Label nickname;
+
     public ControllerGameView() {
         System.out.println("game controller created");
     }
@@ -27,6 +30,7 @@ public class ControllerGameView extends GameView implements Initializable {
         if (this.myViewModel == null)
             return;
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
+        this.nickname.textProperty().bind(this.myViewModel.nickname);
     }
 
 

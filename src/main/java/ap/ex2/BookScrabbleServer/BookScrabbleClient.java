@@ -1,4 +1,4 @@
-package ap.ex2.bookscrabble.model;
+package ap.ex2.BookScrabbleServer;
 
 import java.io.IOException;
 import java.io.PrintWriter;

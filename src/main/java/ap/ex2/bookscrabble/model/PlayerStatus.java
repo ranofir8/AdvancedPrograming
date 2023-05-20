@@ -12,7 +12,7 @@ import java.util.List;
  * This class is used by the model in order to update for each player the data he knows (and present it in his view).
  */
 public class PlayerStatus {
-    private String nickName;
+    public final String nickName;
     private boolean isMyTurn;
     private List<Tile> tiles;
     private List<Word.PositionedTile> tilesInLimbo; // tiles that are not in the Board and not in Hand

@@ -21,6 +21,9 @@ public class ControllerHelloView extends GameView implements Initializable {
     @FXML
     private TextField joinGameIP;
 
+    @FXML
+    private TextField nickname;
+
     public ControllerHelloView() {
         System.out.println("hello controller created");
         this.isHost = new SimpleBooleanProperty();
@@ -32,6 +35,7 @@ public class ControllerHelloView extends GameView implements Initializable {
         this.myViewModel.hostPort.bind(this.joinGamePort.textProperty());
         this.myViewModel.hostIP.bind(this.joinGameIP.textProperty());
         this.myViewModel.isHost.bind(this.isHost);
+        this.myViewModel.nickname.bind(this.nickname.textProperty());
     }
 
     @Override

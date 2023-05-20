@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
+<BorderPane prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
     <top>
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
@@ -26,8 +26,17 @@
                         <Font size="44.0" />
                     </font>
                 </Label>
-                <Label text="Ofir Yehezkel, Moriya Weisman, Gilad Savoray, Ran Ofir" />
-                <HBox alignment="TOP_CENTER">
+                <Label prefHeight="36.0" prefWidth="292.0" text="Ofir Yehezkel, Moriya Weisman, Gilad Savoray, Ran Ofir" />
+            <HBox alignment="CENTER" prefHeight="71.0" prefWidth="910.0">
+               <children>
+                  <TextField fx:id="nickname" prefHeight="25.0" prefWidth="155.0" promptText="Nickname">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+                <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="910.0">
                     <children>
                         <Button mnemonicParsing="false" onAction="#hostNewGameClick" text="Host a new Game">
                             <HBox.margin>
@@ -70,6 +79,9 @@
                             </HBox.margin>
                         </VBox>
                     </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
                 </HBox>
             </children>
         </VBox>
