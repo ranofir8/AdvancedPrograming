@@ -65,8 +65,8 @@
          <right>
             <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="616.0" prefWidth="150.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn editable="false" prefWidth="100.0" text="Nickname" />
-                <TableColumn editable="false" prefWidth="50.0" resizable="false" sortType="DESCENDING" text="Score" />
+<!--                <TableColumn editable="false" prefWidth="100.0" text="Nickname" />-->
+<!--                <TableColumn editable="false" prefWidth="50.0" resizable="false" sortType="DESCENDING" text="Score" />-->
               </columns>
             </TableView>
          </right>

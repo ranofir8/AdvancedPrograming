@@ -2,10 +2,6 @@ package ap.ex2.bookscrabble.view;
 
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -76,7 +72,7 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     @FXML
-    private Canvas boardCanvas;
+    public Canvas boardCanvas; // public -> private
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
@@ -132,17 +128,22 @@ public class ControllerGameView extends GameView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.initSceneBind();
-        ObservableList<PlayerRowView> ol = new SimpleListProperty<>();
-        this.scoreBoard.setItems(ol);
-        ol.add(new PlayerRowView("Ran", "Ofir"));
+        TableView table = new TableView<PlayerRowView>();
 
-        TableColumn<PlayerRowView,String> firstNameCol = new TableColumn<PlayerRowView,String>("First Name");
-        firstNameCol.setCellValueFactory(new PropertyValueFactory("firstName"));
-        TableColumn<PlayerRowView,String> lastNameCol = new TableColumn<PlayerRowView,String>("Last Name");
-        lastNameCol.setCellValueFactory(new PropertyValueFactory("lastName"));
+        TableColumn<PlayerRowView,String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
+        nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
+        TableColumn<PlayerRowView,String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
+        scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
 
-        this.scoreBoard.getColumns().setAll(firstNameCol, lastNameCol);
+        this.scoreBoard.getColumns().add(nicknameCol);
+        this.scoreBoard.getColumns().add(scoreCol);
+
+        PlayerRowView player = new PlayerRowView();
+        player.setNickname("Ran");
+        player.setScore("Ofir");
+        this.scoreBoard.getItems().add(player);
+
+        //this.scoreBoard.itemsProperty().bind();
+
     }
-
-
 }

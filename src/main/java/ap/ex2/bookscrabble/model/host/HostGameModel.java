@@ -13,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
@@ -100,7 +101,7 @@ public class HostGameModel extends GameModel implements Observer {
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
                     this.onlinePlayers.add(args[1]);
                     setChanged();
-                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, this.onlinePlayers.size()));
+                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, this.onlinePlayers.size() + " " + String.join(", ", this.onlinePlayers)));
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
                     this.onlinePlayers.remove(args[1]);

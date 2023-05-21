@@ -7,6 +7,7 @@ import java.util.List;
 import ap.ex2.scrabble.Word.PositionedTile;
 import ap.ex2.scrabble.Word.WordIterator;
 
+
 public class Board {
 	private static class Multiplier {
 		public final int multiplyWordBy;
@@ -32,7 +33,7 @@ public class Board {
 	
 	private Tile[][] mat;	// mat[col][row], \/	->
 	private boolean isEmpty;
-	
+
 	public Board() {
 		this.mat = new Tile[Board.COL_NUM][Board.ROW_NUM];
 		this.isEmpty = true;
