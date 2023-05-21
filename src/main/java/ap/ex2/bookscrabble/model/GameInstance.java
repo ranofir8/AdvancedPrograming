@@ -1,8 +1,13 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Word;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +17,7 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
+    public ChangeBooleanProperty scoreBoardChangeEvent;
     private HashMap<String, Integer> scoreBoard;
     private Board gameBoard;
     private PlayerStatus myPlayer;
@@ -25,8 +31,9 @@ public class GameInstance {
         this.gameBoard = new Board();
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
-        System.out.println("update my player");
-        this.updateScoreBoard(nickName, 0);
+        this.scoreBoardChangeEvent = new ChangeBooleanProperty();
+
+        updateScoreBoard(nickName, 0);
     }
 
     /**
@@ -37,11 +44,15 @@ public class GameInstance {
     public void updateScoreBoard(String recentPlayerName, int inc) {
         this.scoreBoard.putIfAbsent(recentPlayerName, 0);
         int lastScore = this.scoreBoard.get(recentPlayerName);
-        this.scoreBoard.put(recentPlayerName,lastScore+inc);
+        this.scoreBoard.put(recentPlayerName, lastScore+inc);
+
+        this.scoreBoardChangeEvent.alertChanged();
     }
 
     public void removeScoreBoardPlayer(String playerName) {
         this.scoreBoard.remove(playerName);
+
+        this.scoreBoardChangeEvent.alertChanged();
     }
 
     /**
@@ -49,7 +60,7 @@ public class GameInstance {
      * @param recentPlayerName the player who played last and (maybe) achieved points
      * @param newWord the word he put
      */
-    public void updateBoard(String recentPlayerName, Word newWord) {
+    public void updateGameBoard(String recentPlayerName, Word newWord) {
         this.updateScoreBoard(recentPlayerName, this.gameBoard.tryPlaceWord(newWord));
     }
 

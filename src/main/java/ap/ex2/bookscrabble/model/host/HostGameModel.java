@@ -99,13 +99,9 @@ public class HostGameModel extends GameModel implements Observer {
                     break;
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
                     this.gi.updateScoreBoard(args[1], 0);
-                    setChanged();
-                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, null));
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
                     this.gi.removeScoreBoardPlayer(args[1]);
-                    setChanged();
-                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, null));
                     break;
             }
 

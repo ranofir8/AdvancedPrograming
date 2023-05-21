@@ -40,6 +40,8 @@ public class MyViewModel extends ViewModel {
         this.countPlayers = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
+
+
     }
 
 
@@ -99,15 +101,20 @@ public class MyViewModel extends ViewModel {
         } else {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
-                this.myModel.startGuestGameModel(this.nickname.get(),this.hostIP.get(), hostIntPort);
+                this.myModel.startGuestGameModel(this.nickname.get(), this.hostIP.get(), hostIntPort);
 
             } catch (NumberFormatException e) {
                 setChanged();
                 notifyObservers(new guiMessage("Host port is invalid!", Alert.AlertType.ERROR));
             }
         }
+        this.myModel.getGameModel().getGameInstance().scoreBoardChangeEvent
+                .addListener((observableValue, oldVal, newVal) -> {
+                    System.out.println("scoreboard changed!");
+                    this.updateplayerListGUI();
+                });
 
-        updateplayerListGUI();
+
 
         GameModel gm = this.myModel.getGameModel();
         if (gm != null)

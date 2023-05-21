@@ -4,8 +4,10 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
+import javafx.beans.property.ObjectProperty;
 
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,6 +23,10 @@ public abstract class GameModel extends Model {
         }*/
     }
 
+    public GameInstance getGameInstance() {
+        return this.gi;
+    }
+
     public abstract int getDisplayPort();
 
     public abstract void establishConnection() throws Exception;
@@ -30,4 +36,5 @@ public abstract class GameModel extends Model {
     public List<PlayerRowView> getPlayerList() {
         return this.gi.getPlayerList();
     }
+
 }
