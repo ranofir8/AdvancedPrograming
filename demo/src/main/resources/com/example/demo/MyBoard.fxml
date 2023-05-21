@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!--<?import com.example.demo.MyBoard?>-->
+<!-- fx:controller="com.example.demo.MyBoard" -->
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="29.0" prefWidth="600.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#clearCanvas" text="clear board" />
+                  <Button mnemonicParsing="false" onAction="#drawRand" text="add shape" />
+                  <Button mnemonicParsing="false" onAction="#drawBoardTest" text="draw board" />
+               </children>
+            </HBox>
+            <Canvas fx:id="myCanvas" height="500.0" width="500.0" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
+
+
