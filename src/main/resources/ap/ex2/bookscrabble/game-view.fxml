@@ -14,7 +14,7 @@
 
 <!--Oh no :(-->
 
-<VBox alignment="CENTER" prefHeight="413.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<VBox alignment="CENTER" prefHeight="413.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <top>

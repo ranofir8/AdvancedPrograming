@@ -12,6 +12,12 @@ public abstract class ViewModel extends Observable implements Observer {
     protected Stage stage;
     private Scene sceneH, sceneG;
 
+    /**
+     * save local stages in order to change scenes later
+     * @param stage - stage where to put scenes in
+     * @param sceneH - scene for Hello window
+     * @param sceneG - scene for Game window
+     */
     public void setStages(Stage stage, Scene sceneH, Scene sceneG) {
         this.stage = stage;
         this.sceneH = sceneH;
@@ -22,6 +28,9 @@ public abstract class ViewModel extends Observable implements Observer {
         this.setScene(this.sceneH);
     }
 
+    /**
+     * @param s the relevant scene (FXML window) to change to
+     */
     private void setScene(Scene s) {
         Platform.runLater(()->this.stage.setScene(s));
     }

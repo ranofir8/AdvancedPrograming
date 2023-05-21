@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
+<BorderPane prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
     <top>
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
@@ -55,12 +55,12 @@
                                 </Button>
                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <TextField fx:id="joinGameIP" promptText="ip" text="127.0.0.1">
+                                        <TextField fx:id="joinGameIP" promptText="ip">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </TextField>
-                                        <TextField fx:id="joinGamePort" promptText="port" text="8022">
+                                        <TextField fx:id="joinGamePort" promptText="port">
                                             <HBox.margin>
                                                 <Insets left="20.0" />
                                             </HBox.margin>

@@ -26,7 +26,6 @@ public class HostGameModel extends GameModel implements Observer {
         super(nickname); //String configFileName
         this.hostPort = hostPort;
         this.onlinePlayers = new HashSet<>();
-        System.out.println("hopa");
 
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
     }
@@ -99,12 +98,14 @@ public class HostGameModel extends GameModel implements Observer {
                     this.onRecvMessage(args[1], args[2]);
                     break;
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
-                    this.onlinePlayers.add(args[1]);
+                    this.gi.updateScoreBoard(args[1], 0);
                     setChanged();
-                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, this.onlinePlayers.size() + " " + String.join(", ", this.onlinePlayers)));
+                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, null));
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
-                    this.onlinePlayers.remove(args[1]);
+                    this.gi.removeScoreBoardPlayer(args[1]);
+                    setChanged();
+                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, null));
                     break;
             }
 

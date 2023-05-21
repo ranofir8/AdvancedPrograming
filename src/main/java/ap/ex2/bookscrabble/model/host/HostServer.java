@@ -124,7 +124,7 @@ public class HostServer extends Observable implements Observer {
                 // welcome him to the game
                 this.playersSockets.put(chosenNickname, client);
                 setChanged();
-                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves
+                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves!
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");
             }
         }

@@ -5,8 +5,10 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.common.guiMessage;
+import ap.ex2.bookscrabble.view.PlayerRowView;
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 import java.util.Observable;
@@ -24,6 +26,7 @@ public class MyViewModel extends ViewModel {
     public StringProperty countPlayers;
 
     public StringProperty resultHostPort;
+    public ObjectProperty<ObservableList<PlayerRowView>> playerScoreboard;
 
     public MyViewModel(MainScreenModel myModel) {
         this.myModel = myModel;
@@ -35,14 +38,8 @@ public class MyViewModel extends ViewModel {
         this.resultHostPort = new SimpleStringProperty();
         this.nickname = new SimpleStringProperty();
         this.countPlayers = new SimpleStringProperty();
-//        this.isHost.addListener((o, ov, nv) -> {
-//            //create a host/guest model?
-//            if(nv){
-//                //start host?
-//            } else {
-//                //start guest?
-//            }
-//        });
+
+        this.playerScoreboard = new SimpleObjectProperty<>();
     }
 
 
@@ -67,7 +64,6 @@ public class MyViewModel extends ViewModel {
                         break;
                     case DISPLAY_PORT:
                         String s = "port is: "+(int) cmd.args;
-                        System.out.println(s);
                         this.resultHostPort.set(s);
                         break;
                     case DEFAULT_GUEST_VALUES:
@@ -78,13 +74,21 @@ public class MyViewModel extends ViewModel {
                         break;
                     case UPDATE_PLAYER_LIST:
                         Platform.runLater(() -> this.countPlayers.set("Current players online: " + cmd.args));
-                        System.out.println("Current players online: " + cmd.args);
+                        this.updateplayerListGUI();
                         //this.nickname.set("Current players online: " + cmd.args);
                         break;
                 }
             }
         }
     }
+
+    private void updateplayerListGUI() {
+        Platform.runLater(() -> {
+            this.playerScoreboard.get().setAll(myModel.getGameModel().getPlayerList());
+            System.out.println("update gui list");
+        });
+    }
+
 
     @Override
     public void startGameModel() {
@@ -103,10 +107,10 @@ public class MyViewModel extends ViewModel {
             }
         }
 
+        updateplayerListGUI();
+
         GameModel gm = this.myModel.getGameModel();
         if (gm != null)
             gm.addObserver(this);
-
-
     }
 }

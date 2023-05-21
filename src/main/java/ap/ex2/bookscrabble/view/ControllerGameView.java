@@ -2,6 +2,8 @@ package ap.ex2.bookscrabble.view;
 
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -33,34 +35,18 @@ public class ControllerGameView extends GameView implements Initializable {
     public void initSceneBind() {
         if (this.myViewModel == null)
             return;
+        System.out.println("init bind vm to v");
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.nickname.textProperty().bind(this.myViewModel.nickname);
         this.countPlayers.textProperty().bind(this.myViewModel.countPlayers);
+        this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
     }
 
 
-    /**
-     * @author Ran Ofir
-     * join game button function in opening window -
-     * opens a game if a valid connection to the inserted ip and port is foun
-     */
 
 
-//    /**
-//     * @param sceneFXML the relevant scene (FXML window) to change to
-//     */
-//    private void switchToScene(String sceneFXML) {
-//        try {
-//            Parent root = FXMLLoader.load(R.getResource(sceneFXML));
-//            Scene newScene = new Scene(root);
-//            this.stage.setScene(newScene);
-//            this.stage.show();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//
-//    }
+
+
 
     /**
      * host game button function in opening window -
@@ -128,22 +114,23 @@ public class ControllerGameView extends GameView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.initSceneBind();
-        TableView table = new TableView<PlayerRowView>();
 
-        TableColumn<PlayerRowView,String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
+
+        TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
-        TableColumn<PlayerRowView,String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
+        TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
         scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
 
         this.scoreBoard.getColumns().add(nicknameCol);
         this.scoreBoard.getColumns().add(scoreCol);
 
-        PlayerRowView player = new PlayerRowView();
-        player.setNickname("Ran");
-        player.setScore("Ofir");
-        this.scoreBoard.getItems().add(player);
+
+//        PlayerRowView player = new PlayerRowView("Gil?");
+//        player.setScore(100);
+//        this.scoreBoard.getItems().add(player);
 
         //this.scoreBoard.itemsProperty().bind();
 
     }
+
 }

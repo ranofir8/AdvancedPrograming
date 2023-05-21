@@ -1,9 +1,12 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Word;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
 All things related to the current running game
@@ -22,6 +25,8 @@ public class GameInstance {
         this.gameBoard = new Board();
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
+        System.out.println("update my player");
+        this.updateScoreBoard(nickName, 0);
     }
 
     /**
@@ -29,10 +34,14 @@ public class GameInstance {
      * @param recentPlayerName - the player who played last and (maybe) achieved points
      * @param inc points achieved
      */
-    private void updateScoreBoard(String recentPlayerName, int inc) {
+    public void updateScoreBoard(String recentPlayerName, int inc) {
         this.scoreBoard.putIfAbsent(recentPlayerName, 0);
         int lastScore = this.scoreBoard.get(recentPlayerName);
         this.scoreBoard.put(recentPlayerName,lastScore+inc);
+    }
+
+    public void removeScoreBoardPlayer(String playerName) {
+        this.scoreBoard.remove(playerName);
     }
 
     /**
@@ -45,4 +54,14 @@ public class GameInstance {
     }
 
     public String getNickname() {return this.myPlayer.nickName;}
+
+    // todo maybe dont create a new list each time, but update existing one each time this.gameBoard changes?
+    public List<PlayerRowView> getPlayerList() {
+        return this.scoreBoard.entrySet().stream()
+                .map(stringIntegerEntry -> new PlayerRowView(
+                        stringIntegerEntry.getKey() + (stringIntegerEntry.getKey().equals(myPlayer.nickName) ? " (You)" : ""),
+                        stringIntegerEntry.getValue()))
+                .collect(Collectors.toList());
+    }
+
 }

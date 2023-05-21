@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble.view;
 
+import ap.ex2.bookscrabble.Config;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -51,7 +52,13 @@ public class ControllerHelloView extends GameView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String defaultGuestIP = Config.getInstance().get(Config.DEFAULT_GUEST_IP_KEY);
+        String defaultGuestPort = Config.getInstance().get(Config.DEFAULT_GUEST_PORT_KEY);
 
+        if (defaultGuestIP != null)
+            this.joinGameIP.setText(defaultGuestIP);
+        if (defaultGuestPort != null)
+            this.joinGamePort.setText(defaultGuestPort);
     }
 
     @FXML
@@ -66,18 +73,14 @@ public class ControllerHelloView extends GameView implements Initializable {
 //        }
     }
 
+    /**
+     * @author Ran Ofir
+     * join game button function in opening window -
+     * opens a game if a valid connection to the inserted ip and port is foun
+     */
     @FXML
     protected void joinExistingGameClick() {
         this.isHost.set(false); //transmitted to vm and m(?)
         this.myViewModel.startGameModel();
-
-//        try {
-//            this.switchToScene(SCENE_GAME_FXML);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        //setChanged();
-        //notifyObservers(false);
-        //System.out.println("join");
     }
 }
