@@ -51,6 +51,7 @@ public class MyMainScreenModel extends MainScreenModel {
             this.gameModel.establishConnection();
 
             if (this.gameModel instanceof HostGameModel) {
+
                 setChanged();
                 notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
                 setChanged();

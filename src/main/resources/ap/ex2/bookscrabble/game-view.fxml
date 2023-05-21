@@ -5,6 +5,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -13,41 +16,60 @@
 
 <VBox alignment="CENTER" prefHeight="413.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <children>
-      <Label fx:id="nickname" alignment="TOP_LEFT" text="Nickname">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="20.0" top="20.0" />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER" prefHeight="109.0" prefWidth="500.0">
-         <children>
-            <Label fx:id="portNum" text="Port">
-               <HBox.margin>
-                  <Insets right="50.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label text="Players in game">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Button mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
-        <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
-        <Separator prefWidth="200.0" />
-        <Canvas height="113.0" width="200.0" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="nickname" alignment="TOP_LEFT" text="Nickname">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="109.0" prefWidth="500.0">
+                     <children>
+                        <Label fx:id="portNum" text="Port">
+                           <HBox.margin>
+                              <Insets right="50.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="countPlayers" text="Players in game">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                    <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
+                    <Separator prefWidth="200.0" />
+                    <Canvas height="113.0" width="200.0" />
+               </children>
+            </VBox>
+         </center>
+         <right>
+            <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="616.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+              <columns>
+                <TableColumn editable="false" prefWidth="100.0" text="Nickname" />
+                <TableColumn editable="false" prefWidth="50.0" resizable="false" sortType="DESCENDING" text="Score" />
+              </columns>
+            </TableView>
+         </right>
+      </BorderPane>
     </children>
 </VBox>

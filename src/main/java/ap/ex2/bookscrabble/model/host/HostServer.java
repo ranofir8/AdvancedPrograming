@@ -14,12 +14,20 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
-public class HostServer implements Observer {
+public class HostServer extends Observable implements Observer {
+    public static final String SOCKET_MSG_NOTIFICATION = "socketMsg";
+    public static final String PLAYER_JOINED_NOTIFICATION = "playerJoin";
+    public static final String PLAYER_EXITED_NOTIFICATION = "playerExit";
     private final int hostPort;
     private final int threadsLimit;
     private boolean stop;
 
     private Thread.UncaughtExceptionHandler exceptionHandler;
+
+    public int getCountPlayers() {
+        return playersSockets.size();
+    }
+
     private HashMap<String, SocketClientHandler> playersSockets;
 
     private BiConsumer<String, String> onMsgReceivedConsumer;
@@ -88,8 +96,8 @@ public class HostServer implements Observer {
 
         if (nickname[0] != null) {
             // client socket is already recognized, just forward this message to the Host model
-            if (this.onMsgReceivedConsumer != null)
-                this.onMsgReceivedConsumer.accept(nickname[0], (String) arg);
+            setChanged();
+            notifyObservers(new String[]{HostServer.SOCKET_MSG_NOTIFICATION, nickname[0], (String) arg});
         } else {
             // client socket is new!
 
@@ -115,6 +123,8 @@ public class HostServer implements Observer {
             } else {
                 // welcome him to the game
                 this.playersSockets.put(chosenNickname, client);
+                setChanged();
+                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");
             }
         }

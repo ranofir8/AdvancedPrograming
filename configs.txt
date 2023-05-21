@@ -1,5 +1,5 @@
 book_scrabble_ip,127.0.0.1
 book_scrabble_port,6000
-host_port,8020
+host_port,8023
 default_guest_ip,127.0.0.1
 default_guest_port,8020

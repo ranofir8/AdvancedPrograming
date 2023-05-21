@@ -1,24 +1,34 @@
 package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
+import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.model.GameModel;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class HostGameModel extends GameModel {
+public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
     private int hostPort;
+    private Set<String> onlinePlayers;
+
     private HostServer hostServer;
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName
         this.hostPort = hostPort;
+        this.onlinePlayers = new HashSet<>();
+        System.out.println("hopa");
+
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
     }
-
-
 
     @Override
     public int getDisplayPort() {
@@ -32,6 +42,7 @@ public class HostGameModel extends GameModel {
         this.hostServer = new HostServer(this.hostPort, 5, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
         });
+        this.hostServer.addObserver(this);
 
         this.hostServer.setOnMsgReceivedCallback(
                 new BiConsumer<String, String>() {
@@ -73,13 +84,29 @@ public class HostGameModel extends GameModel {
 
     }
 
-
-
-
     protected void finalize() {
         this.hostServer.close();
     }
 
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o == this.hostServer) {
+            String[] args = (String[]) arg;
+            switch (args[0]) {
+                case HostServer.SOCKET_MSG_NOTIFICATION:
+                    this.onRecvMessage(args[1], args[2]);
+                    break;
+                case HostServer.PLAYER_JOINED_NOTIFICATION:
+                    this.onlinePlayers.add(args[1]);
+                    setChanged();
+                    notifyObservers(new Command2VM(Command.UPDATE_PLAYER_LIST, this.onlinePlayers.size()));
+                    break;
+                case HostServer.PLAYER_EXITED_NOTIFICATION:
+                    this.onlinePlayers.remove(args[1]);
+                    break;
+            }
 
+        }
+    }
 }

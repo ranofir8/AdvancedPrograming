@@ -4,11 +4,16 @@ import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
@@ -20,7 +25,13 @@ public class ControllerGameView extends GameView implements Initializable {
     private Label portNum;
 
     @FXML
+    private Label countPlayers;
+
+    @FXML
     private Label nickname;
+
+    @FXML
+    private TableView<PlayerRowView> scoreBoard;
 
 
     public void initSceneBind() {
@@ -28,6 +39,7 @@ public class ControllerGameView extends GameView implements Initializable {
             return;
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.nickname.textProperty().bind(this.myViewModel.nickname);
+        this.countPlayers.textProperty().bind(this.myViewModel.countPlayers);
     }
 
 
@@ -120,5 +132,17 @@ public class ControllerGameView extends GameView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.initSceneBind();
+        ObservableList<PlayerRowView> ol = new SimpleListProperty<>();
+        this.scoreBoard.setItems(ol);
+        ol.add(new PlayerRowView("Ran", "Ofir"));
+
+        TableColumn<PlayerRowView,String> firstNameCol = new TableColumn<PlayerRowView,String>("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory("firstName"));
+        TableColumn<PlayerRowView,String> lastNameCol = new TableColumn<PlayerRowView,String>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory("lastName"));
+
+        this.scoreBoard.getColumns().setAll(firstNameCol, lastNameCol);
     }
+
+
 }

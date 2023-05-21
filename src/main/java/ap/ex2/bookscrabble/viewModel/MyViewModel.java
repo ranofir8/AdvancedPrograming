@@ -5,6 +5,7 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.common.guiMessage;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.control.Alert;
 
@@ -20,6 +21,8 @@ public class MyViewModel extends ViewModel {
 
     public StringProperty nickname;
 
+    public StringProperty countPlayers;
+
     public StringProperty resultHostPort;
 
     public MyViewModel(MainScreenModel myModel) {
@@ -31,6 +34,7 @@ public class MyViewModel extends ViewModel {
 
         this.resultHostPort = new SimpleStringProperty();
         this.nickname = new SimpleStringProperty();
+        this.countPlayers = new SimpleStringProperty();
 //        this.isHost.addListener((o, ov, nv) -> {
 //            //create a host/guest model?
 //            if(nv){
@@ -71,6 +75,11 @@ public class MyViewModel extends ViewModel {
                         this.hostIP.set(vals[0]);
                         this.hostPort.set(vals[0]);
                         System.out.println("got defaults: "+ vals[0] + ", "+vals[1]);
+                        break;
+                    case UPDATE_PLAYER_LIST:
+                        Platform.runLater(() -> this.countPlayers.set("Current players online: " + cmd.args));
+                        System.out.println("Current players online: " + cmd.args);
+                        //this.nickname.set("Current players online: " + cmd.args);
                         break;
                 }
             }
