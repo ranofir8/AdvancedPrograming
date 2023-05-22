@@ -20,25 +20,30 @@ public class ControllerHelloView extends GameView implements Initializable {
     protected SimpleBooleanProperty isHostHello;
 
     @FXML
-    private TextField joinGamePort;
+    private TextField joinGamePortTF;
 
     @FXML
-    private TextField joinGameIP;
+    private TextField joinGameIPTF;
 
     @FXML
-    private TextField nickname;
+    private TextField nicknameTF;
 
-    public ControllerHelloView( Button guestBu) {
+    @FXML
+    private Button joinGameButton;
+    @FXML
+    private Button hostGameButton;
+
+    public ControllerHelloView() {
         this.isHostHello = new SimpleBooleanProperty();
     }
 
     public void initSceneBind() {
         if (this.myViewModel == null)
             return;
-        this.myViewModel.hostPort.bind(this.joinGamePort.textProperty());
-        this.myViewModel.hostIP.bind(this.joinGameIP.textProperty());
+        this.myViewModel.hostPort.bind(this.joinGamePortTF.textProperty());
+        this.myViewModel.hostIP.bind(this.joinGameIPTF.textProperty());
         this.myViewModel.isHost.bind(this.isHostHello);
-        this.myViewModel.nickname.bind(this.nickname.textProperty());
+        this.myViewModel.nickname.bind(this.nicknameTF.textProperty());
     }
 
     @Override
@@ -59,16 +64,19 @@ public class ControllerHelloView extends GameView implements Initializable {
         String defaultGuestPort = Config.getInstance().get(Config.DEFAULT_GUEST_PORT_KEY);
 
         if (defaultGuestIP != null)
-            this.joinGameIP.setText(defaultGuestIP);
+            this.joinGameIPTF.setText(defaultGuestIP);
         if (defaultGuestPort != null)
-            this.joinGamePort.setText(defaultGuestPort);
-//
-//        this.joinGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
-//
-//        this.nicknameTF.textProperty().addListener((observableValue, oldNickname, newNickname) ->
-//                this.hostGameButton.setDisable(newNickname.length() == 0));
+            this.joinGamePortTF.setText(defaultGuestPort);
+
+        this.joinGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
+
+        this.nicknameTF.textProperty().addListener((observableValue, oldNickname, newNickname) ->
+                this.hostGameButton.setDisable(newNickname.length() == 0));
+        
+        this.hostGameButton.disableProperty().set(true);
     }
 
+    @FXML
     protected void hostNewGameClick() {
         this.isHostHello.set(true);
         this.myViewModel.startGameModel();
@@ -79,6 +87,7 @@ public class ControllerHelloView extends GameView implements Initializable {
      * join game button function in opening window -
      * opens a game if a valid connection to the inserted ip and port is foun
      */
+    @FXML
     protected void joinExistingGameClick() {
         this.isHostHello.set(false); //transmitted to vm and m(?)
         this.myViewModel.startGameModel();

@@ -29,7 +29,7 @@
                 <Label prefHeight="36.0" prefWidth="292.0" text="Ofir Yehezkel, Moriya Weisman, Gilad Savoray, Ran Ofir" />
             <HBox alignment="CENTER" prefHeight="71.0" prefWidth="910.0">
                <children>
-                  <TextField fx:id="nickname" prefHeight="25.0" prefWidth="155.0" promptText="Nickname">
+                  <TextField fx:id="nicknameTF" prefHeight="25.0" prefWidth="155.0" promptText="Nickname">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -59,12 +59,12 @@
                         -->
                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                        <TextField fx:id="joinGameIP" promptText="ip">
+                                        <TextField fx:id="joinGameIPTF" promptText="ip">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                         </TextField>
-                                        <TextField fx:id="joinGamePort" promptText="port">
+                                        <TextField fx:id="joinGamePortTF" promptText="port">
                                             <HBox.margin>
                                                 <Insets left="20.0" />
                                             </HBox.margin>
