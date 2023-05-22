@@ -14,7 +14,7 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
          <top>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
@@ -54,14 +54,18 @@
          <center>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                    <Canvas fx:id="boardCanvas" height="500.0" width="500.0" />
-                    <Separator prefWidth="200.0" />
-            <ScrollPane prefWidth="200.0">
+                    <Canvas fx:id="boardCanvas" height="250.0" width="250.0" />
+                    <Separator prefHeight="36.0" prefWidth="500.0" />
+            <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ScrollPane fitToWidth="true" prefHeight="19.0" prefWidth="500.0">
                <content>
-                  <Label text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." />
+                          <Canvas fx:id="TilesCanvas" height="50.0" width="487.0" />
                </content>
             </ScrollPane>
-                    <Canvas height="113.0" width="200.0" />
                </children>
             </VBox>
          </center>

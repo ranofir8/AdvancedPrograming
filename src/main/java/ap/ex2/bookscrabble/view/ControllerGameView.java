@@ -18,9 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.net.URL;
-import java.util.Comparator;
-import java.util.Observable;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerGameView extends GameView implements Initializable {
     @FXML
@@ -63,6 +61,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
     @FXML
     public Canvas boardCanvas; // public -> private
+    private final double letterMargin = 0.25;
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
@@ -73,6 +72,8 @@ public class ControllerGameView extends GameView implements Initializable {
         test_ControllerGameView t_board = new test_ControllerGameView();
         t_board.testBoard(b);
         Tile t;
+
+
         gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
@@ -104,12 +105,48 @@ public class ControllerGameView extends GameView implements Initializable {
                 t = b.getTileAt(row,col);
                 if(t != null) {
                     gc.setFill(Color.BLACK); // Set the text color to black
-                    gc.fillText("" + t.letter, col * square + 10, row * square + square - 10);
+                    gc.fillText("" + t.letter, (col + letterMargin) * square, (row +1-letterMargin) * square);
                 }
             }
         }
+        drawTiles();
 
     }
+
+
+    @FXML
+    public Canvas TilesCanvas ; // public -> private
+
+    private List<Tile> tiles;
+    public void drawTiles() {
+        int square = (int) this.TilesCanvas.getHeight();
+        System.out.println(square + "sq");
+        GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
+        tiles = new ArrayList<>();
+        for(int i=0; i<70 ;i++) {
+            tiles.add(i, new Tile((char) ('A' + (i%26)),i*2));
+        }
+        this.TilesCanvas.setWidth(square * tiles.size()); // adapt canvas width
+
+        int w = (int) this.TilesCanvas.getWidth(), h = (int) this.TilesCanvas.getHeight();
+
+        gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
+//        for (int row = 0; row < Board.ROW_NUM; row++) {
+        int i = 0;
+        for (Tile t : tiles) {
+            gc.setFill(Color.GRAY);
+            gc.fillRect(i * square, 0, square, square);
+            gc.strokeRect(i * square, 0, square, square);
+            gc.setFill(Color.BLACK); // Set the text color to black
+            gc.fillText("" + t.letter, (i + letterMargin) * square, letterMargin * square);
+
+            i++;
+        }
+
+
+
+    }
+
 
 
 
