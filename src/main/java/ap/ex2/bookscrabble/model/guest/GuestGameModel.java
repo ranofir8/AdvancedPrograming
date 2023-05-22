@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
+
 public class GuestGameModel extends GameModel implements Observer {
     private String hostIP;
     private int hostPort;
@@ -51,8 +52,8 @@ public class GuestGameModel extends GameModel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         String sentMsg = (String) arg;
-        char msgProtocol = sentMsg.charAt(0);
-        String msgExtra = sentMsg.substring(1, sentMsg.length());
+        char msgProtocol = sentMsg.charAt(0); //when a message is sent, the first part is a protocol
+        String msgExtra = sentMsg.substring(1, sentMsg.length()); //rest of the message contain details
 
         switch (msgProtocol) {
             case Protocol.HOST_LOGIN_REJECT_FULL:

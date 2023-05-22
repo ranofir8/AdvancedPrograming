@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
     private int hostPort;
-
     private HostServer hostServer;
     private Tile.Bag gameBag;
     private List<String> playersTurn;
@@ -79,7 +78,7 @@ public class HostGameModel extends GameModel implements Observer {
 
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) { //updates from:
         if (o == this.hostServer) {
             String[] args = (String[]) arg;
             switch (args[0]) {
