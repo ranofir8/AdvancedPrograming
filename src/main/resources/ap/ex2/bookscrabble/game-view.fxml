@@ -14,9 +14,9 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
          <top>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
                <children>
                   <Label fx:id="nickname" alignment="TOP_LEFT" text="Nickname">
                      <font>
@@ -54,14 +54,14 @@
          <center>
             <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
                <children>
-                    <Canvas fx:id="boardCanvas" height="400.0" width="400.0" />
+                    <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#Clicked_on_board" width="520.0" />
                     <Separator prefHeight="36.0" prefWidth="500.0" />
             <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true">
+            <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="67.0" prefWidth="563.0">
                <content>
                           <Canvas fx:id="TilesCanvas" height="65.0" width="500.0" />
                </content>
@@ -70,7 +70,7 @@
             </VBox>
          </center>
          <right>
-            <TableView id="scoreBoard" fx:id="scoreBoard" BorderPane.alignment="CENTER">
+            <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0" BorderPane.alignment="CENTER">
               <columns>
 <!--                <TableColumn editable="false" prefWidth="100.0" text="Nickname" />-->
 <!--                <TableColumn editable="false" prefWidth="50.0" resizable="false" sortType="DESCENDING" text="Score" />-->

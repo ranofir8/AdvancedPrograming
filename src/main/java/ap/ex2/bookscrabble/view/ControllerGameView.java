@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -118,6 +119,28 @@ public class ControllerGameView extends GameView implements Initializable {
 
     }
 
+    @FXML
+    void Clicked_on_board(MouseEvent event){
+        double x = event.getX();
+        double y = event.getY();
+        int row=0,col =0;
+        Board b = new Board();
+        int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
+        int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
+        System.out.println("x = " + x + " y = " + y);
+        row = (int)(x/square);
+        col = (int)(y/square);
+        mark_board_square(row,col,square, this.boardCanvas.getGraphicsContext2D());
+
+
+    }
+
+
+    void mark_board_square(int x, int y, int square, GraphicsContext gc ){
+        gc.setStroke(Color.PERU);
+        gc.strokeRect(x*square, y*square, square, square);
+
+    }
 
     @FXML
     public Canvas TilesCanvas; // public -> private
