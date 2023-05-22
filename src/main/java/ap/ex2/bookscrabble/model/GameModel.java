@@ -37,4 +37,5 @@ public abstract class GameModel extends Model {
         this.gi.updateScoreBoard(newplayerName, 0);
     }
 
+    public abstract void onStartGame();
 }

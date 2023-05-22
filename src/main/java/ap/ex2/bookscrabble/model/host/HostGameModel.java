@@ -8,10 +8,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -50,6 +47,16 @@ public class HostGameModel extends GameModel implements Observer {
     @Override
     protected void closeConnection() {
         this.hostServer.close();
+    }
+
+    @Override
+    public void onStartGame() {
+        this.gi.onStartGame();  // status PLAYING
+//        this. DRAW BOARD todo
+        // decide on turns
+        // draw tiles for players
+        this.hostServer.sendMsgToAllGuests(Protocol.START_GAME + "");
+
     }
 
     public void onRecvMessage(String nickname, String msgRecv) {

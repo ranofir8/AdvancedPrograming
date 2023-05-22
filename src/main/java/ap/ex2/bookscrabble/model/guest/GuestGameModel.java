@@ -44,6 +44,11 @@ public class GuestGameModel extends GameModel implements Observer {
     }
 
     @Override
+    public void onStartGame() {
+
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
         String sentMsg = (String) arg;
         char msgProtocol = sentMsg.charAt(0);

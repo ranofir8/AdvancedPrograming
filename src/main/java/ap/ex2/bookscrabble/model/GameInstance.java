@@ -75,4 +75,11 @@ public class GameInstance {
                 .collect(Collectors.toList());
     }
 
+    public boolean isMyTurn() {
+        return this.myPlayer.getIsMyTurn();
+    }
+
+    public void onStartGame() {
+        this.gameState = GameState.PLAYING;
+    }
 }

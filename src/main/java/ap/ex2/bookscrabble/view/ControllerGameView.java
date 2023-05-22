@@ -181,8 +181,6 @@ public class ControllerGameView extends GameView implements Initializable {
             i++;
         }
 
-
-
     }
 
 
