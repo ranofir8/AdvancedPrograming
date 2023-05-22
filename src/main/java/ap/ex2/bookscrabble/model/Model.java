@@ -5,4 +5,8 @@ import java.util.Observer;
 
 public abstract class Model extends Observable {
 
+    protected void notifyViewModel(Object message) {
+        setChanged();
+        this.notifyObservers(message);
+    }
 }

@@ -55,7 +55,6 @@ public class GuestGameModel extends GameModel implements Observer {
                 setChanged();
                 this.notifyObservers(new String[]{"MSG", "This nickname is already taken! Copy-Cat..."});
                 this.closeConnection();
-
                 break;
 
             case Protocol.HOST_LOGIN_ACCEPT:

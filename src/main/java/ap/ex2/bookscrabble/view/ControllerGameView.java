@@ -196,9 +196,7 @@ public class ControllerGameView extends GameView implements Initializable {
 //        this.tilesSP.minViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
 //        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
 
-
         this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
-
 
         TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
@@ -209,10 +207,8 @@ public class ControllerGameView extends GameView implements Initializable {
         nicknameCol.setSortable(false);
         scoreCol.editableProperty().set(false);
 
-
         this.scoreBoard.getColumns().add(nicknameCol);
         this.scoreBoard.getColumns().add(scoreCol);
-
         this.scoreBoard.getSortOrder().add(scoreCol);
 //        this.scoreBoard.property
 
