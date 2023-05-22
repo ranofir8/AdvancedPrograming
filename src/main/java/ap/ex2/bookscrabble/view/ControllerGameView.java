@@ -4,6 +4,10 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
@@ -28,6 +32,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private BooleanProperty isHostGame;
     private ObjectProperty<Board> gameBoardProperty;
     private IntegerProperty playersCount;
+    private BooleanProperty isPlayerTurn;
 
     @FXML
     private Label portNum;
@@ -86,7 +91,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
 
     @Override
-    public void update(Observable o, Object arg) { //updates from myViewModel
+    public void update(Observable o, Object arg) {
         if (o == this.myViewModel) {
             if (arg instanceof Command) {
                 Command cmd = (Command) arg;
@@ -98,6 +103,7 @@ public class ControllerGameView extends GameView implements Initializable {
             }
         }
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -143,19 +149,32 @@ public class ControllerGameView extends GameView implements Initializable {
     public Canvas boardCanvas; // public -> private
     private final double letterMargin = 0.25;
     private final double tilePadding = 0.1;
+
+    private double squareOfBoard = 1;
+    private double squareOfTiles = 1;
+
+    public void testDrawings() {
+        this.drawBoardTest();
+        this.drawTiles();
+    }
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
-//        Board b = this.myPlayer.getGameBoard();  todo get from model
+        gc.clearRect(0, 0, this.boardCanvas.getWidth(), this.boardCanvas.getHeight());
+
         //        test_ControllerGameView t_board = new test_ControllerGameView();
 //        t_board.testBoard(b);
 
         Board b = this.gameBoardProperty.get();
 
+//        Board b = this.myPlayer.getGameBoard();  todo get from model
+        //        test_ControllerGameView t_board = new test_ControllerGameView();
+//        t_board.testBoard(b);
+
+
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
-        int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
-        //fill board with words for test:
-
+        this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
+        double square = this.squareOfBoard;
         Tile t;
 
 
@@ -164,25 +183,29 @@ public class ControllerGameView extends GameView implements Initializable {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
                 Color toFill;
-                switch (m) {
-                    case 11:
-                        toFill = Color.color(0, 153.0/255, 0);
-                        break;
-                    case 13:
-                        toFill = Color.color(0, 153.0/255, 1);
-                        break;
-                    case 12:
-                        toFill = Color.color(100.0/255, 204.0/255, 1);
-                        break;
-                    case 21:
-                        toFill = Color.color(1, 1, 153.0/255);
-                        break;
-                    case 31:
-                        toFill = Color.color(1, 51.0/255, 51.0/255);
-                        break;
-                    default:
-                        toFill = Color.GRAY;
-                        break;
+                if (row == this.selectedBoardRow && col == this.selectedBoardCol) {
+                    toFill = Color.color(1, 60.0/255, 200.0/255);
+                } else {
+                    switch (m) {
+                        case 11:
+                            toFill = Color.color(0, 153.0 / 255, 0);
+                            break;
+                        case 13:
+                            toFill = Color.color(0, 153.0 / 255, 1);
+                            break;
+                        case 12:
+                            toFill = Color.color(100.0 / 255, 204.0 / 255, 1);
+                            break;
+                        case 21:
+                            toFill = Color.color(1, 1, 153.0 / 255);
+                            break;
+                        case 31:
+                            toFill = Color.color(1, 51.0 / 255, 51.0 / 255);
+                            break;
+                        default:
+                            toFill = Color.GRAY;
+                            break;
+                    }
                 }
                 gc.setFill(toFill);
                 gc.fillRect(col * square, row * square, square, square);
@@ -191,34 +214,159 @@ public class ControllerGameView extends GameView implements Initializable {
 
                 if(t != null) {
                     gc.setFill(Color.BLACK); // Set the text color to black
-                    gc.fillText("" + t.letter, (col + letterMargin) * square, (row +1-letterMargin) * square);
+                    gc.fillText("" + t.letter, (col +letterMargin) * square, (row + 1- letterMargin) * square );
+                } else if (IsSquareWithPlayerPlacement(row,col)){
+                    System.out.println("letter on the board. l = " + TilesPlaced.get(PositionOnBoardToInt(row,col)).letter);
+                    gc.setFill(Color.BLACK); // Set the text color to black
+                    gc.fillText("" + TilesPlaced.get(PositionOnBoardToInt(row,col)).letter, (col +letterMargin) * square, (row + 1- letterMargin) * square);
                 }
             }
         }
-        drawTiles();
 
     }
 
+
+    private int selectedBoardRow = -1;
+    private int selectedBoardCol = -1;
+
+    private int selectedTileIndex = -1;
+
+//    private class Point {
+//        int x;
+//        int y;
+//        public Point(int x, int y) {
+//            this.x = x;
+//            this.y = y;
+//        }
+//        public int getX() {
+//            return x;
+//        }
+//        public int getY() {
+//            return y;
+//        }
+//        public Point getPoint(){
+//            return new Point(x,y);
+//        }
+//    }
+    private HashMap<Integer, Tile> TilesPlaced = new HashMap<Integer, Tile>();
+
     @FXML
-    void Clicked_on_board(MouseEvent event){
+    void clickedOnCanvasEvent(MouseEvent event){
+        if (!isPlayerTurn.getValue())
+            return; //TODO: add error message: It Is Not Your Turn
+        System.out.println("clickedOnCanvasEvent");
         double x = event.getX();
         double y = event.getY();
-        int row=0,col =0;
-        Board b = new Board();
-        int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
-        int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
-        System.out.println("x = " + x + " y = " + y);
-        row = (int)(x/square);
-        col = (int)(y/square);
-        mark_board_square(row,col,square, this.boardCanvas.getGraphicsContext2D());
+        double square = 0;
+        Canvas c = (Canvas) event.getTarget();
+        if (c == this.boardCanvas) {
+            square = squareOfBoard;
+        } else if (c == this.TilesCanvas) {
+            square = squareOfTiles*(1+tilePadding);
+        }
 
+        int row = 0, col = 0;
+        row = (int) (y / square);
+        col = (int) (x / square);
+
+        System.out.println("x = " + x + " y = " + y + " | row = " + row + " col = " + col);
+
+//        this.markBoardSquare(row, col, square, c.getGraphicsContext2D());
+
+        if (c == this.boardCanvas) {
+            if (this.isValidBoardPosition(row, col))
+                clickedOnBoard(row, col);
+//            this.drawBoardTest();
+        } else if (c == this.TilesCanvas) {
+            if (this.isValidTilesPosition(row, col))
+                clickOnTiles(row, col);
+//            this.drawTiles();
+        }
         SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
     }
 
 
-    void mark_board_square(int x, int y, int square, GraphicsContext gc ){
+    void markBoardSquare(int x, int y, double square, GraphicsContext gc) {
         gc.setStroke(Color.PERU);
         gc.strokeRect(x*square, y*square, square, square);
+    }
+
+
+    /**
+     * @return true if the position on canvas is inside the board
+     */
+    boolean isValidBoardPosition(int row, int col) {
+        return 0 <= col && col < Board.COL_NUM && 0 <= row && row < Board.ROW_NUM;
+    }
+
+
+    /**
+     * @return true if the position on canvas is inside the Tiles bag
+     */
+    boolean isValidTilesPosition(int row, int col) {
+        return 0 <= col && col < this.tiles.size() && row == 0;
+    }
+
+    boolean IsValidBoardChoice(int row, int col) {
+        return true;
+        //move to view model class ?
+        //not hereeeee!!!!
+
+        //check if the position in legal from the board point of view
+        //check if this choice consists with the last ones.
+    }
+
+    boolean IsSquareWithPlayerPlacement(int row, int col){
+        return TilesPlaced.containsKey( PositionOnBoardToInt(row,col));
+    }
+
+    /**
+     *
+     * @return int value of a point on the board.
+     */
+    int PositionOnBoardToInt(int row, int col){
+        return (row*Board.ROW_NUM+col);
+    }
+    void clickedOnBoard(int row, int col){
+        System.out.println("clickedOnBoard | row = " +row +" col = "+ col);
+        System.out.println("selectedTileIndex = " + selectedTileIndex);
+
+        if (!IsValidBoardChoice(row,col))
+            return;
+        if (selectedTileIndex > -1) { // there is a legal choice of tile to put on the board
+//            Tile t = this.tiles.get(selectedTileIndex);
+            selectedBoardRow = row;
+            selectedBoardCol = col;
+            TilesPlaced.put(PositionOnBoardToInt(row,col),this.tiles.get(selectedTileIndex));
+            tiles.remove(selectedTileIndex);
+            selectedTileIndex = -1;
+//            markBoardSquare(row,col,this.squareOfBoard,this.boardCanvas.get);
+        }
+        else {
+            selectedBoardRow = -1;
+            selectedBoardCol = -1;
+        }
+
+        this.testDrawings();
+    }
+
+    void clickOnTiles(int row, int col){
+        System.out.println("clickOnTiles | row = " +row +" col = "+ col);
+        System.out.println("selectedTileIndex = " + selectedTileIndex);
+//        if (!IsValidTileChoice(row, col))
+//            return;
+//        if (selectedTileIndex >= 0) { // there is a legal choice of tile to put on the board
+            selectedBoardRow = -1;
+            selectedBoardCol = -1;
+            selectedTileIndex = col;
+
+//            markBoardSquare(row,col,this.squareOfTiles,this.boardCanvas.getGraphicsContext2D());
+//        }
+//        else{
+
+//        }
+
+        this.testDrawings();
 
     }
 
@@ -237,17 +385,16 @@ public class ControllerGameView extends GameView implements Initializable {
     public void test_RemoveTile() {
         this.tiles.remove(0);
     }
+
     public void drawTiles() {
-        this.test_RemoveTile();
+//        this.test_RemoveTile();
 
         int square = (int) this.TilesCanvas.getHeight();
+        this.squareOfTiles = square;
         this.TilesCanvas.heightProperty().set(square+0.1);
         GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
 
         this.TilesCanvas.setWidth(square * (1 + this.tilePadding) * tiles.size() - tilePadding*square*0.5); // adapt canvas width
-
-        int w = (int) this.TilesCanvas.getWidth(), h = (int) this.TilesCanvas.getHeight();
-
 
 //        for (int row = 0; row < Board.ROW_NUM; row++) {
         int i = 0;
@@ -255,6 +402,9 @@ public class ControllerGameView extends GameView implements Initializable {
         for (Tile t : tiles) {
             double startX = i * (square * (1+tilePadding));
             gc.setFill(Color.GRAY);
+            if (i == this.selectedTileIndex)
+                gc.setFill(Color.PLUM);
+
             gc.fillRect(startX, 0, square, square);
             gc.strokeRect(startX, 0, square, square);
             gc.setFill(Color.BLACK); // Set the text color to black
@@ -271,6 +421,8 @@ public class ControllerGameView extends GameView implements Initializable {
             i++;
         }
 
+
     }
+
 
 }

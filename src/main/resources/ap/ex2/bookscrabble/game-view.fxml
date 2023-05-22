@@ -59,7 +59,7 @@
          <center>
             <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
                <children>
-                    <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#Clicked_on_board" width="520.0" />
+                    <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="520.0" />
                     <Separator prefHeight="36.0" prefWidth="500.0" />
             <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
                <font>
@@ -68,7 +68,7 @@
             </Label>
             <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="67.0" prefWidth="563.0">
                <content>
-                          <Canvas fx:id="TilesCanvas" height="65.0" width="500.0" />
+                          <Canvas fx:id="TilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="500.0" />
                </content>
             </ScrollPane>
                </children>
@@ -77,8 +77,6 @@
          <right>
             <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0" BorderPane.alignment="CENTER">
               <columns>
-<!--                <TableColumn editable="false" prefWidth="100.0" text="Nickname" />-->
-<!--                <TableColumn editable="false" prefWidth="50.0" resizable="false" sortType="DESCENDING" text="Score" />-->
               </columns>
             </TableView>
          </right>
