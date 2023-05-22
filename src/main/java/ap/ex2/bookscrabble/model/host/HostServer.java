@@ -122,9 +122,10 @@ public class HostServer extends Observable implements Observer {
 
             String chosenNickname = msgExtra;
 
-
-            if (this.hasPlayerNamed(chosenNickname)) {
-
+            if(this.playersSockets.size() >= 4) {
+                client.sendMsg(Protocol.HOST_LOGIN_REJECT_FULL + "");
+                client.close();
+            } else if (this.hasPlayerNamed(chosenNickname)) {
                 // kick this player
                 client.sendMsg(Protocol.HOST_LOGIN_REJECT_NICKNAME + "");
                 client.close();

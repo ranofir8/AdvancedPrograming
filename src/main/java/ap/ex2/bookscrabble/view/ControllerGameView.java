@@ -68,6 +68,10 @@ public class ControllerGameView extends GameView implements Initializable {
     private final double letterMargin = 0.25;
     private final double tilePadding = 0.1;
     public void drawBoardTest() {
+        // unbind visibility
+        this.startGameButton.visibleProperty().unbind();
+        this.startGameButton.visibleProperty().set(false); //bye button
+
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
         Board b = new Board();
