@@ -68,4 +68,8 @@ public class PlayerStatus {
         //todo
         return null;
     }
+
+    public boolean getIsMyTurn() {
+        return this.isMyTurn;
+    }
 }

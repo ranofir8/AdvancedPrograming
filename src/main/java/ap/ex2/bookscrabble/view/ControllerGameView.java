@@ -2,10 +2,7 @@ package ap.ex2.bookscrabble.view;
 
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -50,7 +47,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.startGameButton.visibleProperty().bind(this.isHostGame);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
-        this.nickname.textProperty().bind(this.myViewModel.nickname);
+        this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.nickname.textProperty().set(this.myViewModel.getStatusText()));
         this.countPlayers.textProperty().bind(this.myViewModel.countPlayers);
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
     }
@@ -68,9 +65,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private final double letterMargin = 0.25;
     private final double tilePadding = 0.1;
     public void drawBoardTest() {
-        // unbind visibility
-        this.startGameButton.visibleProperty().unbind();
-        this.startGameButton.visibleProperty().set(false); //bye button
+
 
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
@@ -207,19 +202,22 @@ public class ControllerGameView extends GameView implements Initializable {
 
         nicknameCol.editableProperty().set(false);
         nicknameCol.setSortable(false);
+
         scoreCol.editableProperty().set(false);
 
         this.scoreBoard.getColumns().add(nicknameCol);
         this.scoreBoard.getColumns().add(scoreCol);
         this.scoreBoard.getSortOrder().add(scoreCol);
-//        this.scoreBoard.property
 
 
-//        PlayerRowView player = new PlayerRowView("Gil?");
-//        player.setScore(100);
-//        this.scoreBoard.getItems().add(player);
+    }
 
-        //this.scoreBoard.itemsProperty().bind();
+    @FXML
+    public void startGameButtonAction() {
+        // unbind visibility
+        this.startGameButton.visibleProperty().unbind();
+        this.startGameButton.visibleProperty().set(false); //bye button
 
+        this.myViewModel.startGame();
     }
 }

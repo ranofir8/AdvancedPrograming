@@ -1,7 +1,9 @@
 package ap.ex2.bookscrabble.viewModel;
 
+import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.common.guiMessage;
@@ -21,7 +23,8 @@ public class MyViewModel extends ViewModel {
     public StringProperty hostPort;
     public StringProperty hostIP;
 
-    public StringProperty nickname;
+    public StringProperty nicknameOLD;
+    public ChangeBooleanProperty gameStatusUpdateEvent;
 
     public StringProperty countPlayers;
 
@@ -36,7 +39,8 @@ public class MyViewModel extends ViewModel {
         this.hostIP = new SimpleStringProperty();
 
         this.resultHostPort = new SimpleStringProperty();
-        this.nickname = new SimpleStringProperty();
+        this.nicknameOLD = new SimpleStringProperty();
+        this.gameStatusUpdateEvent = new ChangeBooleanProperty();
         this.countPlayers = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
@@ -66,6 +70,7 @@ public class MyViewModel extends ViewModel {
                         String s = "port is: "+(int) cmd.args;
                         this.resultHostPort.set(s);
                         break;
+
                 }
             }
         }
@@ -85,11 +90,11 @@ public class MyViewModel extends ViewModel {
         //port handling:
 
         if (this.isHost.get()) {
-            this.myModel.startHostGameModel(this.nickname.get());
+            this.myModel.startHostGameModel(this.nicknameOLD.get());
         } else {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
-                this.myModel.startGuestGameModel(this.nickname.get(), this.hostIP.get(), hostIntPort);
+                this.myModel.startGuestGameModel(this.nicknameOLD.get(), this.hostIP.get(), hostIntPort);
 
             } catch (NumberFormatException e) {
                 setChanged();
@@ -107,5 +112,18 @@ public class MyViewModel extends ViewModel {
         GameModel gm = this.myModel.getGameModel();
         if (gm != null)
             gm.addObserver(this);
+    }
+
+    public String getStatusText() {
+        GameInstance gi = this.myModel.getGameModel().getGameInstance();
+        String currentGameStatus = gi.getCurrentGameStatus();
+        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus + " hello";
+    }
+
+    @Override
+    public void startGame() {
+        this.myModel.getGameModel().onStartGame();
+        this.gameStatusUpdateEvent.alertChanged();
+//        this.hasBoardUpdated  update board
     }
 }

@@ -17,10 +17,16 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
+
+
+    static enum GameState {
+        WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
+    }
     public ChangeBooleanProperty scoreBoardChangeEvent;
     private HashMap<String, Integer> scoreBoard;
     private Board gameBoard;
     private PlayerStatus myPlayer;
+    private GameState gameState;
 
     /**
      *
@@ -32,6 +38,7 @@ public class GameInstance {
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
         this.scoreBoardChangeEvent = new ChangeBooleanProperty();
+        this.gameState = GameState.WAITING_FOR_PLAYERS;
 
         updateScoreBoard(nickName, 0);
     }
@@ -73,6 +80,18 @@ public class GameInstance {
                         stringIntegerEntry.getKey() + (stringIntegerEntry.getKey().equals(myPlayer.nickName) ? " (You)" : ""),
                         stringIntegerEntry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public String getCurrentGameStatus() {
+        switch (this.gameState) {
+            case WAITING_FOR_PLAYERS:
+                return "Waiting for players to join";
+            case PLAYING:
+                 return this.isMyTurn() ? "It's your turn":"somebody else is playing";
+            case GAME_ENDED:
+                return "Game ended";
+        }
+        return "Unknown game state";
     }
 
     public boolean isMyTurn() {

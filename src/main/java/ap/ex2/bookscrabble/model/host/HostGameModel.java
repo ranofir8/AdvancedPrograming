@@ -3,7 +3,10 @@ package ap.ex2.bookscrabble.model.host;
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.PlayerStatus;
+import ap.ex2.scrabble.Tile;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -17,6 +20,8 @@ public class HostGameModel extends GameModel implements Observer {
     private int hostPort;
 
     private HostServer hostServer;
+    private Tile.Bag gameBag;
+    private List<String> playersTurn;
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName

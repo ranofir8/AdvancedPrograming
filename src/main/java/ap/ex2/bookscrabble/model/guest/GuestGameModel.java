@@ -76,6 +76,10 @@ public class GuestGameModel extends GameModel implements Observer {
                 this.onNewPlayer(newUsername);
                 break;
 
+            case Protocol.START_GAME:
+                this.onStartGame();
+                break;
+
             default:
                 System.err.println("Unknown protocol message!");
                 break;
@@ -85,6 +89,4 @@ public class GuestGameModel extends GameModel implements Observer {
     protected void finalize() {
         this.myHandler.close();
     }
-
-
 }
