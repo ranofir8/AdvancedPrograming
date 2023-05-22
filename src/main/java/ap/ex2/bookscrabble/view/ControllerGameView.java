@@ -9,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
@@ -32,6 +30,9 @@ public class ControllerGameView extends GameView implements Initializable {
 
     @FXML
     private TableView<PlayerRowView> scoreBoard;
+
+    @FXML
+    private ScrollPane tilesSP;
 
 
     public void initSceneBind() {
@@ -62,6 +63,7 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     public Canvas boardCanvas; // public -> private
     private final double letterMargin = 0.25;
+    private final double tilePadding = 0.1;
     public void drawBoardTest() {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
@@ -103,6 +105,7 @@ public class ControllerGameView extends GameView implements Initializable {
                 gc.fillRect(col * square, row * square, square, square);
                 gc.strokeRect(col * square, row * square, square, square);
                 t = b.getTileAt(row,col);
+
                 if(t != null) {
                     gc.setFill(Color.BLACK); // Set the text color to black
                     gc.fillText("" + t.letter, (col + letterMargin) * square, (row +1-letterMargin) * square);
@@ -115,30 +118,53 @@ public class ControllerGameView extends GameView implements Initializable {
 
 
     @FXML
-    public Canvas TilesCanvas ; // public -> private
+    public Canvas TilesCanvas; // public -> private
 
     private List<Tile> tiles;
-    public void drawTiles() {
-        int square = (int) this.TilesCanvas.getHeight();
-        System.out.println(square + "sq");
-        GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
-        tiles = new ArrayList<>();
-        for(int i=0; i<70 ;i++) {
+
+    public ControllerGameView() {
+        this.tiles = new ArrayList<>();
+        this.test_AddTiles();
+    }
+
+    public void test_AddTiles() {
+        for(int i=0; i<16 ;i++) {
             tiles.add(i, new Tile((char) ('A' + (i%26)),i*2));
         }
-        this.TilesCanvas.setWidth(square * tiles.size()); // adapt canvas width
+    }
+
+    public void test_RemoveTile() {
+        this.tiles.remove(0);
+    }
+    public void drawTiles() {
+        this.test_RemoveTile();
+
+        int square = (int) this.TilesCanvas.getHeight();
+        GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
+
+        this.TilesCanvas.setWidth(square * (1 + this.tilePadding) * tiles.size() - tilePadding*square*0.5); // adapt canvas width
 
         int w = (int) this.TilesCanvas.getWidth(), h = (int) this.TilesCanvas.getHeight();
 
-        gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
+
 //        for (int row = 0; row < Board.ROW_NUM; row++) {
         int i = 0;
+
         for (Tile t : tiles) {
+            double startX = i * (square * (1+tilePadding));
             gc.setFill(Color.GRAY);
-            gc.fillRect(i * square, 0, square, square);
-            gc.strokeRect(i * square, 0, square, square);
+            gc.fillRect(startX, 0, square, square);
+            gc.strokeRect(startX, 0, square, square);
             gc.setFill(Color.BLACK); // Set the text color to black
-            gc.fillText("" + t.letter, (i + letterMargin) * square, letterMargin * square);
+
+            gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
+            gc.fillText("" + t.letter, startX + letterMargin * square, (1-letterMargin) * square);
+
+            gc.setFont(Font.font("Arial", square * 0.2)); // Adjust the font size as needed
+            double startXletter = startX + (1-letterMargin*0.6) * square;
+            if (t.score > 9)
+                startXletter -= letterMargin * 0.5  * square;
+            gc.fillText("" + t.score, startXletter, (1-letterMargin*0.5) * square);
 
             i++;
         }
@@ -158,6 +184,12 @@ public class ControllerGameView extends GameView implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.initSceneBind();
+
+//        this.tilesSP.minViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
+//        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
+
+
+        this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
 
 
         TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
