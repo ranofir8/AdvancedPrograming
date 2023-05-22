@@ -40,8 +40,6 @@ public class MyViewModel extends ViewModel {
         this.countPlayers = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
-
-
     }
 
 
@@ -85,6 +83,7 @@ public class MyViewModel extends ViewModel {
     public void startGameModel() {
         //nickName handling:
         //port handling:
+
         if (this.isHost.get()) {
             this.myModel.startHostGameModel(this.nickname.get());
         } else {

@@ -34,11 +34,18 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private ScrollPane tilesSP;
 
+    @FXML
+    public Button startGameButton;
+
+
 
     public void initSceneBind() {
         if (this.myViewModel == null)
             return;
-        System.out.println("init bind vm to v");
+        this.isHostGame.bind(this.myViewModel.isHost);
+
+        this.startGameButton.visibleProperty().bind(this.isHostGame);
+
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.nickname.textProperty().bind(this.myViewModel.nickname);
         this.countPlayers.textProperty().bind(this.myViewModel.countPlayers);
@@ -123,9 +130,13 @@ public class ControllerGameView extends GameView implements Initializable {
     private List<Tile> tiles;
 
     public ControllerGameView() {
+        this.isHostGame = new SimpleBooleanProperty();
+
         this.tiles = new ArrayList<>();
         this.test_AddTiles();
     }
+
+
 
     public void test_AddTiles() {
         for(int i=0; i<16 ;i++) {

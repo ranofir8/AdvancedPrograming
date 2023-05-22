@@ -6,6 +6,7 @@ import ap.ex2.bookscrabble.common.guiMessage;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 
@@ -14,7 +15,9 @@ import java.util.Observable;
 import java.util.ResourceBundle;
 
 public class ControllerHelloView extends GameView implements Initializable {
-    private SimpleBooleanProperty isHost;
+
+
+    protected SimpleBooleanProperty isHostHello;
 
     @FXML
     private TextField joinGamePort;
@@ -25,8 +28,8 @@ public class ControllerHelloView extends GameView implements Initializable {
     @FXML
     private TextField nickname;
 
-    public ControllerHelloView() {
-        this.isHost = new SimpleBooleanProperty();
+    public ControllerHelloView(Button guestBu) {
+        this.isHostHello = new SimpleBooleanProperty();
     }
 
     public void initSceneBind() {
@@ -34,7 +37,7 @@ public class ControllerHelloView extends GameView implements Initializable {
             return;
         this.myViewModel.hostPort.bind(this.joinGamePort.textProperty());
         this.myViewModel.hostIP.bind(this.joinGameIP.textProperty());
-        this.myViewModel.isHost.bind(this.isHost);
+        this.myViewModel.isHost.bind(this.isHostHello);
         this.myViewModel.nickname.bind(this.nickname.textProperty());
     }
 
@@ -59,18 +62,16 @@ public class ControllerHelloView extends GameView implements Initializable {
             this.joinGameIP.setText(defaultGuestIP);
         if (defaultGuestPort != null)
             this.joinGamePort.setText(defaultGuestPort);
+//
+//        this.joinGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
+//
+//        this.nicknameTF.textProperty().addListener((observableValue, oldNickname, newNickname) ->
+//                this.hostGameButton.setDisable(newNickname.length() == 0));
     }
 
-    @FXML
     protected void hostNewGameClick() {
-        this.isHost.set(true);
+        this.isHostHello.set(true);
         this.myViewModel.startGameModel();
-
-//        try {
-//            this.switchToScene(SCENE_GAME_FXML);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     /**
@@ -78,9 +79,8 @@ public class ControllerHelloView extends GameView implements Initializable {
      * join game button function in opening window -
      * opens a game if a valid connection to the inserted ip and port is foun
      */
-    @FXML
     protected void joinExistingGameClick() {
-        this.isHost.set(false); //transmitted to vm and m(?)
+        this.isHostHello.set(false); //transmitted to vm and m(?)
         this.myViewModel.startGameModel();
     }
 }

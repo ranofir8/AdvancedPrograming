@@ -18,14 +18,12 @@ import java.util.stream.Collectors;
 public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
     private int hostPort;
-    private Set<String> onlinePlayers;
 
     private HostServer hostServer;
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName
         this.hostPort = hostPort;
-        this.onlinePlayers = new HashSet<>();
 
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
     }
@@ -44,20 +42,9 @@ public class HostGameModel extends GameModel implements Observer {
         });
         this.hostServer.addObserver(this);
 
-        this.hostServer.setOnMsgReceivedCallback(
-                new BiConsumer<String, String>() {
-                    @Override
-                    public void accept(String s, String s2) {
-                        onRecvMessage(s, s2);
-                    }
-                }
-        );
-
         this.hostServer.setMyNickname(this.gi.getNickname());
 
-        //new BiFunction<>()
         this.hostServer.start();
-
     }
 
     @Override

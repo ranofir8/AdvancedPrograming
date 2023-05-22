@@ -46,6 +46,7 @@
                                 <Font size="36.0" />
                             </font>
                         </Button>
+                        -->
                         <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#joinExistingGameClick" text="Join Game as Guest ">
@@ -53,6 +54,7 @@
                                         <Font size="36.0" />
                                     </font>
                                 </Button>
+                        -->
                                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                         <TextField fx:id="joinGameIP" promptText="ip">
