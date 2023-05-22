@@ -3,6 +3,7 @@ package ap.ex2.bookscrabble.view;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +20,8 @@ import java.net.URL;
 import java.util.*;
 
 public class ControllerGameView extends GameView implements Initializable {
+    protected SimpleBooleanProperty isHostGame;
+
     @FXML
     private Label portNum;
 
@@ -52,17 +55,10 @@ public class ControllerGameView extends GameView implements Initializable {
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
     }
 
-
-
-
-
-
-
     /**
      * host game button function in opening window -
      * navigate to a new game with created ip and port
      */
-
     public String getPortText() {
         return "Port: "+ this.portNum;
     }
@@ -134,6 +130,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.tiles = new ArrayList<>();
         this.test_AddTiles();
+        //this.isHost = ControllerHelloView.isHost;
     }
 
 

@@ -41,7 +41,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Button mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
+                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>

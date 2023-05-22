@@ -38,7 +38,8 @@
             </HBox>
                 <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="910.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#hostNewGameClick" text="Host a new Game">
+                        <!--
+                        <Button fx:id="hostGameButton" mnemonicParsing="false" onAction="#hostNewGameClick" text="Host a new Game">
                             <HBox.margin>
                                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                             </HBox.margin>
@@ -49,7 +50,8 @@
                         -->
                         <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#joinExistingGameClick" text="Join Game as Guest ">
+                        <!--
+                                <Button fx:id="joinGameButton" mnemonicParsing="false" onAction="#joinExistingGameClick" text="Join Game as Guest ">
                                     <font>
                                         <Font size="36.0" />
                                     </font>
