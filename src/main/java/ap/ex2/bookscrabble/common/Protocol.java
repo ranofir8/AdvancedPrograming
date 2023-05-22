@@ -7,5 +7,6 @@ public class Protocol {
     // messages from host to guest
     public static final char HOST_LOGIN_ACCEPT = '1';
     public static final char HOST_LOGIN_REJECT = '2';
+    public static final char START_GAME = '3';
 
 }

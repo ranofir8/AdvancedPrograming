@@ -3,6 +3,7 @@ package ap.ex2.bookscrabble.view;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
@@ -121,8 +123,16 @@ public class ControllerGameView extends GameView implements Initializable {
         TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
         scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
 
+        nicknameCol.editableProperty().set(false);
+        nicknameCol.setSortable(false);
+        scoreCol.editableProperty().set(false);
+
+
         this.scoreBoard.getColumns().add(nicknameCol);
         this.scoreBoard.getColumns().add(scoreCol);
+
+        this.scoreBoard.getSortOrder().add(scoreCol);
+//        this.scoreBoard.property
 
 
 //        PlayerRowView player = new PlayerRowView("Gil?");

@@ -68,17 +68,6 @@ public class MyViewModel extends ViewModel {
                         String s = "port is: "+(int) cmd.args;
                         this.resultHostPort.set(s);
                         break;
-                    case DEFAULT_GUEST_VALUES:
-                        String[] vals = (String[]) cmd.args;
-                        this.hostIP.set(vals[0]);
-                        this.hostPort.set(vals[0]);
-                        System.out.println("got defaults: "+ vals[0] + ", "+vals[1]);
-                        break;
-                    case UPDATE_PLAYER_LIST:
-                        Platform.runLater(() -> this.countPlayers.set("Current players online: " + cmd.args));
-                        this.updateplayerListGUI();
-                        //this.nickname.set("Current players online: " + cmd.args);
-                        break;
                 }
             }
         }

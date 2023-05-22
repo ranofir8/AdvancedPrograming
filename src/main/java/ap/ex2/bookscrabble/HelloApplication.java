@@ -15,10 +15,6 @@ import java.io.IOException;
 
 
 public class HelloApplication extends Application {
-
-    static final String configsFN = "configs.txt";
-
-
     @Override
     public void start(Stage stage) throws IOException {
         // this will contain the code
@@ -33,7 +29,7 @@ public class HelloApplication extends Application {
         // 1. host a new game 2. join exist game
         // HostModel
 
-        MainScreenModel gm = new MyMainScreenModel(configsFN);
+        MainScreenModel gm = new MyMainScreenModel();
         MyViewModel viewModel = new MyViewModel(gm);
         viewModel.setStages(stage, sceneH, sceneG);
 

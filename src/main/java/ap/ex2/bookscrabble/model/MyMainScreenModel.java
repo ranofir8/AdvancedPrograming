@@ -12,15 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class MyMainScreenModel extends MainScreenModel {
-    public MyMainScreenModel(String configFileName) {
-        this.updateDefaultValues();
-    }
-
-    private void updateDefaultValues() {
-        setChanged();
-        notifyObservers(new Command2VM(Command.DEFAULT_GUEST_VALUES, new String[]{Config.getInstance().get(Config.DEFAULT_GUEST_IP_KEY), Config.getInstance().get(Config.DEFAULT_GUEST_PORT_KEY)}));
-    }
-
     @Override
     public void startHostGameModel(String nickname) {
         this.gameModel = new HostGameModel(nickname,
@@ -47,8 +38,6 @@ public class MyMainScreenModel extends MainScreenModel {
             setChanged();
             notifyObservers(new String[]{"MSG", "Unable to establish connection: " + e.getMessage()});
         }
-
-
     }
 
     @Override
