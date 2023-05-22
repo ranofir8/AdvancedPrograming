@@ -46,7 +46,8 @@ public class GuestGameModel extends GameModel implements Observer {
 
     @Override
     public void onStartGame() {
-
+        super.onStartGame();
+        notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
     @Override

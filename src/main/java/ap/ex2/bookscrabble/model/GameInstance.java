@@ -17,14 +17,13 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
-
-
-    static enum GameState {
+    enum GameState {
         WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
     }
+
     public ChangeBooleanProperty scoreBoardChangeEvent;
     private HashMap<String, Integer> scoreBoard;
-    private Board gameBoard;
+    public ObjectProperty<Board> gameBoardProperty;
     private PlayerStatus myPlayer;
     private GameState gameState;
 
@@ -34,10 +33,10 @@ public class GameInstance {
      * This class is for each player in order to update their view
      */
     public GameInstance(String nickName) {
-        this.gameBoard = new Board();
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
         this.scoreBoardChangeEvent = new ChangeBooleanProperty();
+        this.gameBoardProperty = new SimpleObjectProperty<>();
         this.gameState = GameState.WAITING_FOR_PLAYERS;
 
         updateScoreBoard(nickName, 0);
@@ -68,7 +67,11 @@ public class GameInstance {
      * @param newWord the word he put
      */
     public void updateGameBoard(String recentPlayerName, Word newWord) {
-        this.updateScoreBoard(recentPlayerName, this.gameBoard.tryPlaceWord(newWord));
+        this.updateScoreBoard(recentPlayerName, this.getGameBoard().tryPlaceWord(newWord));
+    }
+
+    private Board getGameBoard() {
+        return this.gameBoardProperty.get();
     }
 
     public String getNickname() {return this.myPlayer.nickName;}
@@ -100,5 +103,6 @@ public class GameInstance {
 
     public void onStartGame() {
         this.gameState = GameState.PLAYING;
+        this.gameBoardProperty.set(new Board());
     }
 }

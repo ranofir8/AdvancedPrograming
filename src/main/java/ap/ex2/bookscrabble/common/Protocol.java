@@ -22,4 +22,5 @@ public class Protocol {
     public static final char GOT_NEW_TILE = 'C';
     public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'D';
 
+
 }

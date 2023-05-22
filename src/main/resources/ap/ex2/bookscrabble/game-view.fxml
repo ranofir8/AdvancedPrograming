@@ -14,11 +14,11 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
          <top>
             <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="nickname" alignment="TOP_LEFT" text="Nickname">
+                  <Label fx:id="gameStatusLabel" alignment="TOP_LEFT" text="Nickname">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -41,11 +41,16 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#drawBoardTest" text="Start Game">
+                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGameButtonAction" text="Start Game">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>
                         </Button>
+                         <Button fx:id="drawButtonTest" mnemonicParsing="false" onAction="#drawBoardTest" text="DRAW TEST">
+                             <HBox.margin>
+                                 <Insets left="50.0" />
+                             </HBox.margin>
+                         </Button>
                      </children>
                   </HBox>
                </children>

@@ -43,7 +43,7 @@ public class ControllerHelloView extends GameView implements Initializable {
         this.myViewModel.hostPort.bind(this.joinGamePortTF.textProperty());
         this.myViewModel.hostIP.bind(this.joinGameIPTF.textProperty());
         this.myViewModel.isHost.bind(this.isHostHello);
-        this.myViewModel.nicknameOLD.bind(this.nicknameTF.textProperty());
+        this.myViewModel.nicknamePropertyTextField.bind(this.nicknameTF.textProperty());
     }
 
     @Override

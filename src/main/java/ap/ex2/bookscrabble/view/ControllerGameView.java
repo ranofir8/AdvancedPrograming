@@ -1,8 +1,13 @@
 package ap.ex2.bookscrabble.view;
 
+import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.UpdatingObjectProperty;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -18,16 +23,14 @@ import java.net.URL;
 import java.util.*;
 
 public class ControllerGameView extends GameView implements Initializable {
-    protected SimpleBooleanProperty isHostGame;
+    private BooleanProperty isHostGame;
+    private ObjectProperty<Board> gameBoardProperty;
 
     @FXML
     private Label portNum;
 
     @FXML
-    private Label countPlayers;
-
-    @FXML
-    private Label nickname;
+    private Label gameStatusLabel;
 
     @FXML
     private TableView<PlayerRowView> scoreBoard;
@@ -38,7 +41,14 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     public Button startGameButton;
 
+    public ControllerGameView() {
+        this.isHostGame = new SimpleBooleanProperty();
+        this.gameBoardProperty = new SimpleObjectProperty<>();
 
+        this.tiles = new ArrayList<>();
+        this.test_AddTiles();
+        //this.isHost = ControllerHelloView.isHost;
+    }
 
     public void initSceneBind() {
         if (this.myViewModel == null)
@@ -48,9 +58,10 @@ public class ControllerGameView extends GameView implements Initializable {
         this.startGameButton.visibleProperty().bind(this.isHostGame);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
-        this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.nickname.textProperty().set(this.myViewModel.getStatusText()));
-        this.countPlayers.textProperty().bind(this.myViewModel.countPlayers);
+        this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.gameStatusLabel.textProperty().set(this.myViewModel.getStatusText()));
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
+        this.gameBoardProperty.bind(this.myViewModel.gameBoardProperty);
+        this.myViewModel.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in V updated"));
     }
 
     /**
@@ -61,21 +72,73 @@ public class ControllerGameView extends GameView implements Initializable {
         return "Port: "+ this.portNum;
     }
 
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o == this.myViewModel) {
+            if (arg instanceof Command) {
+                Command cmd = (Command) arg;
+                switch (cmd) {
+                    case UPDATE_GAME_BOARD:
+                        this.drawBoardTest();
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.initSceneBind();
+
+//        this.tilesSP.minViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
+//        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
+
+        this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
+
+        TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
+        nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
+        TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
+        scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
+
+        nicknameCol.editableProperty().set(false);
+        nicknameCol.setSortable(false);
+
+        scoreCol.editableProperty().set(false);
+
+        this.scoreBoard.getColumns().add(nicknameCol);
+        this.scoreBoard.getColumns().add(scoreCol);
+        this.scoreBoard.getSortOrder().add(scoreCol);
+
+
+    }
+
+    @FXML
+    public void startGameButtonAction() {
+        // unbind visibility
+        this.startGameButton.visibleProperty().unbind();
+        this.startGameButton.visibleProperty().set(false); //bye button
+
+        this.myViewModel.startGame();
+    }
+
     @FXML
     public Canvas boardCanvas; // public -> private
     private final double letterMargin = 0.25;
     private final double tilePadding = 0.1;
     public void drawBoardTest() {
-
-
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
 //        Board b = this.myPlayer.getGameBoard();  todo get from model
-        Board b = new Board();
+        //        test_ControllerGameView t_board = new test_ControllerGameView();
+//        t_board.testBoard(b);
+
+        Board b = this.gameBoardProperty.get();
+
+
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         int square = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
         //fill board with words for test:
-        test_ControllerGameView t_board = new test_ControllerGameView();
-        t_board.testBoard(b);
+
         Tile t;
 
 
@@ -147,15 +210,6 @@ public class ControllerGameView extends GameView implements Initializable {
 
     private List<Tile> tiles;
 
-    public ControllerGameView() {
-        this.isHostGame = new SimpleBooleanProperty();
-
-        this.tiles = new ArrayList<>();
-        this.test_AddTiles();
-        //this.isHost = ControllerHelloView.isHost;
-    }
-
-
 
     public void test_AddTiles() {
         for(int i=0; i<16 ;i++) {
@@ -170,6 +224,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.test_RemoveTile();
 
         int square = (int) this.TilesCanvas.getHeight();
+        this.TilesCanvas.heightProperty().set(square+0.1);
         GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
 
         this.TilesCanvas.setWidth(square * (1 + this.tilePadding) * tiles.size() - tilePadding*square*0.5); // adapt canvas width
@@ -201,46 +256,4 @@ public class ControllerGameView extends GameView implements Initializable {
 
     }
 
-
-
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.initSceneBind();
-
-//        this.tilesSP.minViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
-//        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
-
-        this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
-
-        TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
-        nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
-        TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
-        scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
-
-        nicknameCol.editableProperty().set(false);
-        nicknameCol.setSortable(false);
-
-        scoreCol.editableProperty().set(false);
-
-        this.scoreBoard.getColumns().add(nicknameCol);
-        this.scoreBoard.getColumns().add(scoreCol);
-        this.scoreBoard.getSortOrder().add(scoreCol);
-
-
-    }
-
-    @FXML
-    public void startGameButtonAction() {
-        // unbind visibility
-        this.startGameButton.visibleProperty().unbind();
-        this.startGameButton.visibleProperty().set(false); //bye button
-
-        this.myViewModel.startGame();
-    }
 }

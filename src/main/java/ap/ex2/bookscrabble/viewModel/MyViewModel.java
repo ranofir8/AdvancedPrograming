@@ -1,13 +1,11 @@
 package ap.ex2.bookscrabble.viewModel;
 
-import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
-import ap.ex2.bookscrabble.common.Command;
-import ap.ex2.bookscrabble.common.Command2VM;
+import ap.ex2.bookscrabble.common.*;
 import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
-import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.scrabble.Board;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -16,17 +14,16 @@ import javafx.scene.control.Alert;
 import java.util.Observable;
 
 public class MyViewModel extends ViewModel {
+    public ObjectProperty<Board> gameBoardProperty;
     private MainScreenModel myModel;
 
-    // creating/joining game
-    public BooleanProperty isHost;
+
+    public BooleanProperty isHost; // is creating/joining game
     public StringProperty hostPort;
     public StringProperty hostIP;
 
-    public StringProperty nicknameOLD;
+    public StringProperty nicknamePropertyTextField;
     public ChangeBooleanProperty gameStatusUpdateEvent;
-
-    public StringProperty countPlayers;
 
     public StringProperty resultHostPort;
     public ObjectProperty<ObservableList<PlayerRowView>> playerScoreboard;
@@ -39,11 +36,11 @@ public class MyViewModel extends ViewModel {
         this.hostIP = new SimpleStringProperty();
 
         this.resultHostPort = new SimpleStringProperty();
-        this.nicknameOLD = new SimpleStringProperty();
+        this.nicknamePropertyTextField = new SimpleStringProperty();
         this.gameStatusUpdateEvent = new ChangeBooleanProperty();
-        this.countPlayers = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
+        this.gameBoardProperty = new SimpleObjectProperty<>();
     }
 
 
@@ -70,7 +67,6 @@ public class MyViewModel extends ViewModel {
                         String s = "port is: "+(int) cmd.args;
                         this.resultHostPort.set(s);
                         break;
-
                 }
             }
         }
@@ -79,7 +75,6 @@ public class MyViewModel extends ViewModel {
     private void updateplayerListGUI() {
         Platform.runLater(() -> {
             this.playerScoreboard.get().setAll(myModel.getGameModel().getPlayerList());
-            System.out.println("update gui list");
         });
     }
 
@@ -90,31 +85,25 @@ public class MyViewModel extends ViewModel {
         //port handling:
 
         if (this.isHost.get()) {
-            this.myModel.startHostGameModel(this.nicknameOLD.get());
+            this.myModel.startHostGameModel(this.nicknamePropertyTextField.get());
         } else {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
-                this.myModel.startGuestGameModel(this.nicknameOLD.get(), this.hostIP.get(), hostIntPort);
+                this.myModel.startGuestGameModel(this.nicknamePropertyTextField.get(), this.hostIP.get(), hostIntPort);
 
             } catch (NumberFormatException e) {
                 setChanged();
                 notifyObservers(new guiMessage("Host port is invalid!", Alert.AlertType.ERROR));
             }
         }
-        this.myModel.getGameModel().getGameInstance().scoreBoardChangeEvent
-                .addListener((observableValue, oldVal, newVal) -> {
-                    System.out.println("scoreboard changed!");
-                    this.updateplayerListGUI();
-                });
 
-
-
-        GameModel gm = this.myModel.getGameModel();
-        if (gm != null)
-            gm.addObserver(this);
+        this.initGameModelBinds();
     }
 
     public String getStatusText() {
+        if (this.myModel.getGameModel() == null) {
+            return "No game model.";
+        }
         GameInstance gi = this.myModel.getGameModel().getGameInstance();
         String currentGameStatus = gi.getCurrentGameStatus();
         return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus + " hello";
@@ -123,7 +112,21 @@ public class MyViewModel extends ViewModel {
     @Override
     public void startGame() {
         this.myModel.getGameModel().onStartGame();
-        this.gameStatusUpdateEvent.alertChanged();
+
 //        this.hasBoardUpdated  update board
+    }
+
+    @Override
+    protected void initGameModelBinds() {
+        GameModel gm = this.myModel.getGameModel();
+        gm.getGameInstance().scoreBoardChangeEvent
+                .addListener((observableValue, oldVal, newVal) -> {
+                    this.updateplayerListGUI();
+                });
+        this.gameBoardProperty.bind(gm.getGameInstance().gameBoardProperty);
+        this.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in VM updated"));
+
+        if (gm != null)
+            gm.addObserver(this);
     }
 }

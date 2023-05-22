@@ -31,9 +31,10 @@ public class MyClientHandler extends Observable implements SocketClientHandler {
         Runnable r = () -> {
             while (!isStop) {
                 try {
-                    System.out.println("waiting for msg: " +  inFromClient);
+//                    System.out.println("waiting for msg: " +  inFromClient);
                     String msgFromClient = inFromClient.readLine();
-                    System.out.println("the message received, it's: "+ msgFromClient);
+//                    System.out.println("the message received, it's: "+ msgFromClient);
+                    // todo what if client disconnects?
                     setChanged();
                     notifyObservers(msgFromClient);
 

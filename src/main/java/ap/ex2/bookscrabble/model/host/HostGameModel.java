@@ -55,11 +55,14 @@ public class HostGameModel extends GameModel implements Observer {
 
     @Override
     public void onStartGame() {
-        this.gi.onStartGame();  // status PLAYING
+        super.onStartGame();
+        System.out.println("created board");// status PLAYING
+        notifyViewModel(new Command2VM(Command.UPDATE_GAME_BOARD));
 //        this. DRAW BOARD todo
+
+        this.hostServer.sendMsgToAllGuests(Protocol.START_GAME + "");
         // decide on turns
         // draw tiles for players
-        this.hostServer.sendMsgToAllGuests(Protocol.START_GAME + "");
 
     }
 

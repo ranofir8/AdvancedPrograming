@@ -2,5 +2,5 @@ package ap.ex2.bookscrabble.common;
 
 public enum Command {
     GO_TO_GAME_SCENE,
-    DISPLAY_PORT
+    UPDATE_GAME_BOARD, DISPLAY_PORT
 }

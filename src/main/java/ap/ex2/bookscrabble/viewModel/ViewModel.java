@@ -42,4 +42,6 @@ public abstract class ViewModel extends Observable implements Observer {
     public abstract String getStatusText();
 
     public abstract void startGame();
+
+    protected abstract void initGameModelBinds();
 }
