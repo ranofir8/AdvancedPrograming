@@ -28,7 +28,7 @@ public class ControllerHelloView extends GameView implements Initializable {
     @FXML
     private TextField nickname;
 
-    public ControllerHelloView(Button guestBu) {
+    public ControllerHelloView( Button guestBu) {
         this.isHostHello = new SimpleBooleanProperty();
     }
 
