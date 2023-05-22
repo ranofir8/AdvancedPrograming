@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
@@ -46,9 +47,16 @@ public class HostServer extends Observable implements Observer {
         this.onMsgReceivedConsumer = func;
     }
 
+    // send a message to a specific guest
     public void sendMsgToGuest(String nickName, String msgToSend) {
         if (!(this.playersSockets.get(nickName) == null))
             this.playersSockets.get(nickName).sendMsg(msgToSend);
+    }
+
+    // send a message to all online players
+    public void sendMsgToAllGuests(String msgToSend) {
+        for (String n : this.playersSockets.keySet())
+            sendMsgToGuest(n, msgToSend);
     }
 
     public void start() {
@@ -118,18 +126,30 @@ public class HostServer extends Observable implements Observer {
             if (this.hasPlayerNamed(chosenNickname)) {
 
                 // kick this player
-                client.sendMsg(Protocol.HOST_LOGIN_REJECT + "");
+                client.sendMsg(Protocol.HOST_LOGIN_REJECT_NICKNAME + "");
                 client.close();
 
             } else {
                 // welcome him to the game
-                this.playersSockets.put(chosenNickname, client);
+
+                // add new player to host's screen (locally)
                 setChanged();
                 notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves!
+
+                // send new player's name to the other players
+                this.sendMsgToAllGuests(Protocol.PLAYER_UPLOAD + chosenNickname);
+
+                // add new player to the server
+                Set<String> oldPlayers = this.playersSockets.keySet();
+                this.playersSockets.put(chosenNickname, client);
+
+                // pass on the old players and send their names to the new player (for updating his scoreboard)
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");
+                for (String oldPlayerName : oldPlayers) {
+                    this.sendMsgToGuest(chosenNickname, Protocol.PLAYER_UPLOAD + oldPlayerName);
+                }
             }
         }
-
     }
 
     public void close() {

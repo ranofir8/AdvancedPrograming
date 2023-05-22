@@ -53,17 +53,7 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     public void onRecvMessage(String nickname, String msgRecv) {
-        if (nickname == null) {
-            // a new player has joined
-            if (this.hostServer.hasPlayerNamed(msgRecv)) {
-                // welcome him to the game
-
-            } else {
-                // kick this player
-
-            }
-
-        }
+        // when a guest sends a message
         System.out.println("The player " + nickname+" sent: "+msgRecv);
     }
 
@@ -85,7 +75,7 @@ public class HostGameModel extends GameModel implements Observer {
                     this.onRecvMessage(args[1], args[2]);
                     break;
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
-                    this.gi.updateScoreBoard(args[1], 0);
+                    this.onNewPlayer(args[1]);
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
                     this.gi.removeScoreBoardPlayer(args[1]);

@@ -6,7 +6,6 @@ import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MyClientHandler;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
@@ -51,17 +50,25 @@ public class GuestGameModel extends GameModel implements Observer {
         String msgExtra = sentMsg.substring(1, sentMsg.length());
 
         switch (msgProtocol) {
-            case Protocol.HOST_LOGIN_REJECT:
-                setChanged();
-                this.notifyObservers(new String[]{"MSG", "This nickname is already taken! Copy-Cat..."});
+            case Protocol.HOST_LOGIN_REJECT_FULL:
+                this.notifyViewModel(new String[]{"MSG","The server you're trying to connect is full at the moment, please try later :S"});
+                this.closeConnection();
+                break;
+
+                case Protocol.HOST_LOGIN_REJECT_NICKNAME:
+                this.notifyViewModel(new String[]{"MSG", "This nickname is already taken! Copy-Cat..."});
                 this.closeConnection();
                 break;
 
             case Protocol.HOST_LOGIN_ACCEPT:
-                setChanged();
-                notifyObservers(new Command2VM(Command.GO_TO_GAME_SCENE));
-                setChanged();
-                notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.getDisplayPort()));
+                notifyViewModel(new Command2VM(Command.GO_TO_GAME_SCENE));
+                notifyViewModel(new Command2VM(Command.DISPLAY_PORT, this.getDisplayPort()));
+                break;
+
+            case Protocol.PLAYER_UPLOAD:
+                // add player to local list
+                String newUsername = msgExtra;
+                this.onNewPlayer(newUsername);
                 break;
 
             default:

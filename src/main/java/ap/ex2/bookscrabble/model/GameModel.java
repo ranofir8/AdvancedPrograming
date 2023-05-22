@@ -33,4 +33,8 @@ public abstract class GameModel extends Model {
         return this.gi.getPlayerList();
     }
 
+    protected void onNewPlayer(String newplayerName) {
+        this.gi.updateScoreBoard(newplayerName, 0);
+    }
+
 }

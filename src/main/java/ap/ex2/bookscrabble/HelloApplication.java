@@ -39,25 +39,16 @@ public class HelloApplication extends Application {
         gView.setGameViewModel(viewModel);
         hView.setGameViewModel(viewModel);
 
-        //for start i implement it in both controllers (can be done by using abstract controller probably..
-//        hv.setStage(stage);
-//        gv.setStage(stage);
-
         gm.addObserver(viewModel);
         viewModel.addObserver(gView);
         viewModel.addObserver(hView);
-        //cursor parking:
-        //|    |    |
 
-
-        stage.setTitle("Hello!");
+        stage.setTitle("Scrabble Book game");
         viewModel.showHelloScene();
         stage.show();
     }
 
     public static void main(String[] args) {
-
-
         launch();
     }
 }
