@@ -1,7 +1,6 @@
 package ap.ex2.bookscrabble.view;
 
 import ap.ex2.bookscrabble.common.Command;
-import ap.ex2.bookscrabble.common.UpdatingObjectProperty;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.application.Platform;
@@ -23,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.File;
+import java.net.StandardSocketOptions;
 import java.net.URL;
 import java.util.*;
 
@@ -66,6 +66,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.gameStatusLabel.textProperty().set(this.myViewModel.getStatusText()));
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
+
         this.gameBoardProperty.bind(this.myViewModel.gameBoardProperty);
         this.myViewModel.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in V updated"));
     }
@@ -106,6 +107,11 @@ public class ControllerGameView extends GameView implements Initializable {
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
         TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
         scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
+
+        this.scoreBoard.itemsProperty().addListener((observableValue, playerRowViews, t1) ->{
+            System.out.println("scoreboard updated");
+//            Platform.runLater(() -> this.startGameButton.setDisable(t1 <= 1)); //enable button if 2-4 players are in the server
+        });
 
         nicknameCol.editableProperty().set(false);
         nicknameCol.setSortable(false);

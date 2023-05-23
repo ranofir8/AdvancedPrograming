@@ -1,27 +1,27 @@
 package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
-import ap.ex2.bookscrabble.common.Command;
-import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
-import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Tile;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
     private int hostPort;
     private HostServer hostServer;
     private Tile.Bag gameBag;
-    private List<String> playersTurn;
+    private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
 
+    /**
+     *  puts in 'playersTurn' the names of the players in turn order
+     */
+    private void shuffleTurns() {
+        this.playersTurn = new ArrayList<String>(this.hostServer.getOnlinePlayers());
+        Collections.shuffle(this.playersTurn);
+    }
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName
         this.hostPort = hostPort;
@@ -36,7 +36,7 @@ public class HostGameModel extends GameModel implements Observer {
 
     @Override
     public void establishConnection() throws IOException {
-        System.out.println("HOST");
+        System.out.println("HOST STARTED SERVER");
         // bind to host port
         this.hostServer = new HostServer(this.hostPort, 5, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
@@ -66,15 +66,24 @@ public class HostGameModel extends GameModel implements Observer {
 //        this.onTurnOf();
 
         // draw tiles for players
-
     }
 
-    public void onRecvMessage(String nickname, String msgRecv) {
-        // when a guest sends a message
-        System.out.println("The player " + nickname+" sent: "+msgRecv);
+    /**
+     *
+     * @return the player with the current turn,
+     * and put him in the end of the turn list (update turns for next times)
+     */
+    private String getCurrentTurnAndCycle() {
+        String playerNickname = this.playersTurn.remove(0);
+        this.playersTurn.add(playerNickname);
+        return playerNickname;
     }
 
-    public void sendMessageToGuest(String nickname, String msgToSend) {
+    /**
+     * Send to all player whether it's their turn or not
+     */
+    private void sendTurnsToPlayers() {
+        String currentTurn = this.playersTurn.get(0);
 
     }
 
@@ -83,13 +92,18 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
 
+
+
     @Override
-    public void update(Observable o, Object arg) { //updates from:
+    public void update(Observable o, Object arg) { //updates from hostServer, about incoming events from other clients
         if (o == this.hostServer) {
             String[] args = (String[]) arg;
             switch (args[0]) {
                 case HostServer.SOCKET_MSG_NOTIFICATION:
                     this.onRecvMessage(args[1], args[2]);
+                    break;
+                case HostServer.HOST_LOOPBACK_MSG_NOTIFICATION:
+                    this.onRecvMessage(null, args[1]);
                     break;
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
                     //controllerGameView?
@@ -102,4 +116,12 @@ public class HostGameModel extends GameModel implements Observer {
 
         }
     }
+
+    @Override
+    protected void handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
+        super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
+
+        System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
+    }
+
 }

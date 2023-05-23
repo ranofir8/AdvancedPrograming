@@ -14,8 +14,7 @@ public class Protocol {
 
 //cursors parking:| | | |
 
-     static final char YOUR_TURN = '7';
-    public static final char NOT_YOUR_TURN = '8';
+    public static final char TURN_OF = '8';
     public static final char BOARD_ASSIGNMENT_ACCEPTED = '9';
     public static final char BOARD_ASSIGNMENT_REJECTED_CHALLENGE = 'A';
     public static final char BOARD_ASSIGNMENT_REJECTED_QUERY = 'B';

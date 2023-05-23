@@ -16,22 +16,20 @@ import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 public class HostServer extends Observable implements Observer {
-    public static final String SOCKET_MSG_NOTIFICATION = "socketMsg";
+    public static final String SOCKET_MSG_NOTIFICATION = "socketMsg";  // used when a guest sends a message to itself
+    public static final String HOST_LOOPBACK_MSG_NOTIFICATION = "hostMsg";  // used when the host sends a message to itself
     public static final String PLAYER_JOINED_NOTIFICATION = "playerJoin";
     public static final String PLAYER_EXITED_NOTIFICATION = "playerExit";
+
     private final int hostPort;
     private final int threadsLimit;
     private boolean stop;
 
     private Thread.UncaughtExceptionHandler exceptionHandler;
 
-    public int getCountPlayers() {
-        return playersSockets.size();
-    }
+    public Set<String> getOnlinePlayers() {return this.playersSockets.keySet();}
 
     private HashMap<String, SocketClientHandler> playersSockets;
-
-    private BiConsumer<String, String> onMsgReceivedConsumer;
 
     private ExecutorService es;
 
@@ -43,20 +41,24 @@ public class HostServer extends Observable implements Observer {
         this.playersSockets = new HashMap<>();
     }
 
-    public void setOnMsgReceivedCallback(BiConsumer<String, String> func) {
-        this.onMsgReceivedConsumer = func;
-    }
-
     // send a message to a specific guest
     public void sendMsgToGuest(String nickName, String msgToSend) {
         if (!(this.playersSockets.get(nickName) == null))
             this.playersSockets.get(nickName).sendMsg(msgToSend);
     }
 
-    // send a message to all online players
+    // send a message to all online players EXCLUDING HOST
     public void sendMsgToAllGuests(String msgToSend) {
         for (String n : this.playersSockets.keySet())
             sendMsgToGuest(n, msgToSend);
+    }
+
+    // send a message to all online players, including HOST!
+    public void sendMsgToAll(String msgToSend) {
+        this.sendMsgToAllGuests(msgToSend);
+        // send to host model too!
+        setChanged();
+        notifyObservers(new String[]{HostServer.HOST_LOOPBACK_MSG_NOTIFICATION, msgToSend});
     }
 
     public void start() {

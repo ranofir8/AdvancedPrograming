@@ -74,6 +74,7 @@ public class MyViewModel extends ViewModel {
 
     private void updateplayerListGUI() {
         Platform.runLater(() -> {
+
             this.playerScoreboard.get().setAll(myModel.getGameModel().getPlayerList());
         });
     }

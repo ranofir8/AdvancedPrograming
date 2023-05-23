@@ -29,6 +29,29 @@ public abstract class GameModel extends Model {
 
     protected abstract void closeConnection();
 
+    protected void onRecvMessage(String sentBy, String msgContent) {
+        // nickname will always be null, because only the host can send message to guests
+        char msgProtocol = msgContent.charAt(0); //when a message is sent, the first part is a protocol
+        String msgExtra = msgContent.substring(1, msgContent.length()); //rest of the message contain details
+
+        this.handleProtocolMsg(sentBy, msgProtocol, msgExtra);
+    }
+
+    protected void handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
+        // common stuff for server & guest to do
+        switch (msgProtocol) {
+            case Protocol.START_GAME:
+                this.onStartGame();
+                break;
+
+            case Protocol.TURN_OF:
+                this.onTurnOf(msgExtra);
+                break;
+        }
+    }
+
+
+
     public List<PlayerRowView> getPlayerList() {
         return this.gi.getPlayerList();
     }
@@ -39,6 +62,18 @@ public abstract class GameModel extends Model {
 
     public void onStartGame() {
         this.gi.onStartGame();
+
+    }
+
+    public void onTurnOf(String turnOfNickname){
+        this.gi.setTurnOfNickname(turnOfNickname);
+        if (this.gi.getNickname().equals(turnOfNickname)) { //if it's my turn I play
+            //my turn //todo unfreeze board
+            //display "Your Turn"
+        } else {
+            //not my turn //todo freeze board and all presses
+            //display "Turn of "nickname"
+        }
 
     }
 }
