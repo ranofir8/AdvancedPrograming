@@ -16,9 +16,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
@@ -195,7 +198,7 @@ public class ControllerGameView extends GameView implements Initializable {
         col = (int)(y/square);
         mark_board_square(row,col,square, this.boardCanvas.getGraphicsContext2D());
 
-
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
     }
 
 

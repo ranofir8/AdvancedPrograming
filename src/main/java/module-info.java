@@ -1,6 +1,7 @@
 module ap.ex2.bookscrabble {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
             
                             
     opens ap.ex2.bookscrabble to javafx.fxml;
