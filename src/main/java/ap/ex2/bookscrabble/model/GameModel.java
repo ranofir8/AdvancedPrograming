@@ -39,5 +39,6 @@ public abstract class GameModel extends Model {
 
     public void onStartGame() {
         this.gi.onStartGame();
+
     }
 }

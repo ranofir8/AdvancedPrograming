@@ -27,6 +27,12 @@ public class GameInstance {
     private PlayerStatus myPlayer;
     private GameState gameState;
 
+    public void setTurnOfNickname(String turnOfNickname) {
+        this.turnOfNickname = turnOfNickname;
+    }
+
+    private String turnOfNickname;
+
     /**
      *
      * @param nickName - make sure its valid

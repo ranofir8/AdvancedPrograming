@@ -46,7 +46,7 @@ public class MyViewModel extends ViewModel {
 
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) { //updates from MyMainScreen Model
         if (o == this.myModel || o == this.myModel.getGameModel()) {
             if (arg instanceof String[]) {
                 String[] args = (String[]) arg;

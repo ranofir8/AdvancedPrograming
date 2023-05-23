@@ -54,14 +54,17 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     @Override
-    public void onStartGame() {
-        super.onStartGame();
-        System.out.println("created board");// status PLAYING
-        notifyViewModel(new Command2VM(Command.UPDATE_GAME_BOARD));
-//        this. DRAW BOARD todo
+    public void onStartGame() { //This happens when the host starts a game
+        super.onStartGame();  // status PLAYING
 
-        this.hostServer.sendMsgToAllGuests(Protocol.START_GAME + "");
-        // decide on turns
+//        notifyViewModel(Command.UPDATE_GAME_BOARD);
+        this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
+
+        // decide on turns randomly
+        this.shuffleTurns();
+        this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
+//        this.onTurnOf();
+
         // draw tiles for players
 
     }
@@ -89,6 +92,7 @@ public class HostGameModel extends GameModel implements Observer {
                     this.onRecvMessage(args[1], args[2]);
                     break;
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
+                    //controllerGameView?
                     this.onNewPlayer(args[1]);
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:

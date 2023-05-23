@@ -4,6 +4,7 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.UpdatingObjectProperty;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -58,7 +59,9 @@ public class ControllerGameView extends GameView implements Initializable {
             return;
         this.isHostGame.bind(this.myViewModel.isHost);
 
-        this.startGameButton.visibleProperty().bind(this.isHostGame);
+        this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
+        //at start there are no client so disable start game button:
+        this.startGameButton.setDisable(true);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.gameStatusLabel.textProperty().set(this.myViewModel.getStatusText()));
@@ -77,7 +80,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) { //updates from myViewModel
         if (o == this.myViewModel) {
             if (arg instanceof Command) {
                 Command cmd = (Command) arg;
