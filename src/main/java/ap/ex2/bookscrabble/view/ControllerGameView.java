@@ -311,14 +311,12 @@ public class ControllerGameView extends GameView implements Initializable {
 
     void clickedOnBoard(int row, int col){
         System.out.println("clickedOnBoard \t <" + row + ", " + col + "> \t selectedTileIndex=" + this.selectedTileIndex);
-
-        if (!IsValidBoardChoice(row, col))
-        if (this.isTilesSelected() && ) {
+        if (this.isTilesSelected() && !IsValidBoardChoice(row, col)) {
             this.displayMSG(new guiMessage("This position is invalid", Alert.AlertType.INFORMATION));
             return;
         } else if (!this.isTilesSelected()) {
             // retrieve tile from board to hand
-            this.tilesInHand.add(this.)
+//            this.tilesInHand.add(this.)
         }
 
         // there is a legal choice of tile to put on the board
