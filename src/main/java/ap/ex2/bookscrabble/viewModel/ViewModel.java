@@ -44,4 +44,11 @@ public abstract class ViewModel extends Observable implements Observer {
     public abstract void startGame();
 
     protected abstract void initGameModelBinds();
+
+    protected abstract void sendWord();
+
+    protected abstract void requestChallenge();
+
+    protected abstract void giveupTurn();
+
 }
