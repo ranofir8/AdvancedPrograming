@@ -44,11 +44,6 @@ public class GuestGameModel extends GameModel implements Observer {
         this.myHandler.close();
     }
 
-    @Override
-    public void onStartGame() {
-        super.onStartGame();
-        notifyViewModel(Command.UPDATE_GAME_BOARD);
-    }
 
     @Override
     public void update(Observable o, Object arg) { //updates from myHandler, about incoming events from host
@@ -60,8 +55,10 @@ public class GuestGameModel extends GameModel implements Observer {
     }
 
     @Override
-    protected void handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
-        super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
+    protected boolean handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
+        boolean hasHandled = super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
+        if (hasHandled)
+            return true;
 
         // handling specific messages to guest
         switch (msgProtocol) {
@@ -88,8 +85,9 @@ public class GuestGameModel extends GameModel implements Observer {
 
             default:
                 System.err.println("Unknown protocol message!");
-                break;
+                return false;
         }
+        return true;
     }
 
     protected void finalize() {

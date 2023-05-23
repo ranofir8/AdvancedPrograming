@@ -13,6 +13,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 public abstract class GameModel extends Model {
+    public static final int MIN_PLAYERS = 2;
+    public static final int MAX_PLAYERS = 4;
+    public static final int DRAW_START_AMOUNT = 7;
     protected GameInstance gi;
 
     public GameModel(String nickname) {
@@ -37,7 +40,7 @@ public abstract class GameModel extends Model {
         this.handleProtocolMsg(sentBy, msgProtocol, msgExtra);
     }
 
-    protected void handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
+    protected boolean handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
         // common stuff for server & guest to do
         switch (msgProtocol) {
             case Protocol.START_GAME:
@@ -47,7 +50,10 @@ public abstract class GameModel extends Model {
             case Protocol.TURN_OF:
                 this.onTurnOf(msgExtra);
                 break;
+            default:
+                return false; // not recognized
         }
+        return true;
     }
 
 
@@ -62,7 +68,7 @@ public abstract class GameModel extends Model {
 
     public void onStartGame() {
         this.gi.onStartGame();
-
+        notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
     public void onTurnOf(String turnOfNickname){

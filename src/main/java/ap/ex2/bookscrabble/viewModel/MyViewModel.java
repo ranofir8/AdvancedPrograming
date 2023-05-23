@@ -4,6 +4,7 @@ import ap.ex2.bookscrabble.common.*;
 import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
+import ap.ex2.bookscrabble.model.host.HostGameModel;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Board;
 import javafx.application.Platform;
@@ -78,8 +79,9 @@ public class MyViewModel extends ViewModel {
 
     private void updateplayerListGUI() {
         Platform.runLater(() -> {
-
-            this.playerScoreboard.get().setAll(myModel.getGameModel().getPlayerList());
+            List<PlayerRowView> l = myModel.getGameModel().getPlayerList();
+            this.playerScoreboard.get().setAll(l);
+            this.countPlayers.set(l.size());
         });
     }
 
@@ -116,7 +118,8 @@ public class MyViewModel extends ViewModel {
 
     @Override
     public void startGame() {
-        this.myModel.getGameModel().onStartGame();
+        if (isHost.get())
+            ((HostGameModel)this.myModel.getGameModel()).hostStartGame();
 
 //        this.hasBoardUpdated  update board
     }

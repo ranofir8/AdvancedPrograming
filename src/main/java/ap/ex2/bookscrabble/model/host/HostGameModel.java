@@ -7,6 +7,8 @@ import ap.ex2.scrabble.Tile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
@@ -38,7 +40,7 @@ public class HostGameModel extends GameModel implements Observer {
     public void establishConnection() throws IOException {
         System.out.println("HOST STARTED SERVER");
         // bind to host port
-        this.hostServer = new HostServer(this.hostPort, 5, (Thread t, Throwable e) -> {
+        this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
         });
         this.hostServer.addObserver(this);
@@ -53,11 +55,8 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.close();
     }
 
-    @Override
-    public void onStartGame() { //This happens when the host starts a game
-        super.onStartGame();  // status PLAYING
 
-//        notifyViewModel(Command.UPDATE_GAME_BOARD);
+    public void hostStartGame() { //This happens when the host starts a game
         this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
 
         // decide on turns randomly
@@ -71,7 +70,6 @@ public class HostGameModel extends GameModel implements Observer {
 
 
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
-//        this.onTurnOf();
 
     }
 
@@ -136,10 +134,11 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     @Override
-    protected void handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
-        super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
+    protected boolean handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
+        boolean hasHandled = super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
 
         System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
+        return hasHandled;
     }
 
 }

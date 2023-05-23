@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.SocketClientHandler;
 import ap.ex2.bookscrabble.model.MyClientHandler;
 
@@ -124,7 +125,7 @@ public class HostServer extends Observable implements Observer {
 
             String chosenNickname = msgExtra;
 
-            if(this.playersSockets.size() >= 4) {
+            if(this.playersSockets.size() >= GameModel.MAX_PLAYERS) {
                 client.sendMsg(Protocol.HOST_LOGIN_REJECT_FULL + "");
                 client.close();
             } else if (this.hasPlayerNamed(chosenNickname)) {

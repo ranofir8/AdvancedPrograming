@@ -1,13 +1,11 @@
 package ap.ex2.bookscrabble.view;
 
 import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -29,6 +27,7 @@ import java.util.*;
 public class ControllerGameView extends GameView implements Initializable {
     private BooleanProperty isHostGame;
     private ObjectProperty<Board> gameBoardProperty;
+    private IntegerProperty playersCount;
 
     @FXML
     private Label portNum;
@@ -69,6 +68,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.gameStatusLabel.textProperty().set(this.myViewModel.getStatusText()));
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
+        this.playersCount.bind(this.myViewModel.countPlayers);
+
+        this.playersCount.addListener((observableValue, n0, n1) -> this.startGameButton.setDisable(n1.intValue()< GameModel.MIN_PLAYERS));
 
         this.gameBoardProperty.bind(this.myViewModel.gameBoardProperty);
         this.myViewModel.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in V updated"));
