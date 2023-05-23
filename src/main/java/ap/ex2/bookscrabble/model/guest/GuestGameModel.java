@@ -5,6 +5,7 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MyClientHandler;
+import ap.ex2.scrabble.Tile;
 
 import java.net.Socket;
 import java.util.Observable;
@@ -12,8 +13,8 @@ import java.util.Observer;
 
 
 public class GuestGameModel extends GameModel implements Observer {
-    private String hostIP;
-    private int hostPort;
+    private final String hostIP;
+    private final int hostPort;
 
     private MyClientHandler myHandler;
 
@@ -88,6 +89,11 @@ public class GuestGameModel extends GameModel implements Observer {
                 return false;
         }
         return true;
+    }
+
+    @Override
+    protected Tile _onGotNewTilesHelper(char tileLetter) {
+        return this.getGameInstance().getGameBag().getTile(tileLetter);
     }
 
     protected void finalize() {

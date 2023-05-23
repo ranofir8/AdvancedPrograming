@@ -1,19 +1,12 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.Command;
-import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Tile;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
-
-import java.net.Socket;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 public abstract class GameModel extends Model {
     public static final int MIN_PLAYERS = 2;
@@ -39,7 +32,7 @@ public abstract class GameModel extends Model {
     protected void onRecvMessage(String sentBy, String msgContent) {
         // nickname will always be null, because only the host can send message to guests
         char msgProtocol = msgContent.charAt(0); //when a message is sent, the first part is a protocol
-        String msgExtra = msgContent.substring(1, msgContent.length()); //rest of the message contain details
+        String msgExtra = msgContent.substring(1); //rest of the message contain details
 
         this.handleProtocolMsg(sentBy, msgProtocol, msgExtra);
     }
@@ -66,11 +59,14 @@ public abstract class GameModel extends Model {
     private void onGotNewTiles(String tilesGotten) {
         for (char tileLetter : tilesGotten.toCharArray()) {
             // take from Bag and add to hand, at the end update board in GUI
-            GameInstance gi = this.getGameInstance();
-            gi.getPlayerStatus().addTile(gi.getGameBag().getTile(tileLetter));
+            this.getGameInstance().getPlayerStatus().addTile(this._onGotNewTilesHelper(tileLetter));
         }
         notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
+
+    protected abstract Tile _onGotNewTilesHelper(char tileLetter);
+
+
 
 
     public List<PlayerRowView> getPlayerList() {

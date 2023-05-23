@@ -8,7 +8,7 @@ public class Tile {
 		private final int[] quantities;
 		private static final int[] scores = {1,3,3,2,1,4,2,4,1,8,5,1,3,1,1,3,10,1,1,1,1,4,4,8,4,10};
 		private final Tile[] tiles;
-		private Random rand;
+		private final Random rand;
 		
 		public Bag() {
 			this.quantities = Bag.TOTAL_QUANTITIES.clone();
@@ -43,6 +43,14 @@ public class Tile {
 			int index = c-'A';
 			if ('A' <= c && c <= 'Z' && this.quantities[index] > 0) {
 				this.quantities[index]--;
+				return this.tiles[index];
+			}
+			return null;
+		}
+
+		public Tile getTileNoRemove(char c) {
+			int index = c-'A';
+			if ('A' <= c && c <= 'Z') {
 				return this.tiles[index];
 			}
 			return null;
@@ -87,9 +95,7 @@ public class Tile {
 		Tile other = (Tile) obj;
 		if (letter != other.letter)
 			return false;
-		if (score != other.score)
-			return false;
-		return true;
+		return score == other.score;
 	}
 	
 	

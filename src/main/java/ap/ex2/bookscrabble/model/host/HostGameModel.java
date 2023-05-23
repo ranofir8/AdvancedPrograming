@@ -76,21 +76,16 @@ public class HostGameModel extends GameModel implements Observer {
 
     private void sendStartingTiles() {
         for (String player : this.playersTurn) {
-            String startingTiles = this.dealNTiles(GameModel.DRAW_START_AMOUNT, player.equals(this.getGameInstance().getNickname()));
+            String startingTiles = this.dealNTiles(GameModel.DRAW_START_AMOUNT);
             //message to the player his tiles
             this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
         }
     }
 
-    private String dealNTiles(int n, boolean putBack) {
+    private String dealNTiles(int n) {
         // todo what to do if the bank is empty?
-        return IntStream.range(0, n).mapToObj(i -> {
-            Tile.Bag b = this.getGameInstance().getGameBag();
-            Tile t = b.getRand();
-            if (putBack)
-                b.put(t);
-            return t;
-        }).map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+        return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand())
+                .map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
     }
 
     /**
@@ -102,14 +97,6 @@ public class HostGameModel extends GameModel implements Observer {
         String playerNickname = this.playersTurn.remove(0);
         this.playersTurn.add(playerNickname);
         return playerNickname;
-    }
-
-    /**
-     * Send to all player whether it's their turn or not
-     */
-    private void sendTurnsToPlayers() {
-        String currentTurn = this.playersTurn.get(0);
-
     }
 
     protected void finalize() {
@@ -146,6 +133,11 @@ public class HostGameModel extends GameModel implements Observer {
 
         System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
         return hasHandled;
+    }
+
+    @Override
+    protected Tile _onGotNewTilesHelper(char tileLetter) {
+        return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
     }
 
 }
