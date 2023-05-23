@@ -14,7 +14,7 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
          <top>
             <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
                <children>
@@ -75,9 +75,15 @@
             </VBox>
          </center>
          <right>
-            <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0" BorderPane.alignment="CENTER">
-              <columns>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="sendWordButton" mnemonicParsing="false" onAction="#sendWord" prefHeight="25.0" prefWidth="109.0" text="skip turn" />
+            <Button fx:id="AudioButton" mnemonicParsing="false" onAction="#changeAudioStatus" prefHeight="25.0" prefWidth="109.0" text="Turn Off Audio" />
+                  <TableView id="scoreBoard" fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0">
+                    <columns>
               </columns>
-            </TableView>
+                  </TableView>
+         </children>
+      </VBox>
          </right>
       </BorderPane>
