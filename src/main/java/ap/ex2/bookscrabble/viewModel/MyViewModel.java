@@ -11,11 +11,14 @@ import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
+import java.util.List;
 import java.util.Observable;
 
 public class MyViewModel extends ViewModel {
     public ObjectProperty<Board> gameBoardProperty;
     private MainScreenModel myModel;
+
+    public IntegerProperty countPlayers;
 
 
     public BooleanProperty isHost; // is creating/joining game
@@ -41,6 +44,7 @@ public class MyViewModel extends ViewModel {
 
         this.playerScoreboard = new SimpleObjectProperty<>();
         this.gameBoardProperty = new SimpleObjectProperty<>();
+        this.countPlayers = new SimpleIntegerProperty();
     }
 
 

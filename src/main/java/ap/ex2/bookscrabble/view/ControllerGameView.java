@@ -45,9 +45,12 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     public Button startGameButton;
 
+
+
     public ControllerGameView() {
         this.isHostGame = new SimpleBooleanProperty();
         this.gameBoardProperty = new SimpleObjectProperty<>();
+        this.playersCount = new SimpleIntegerProperty();
 
         this.tiles = new ArrayList<>();
         this.test_AddTiles();

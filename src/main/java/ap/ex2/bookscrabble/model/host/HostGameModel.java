@@ -18,7 +18,7 @@ public class HostGameModel extends GameModel implements Observer {
     /**
      *  puts in 'playersTurn' the names of the players in turn order
      */
-    private void shuffleTurns() {
+    private void selectTurnOrder() {
         this.playersTurn = new ArrayList<String>(this.hostServer.getOnlinePlayers());
         Collections.shuffle(this.playersTurn);
     }
@@ -61,11 +61,29 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
 
         // decide on turns randomly
-        this.shuffleTurns();
+        this.selectTurnOrder();
+
+        // draw tiles for players
+        //outter loop of player amount
+        //inner loop of tiles to player - 7
+        //create a list of 7 random tiles
+        this.sendStrartingTiles();
+
+
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
 //        this.onTurnOf();
 
-        // draw tiles for players
+    }
+
+    private void sendStrartingTiles() {
+        for (String player : this.playersTurn) {
+            List<Tile> startingTiles = this.dealAtStart();
+            //message to the player his tiles
+        }
+    }
+
+    private List<Tile> dealAtStart() {
+        return IntStream.range(0, GameModel.DRAW_START_AMOUNT).mapToObj(i -> this.gameBag.getRand()).collect(Collectors.toList());
     }
 
     /**
