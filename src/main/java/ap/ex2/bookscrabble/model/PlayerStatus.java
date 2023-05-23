@@ -3,6 +3,10 @@ package ap.ex2.bookscrabble.model;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +17,8 @@ import java.util.List;
  */
 public class PlayerStatus {
     public final String nickName;
-    private boolean isMyTurn;
+    public BooleanProperty isMyTurnProperty;
+    public StringProperty turnOfProperty;
     private List<Tile> tiles;
     private List<Word.PositionedTile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
@@ -21,6 +26,11 @@ public class PlayerStatus {
         this.tiles = new ArrayList<Tile>();
         this.nickName = nickName;
         this.tilesInLimbo = new ArrayList<>();
+
+        this.turnOfProperty = new SimpleStringProperty();
+        this.isMyTurnProperty = new SimpleBooleanProperty();
+        this.turnOfProperty.addListener((observableValue, s0, s1) -> this.isMyTurnProperty.set(s1.equals(this.nickName)));
+
     }
 
     public void updateTurnOf(String nickName) {
@@ -68,7 +78,12 @@ public class PlayerStatus {
         return null;
     }
 
+
     public boolean getIsMyTurn() {
-        return this.isMyTurn;
+        return this.isMyTurnProperty.get();
+    }
+
+    public List<Tile> getTilesInHand() {
+        return this.tiles; //*these tiles*
     }
 }

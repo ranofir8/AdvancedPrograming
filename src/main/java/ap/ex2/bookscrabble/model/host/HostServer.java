@@ -14,7 +14,6 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.BiConsumer;
 
 public class HostServer extends Observable implements Observer {
     public static final String SOCKET_MSG_NOTIFICATION = "socketMsg";  // used when a guest sends a message to itself
@@ -52,18 +51,10 @@ public class HostServer extends Observable implements Observer {
         }
     }
 
-    // send a message to all online players EXCLUDING HOST
-    public void sendMsgToAllGuests(String msgToSend) {
-        for (String n : this.playersSockets.keySet())
-            sendMsgToGuest(n, msgToSend);
-    }
-
     // send a message to all online players, including HOST!
     public void sendMsgToAll(String msgToSend) {
-        this.sendMsgToAllGuests(msgToSend);
-        // send to host model too!
-        setChanged();
-        notifyObservers(new String[]{HostServer.HOST_LOOPBACK_MSG_NOTIFICATION, msgToSend});
+        for (String n : this.playersSockets.keySet())
+            sendMsgToPlayer(n, msgToSend);
     }
 
     public void start() {
@@ -145,7 +136,7 @@ public class HostServer extends Observable implements Observer {
                 notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves!
 
                 // send new player's name to the other players
-                this.sendMsgToAllGuests(Protocol.PLAYER_UPLOAD + chosenNickname);
+                this.sendMsgToAll(Protocol.PLAYER_UPLOAD + chosenNickname);
 
                 // add new player to the server
                 Set<String> oldPlayers = this.playersSockets.keySet();
@@ -154,7 +145,7 @@ public class HostServer extends Observable implements Observer {
                 // pass on the old players and send their names to the new player (for updating his scoreboard)
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");
                 for (String oldPlayerName : oldPlayers) {
-                    this.sendMsgToGuest(chosenNickname, Protocol.PLAYER_UPLOAD + oldPlayerName);
+                    this.sendMsgToPlayer(chosenNickname, Protocol.PLAYER_UPLOAD + oldPlayerName);
                 }
             }
         }

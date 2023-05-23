@@ -5,5 +5,6 @@ public abstract class MainScreenModel extends Model {
 
     public abstract void startHostGameModel(String nickname);
     public abstract void startGuestGameModel(String nickname, String hostIPinput, int hostPortInput);
+
     public GameModel getGameModel(){return this.gameModel;}
 }

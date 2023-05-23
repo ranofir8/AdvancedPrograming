@@ -14,7 +14,6 @@ public class HostGameModel extends GameModel implements Observer {
     private BookScrabbleClient myBookScrabbleClient; //for Client
     private int hostPort;
     private HostServer hostServer;
-    private Tile.Bag gameBag;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
 
     /**
@@ -68,22 +67,30 @@ public class HostGameModel extends GameModel implements Observer {
         //outter loop of player amount
         //inner loop of tiles to player - 7
         //create a list of 7 random tiles
-        this.sendStrartingTiles();
+        this.sendStartingTiles();
 
 
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
 
     }
 
-    private void sendStrartingTiles() {
+    private void sendStartingTiles() {
         for (String player : this.playersTurn) {
-            List<Tile> startingTiles = this.dealAtStart();
+            String startingTiles = this.dealNTiles(GameModel.DRAW_START_AMOUNT, player.equals(this.getGameInstance().getNickname()));
             //message to the player his tiles
+            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
         }
     }
 
-    private List<Tile> dealAtStart() {
-        return IntStream.range(0, GameModel.DRAW_START_AMOUNT).mapToObj(i -> this.gameBag.getRand()).collect(Collectors.toList());
+    private String dealNTiles(int n, boolean putBack) {
+        // todo what to do if the bank is empty?
+        return IntStream.range(0, n).mapToObj(i -> {
+            Tile.Bag b = this.getGameInstance().getGameBag();
+            Tile t = b.getRand();
+            if (putBack)
+                b.put(t);
+            return t;
+        }).map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
     }
 
     /**
@@ -108,8 +115,6 @@ public class HostGameModel extends GameModel implements Observer {
     protected void finalize() {
         this.hostServer.close();
     }
-
-
 
 
     @Override

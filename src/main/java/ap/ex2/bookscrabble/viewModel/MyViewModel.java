@@ -6,7 +6,6 @@ import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
 import ap.ex2.bookscrabble.view.PlayerRowView;
-import ap.ex2.scrabble.Board;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Observable;
 
 public class MyViewModel extends ViewModel {
-    public ObjectProperty<Board> gameBoardProperty;
+    public ObjectProperty<GameInstance> gameInstanceProperty;
     private MainScreenModel myModel;
 
     public IntegerProperty countPlayers;
@@ -44,7 +43,7 @@ public class MyViewModel extends ViewModel {
         this.gameStatusUpdateEvent = new ChangeBooleanProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
-        this.gameBoardProperty = new SimpleObjectProperty<>();
+        this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.countPlayers = new SimpleIntegerProperty();
     }
 
@@ -131,8 +130,8 @@ public class MyViewModel extends ViewModel {
                 .addListener((observableValue, oldVal, newVal) -> {
                     this.updatePlayerListGUI();
                 });
-        this.gameBoardProperty.bind(gm.getGameInstance().gameBoardProperty);
-        this.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in VM updated"));
+        this.gameInstanceProperty.bind(gm.gameInstanceProperty);
+        this.gameInstanceProperty.addListener((observableValue, o0, o1) -> System.out.println("gameInstance (Board) in VM updated"));
 
         if (gm != null)
             gm.addObserver(this);

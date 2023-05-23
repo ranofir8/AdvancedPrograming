@@ -3,6 +3,7 @@ package ap.ex2.bookscrabble.model;
 import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Board;
+import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
@@ -28,12 +29,11 @@ public class GameInstance {
     public Board gameBoard;
     private final PlayerStatus myPlayer;
     private GameState gameState;
+    private Tile.Bag gameBag;
 
     public void setTurnOfNickname(String turnOfNickname) {
-        this.turnOfNickname = turnOfNickname;
+        this.myPlayer.turnOfProperty.set(turnOfNickname);
     }
-
-    private String turnOfNickname;
 
     /**
      *
@@ -44,7 +44,6 @@ public class GameInstance {
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
         this.scoreBoardChangeEvent = new ChangeBooleanProperty();
-        this.gameBoardProperty = new SimpleObjectProperty<>();
         this.gameState = GameState.WAITING_FOR_PLAYERS;
 
         updateScoreBoard(nickName, 0);
@@ -107,6 +106,20 @@ public class GameInstance {
 
     public void onStartGame() {
         this.gameState = GameState.PLAYING;
-        this.gameBoardProperty.set(new Board());
+        this.gameBoard = new Board();
+        this.gameBag = new Tile.Bag();
     }
+
+    public PlayerStatus getPlayerStatus() {
+        return this.myPlayer;
+    }
+
+    public Tile.Bag getGameBag() {
+        return this.gameBag;
+    }
+
+    public Board getGameBoard() {
+        return this.gameBoard;
+    }
+
 }

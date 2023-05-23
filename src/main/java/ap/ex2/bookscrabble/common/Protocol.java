@@ -18,7 +18,7 @@ public class Protocol {
     public static final char BOARD_ASSIGNMENT_ACCEPTED = '9';
     public static final char BOARD_ASSIGNMENT_REJECTED_CHALLENGE = 'A';
     public static final char BOARD_ASSIGNMENT_REJECTED_QUERY = 'B';
-    public static final char GOT_NEW_TILE = 'C';
+    public static final char SEND_NEW_TILES = 'C';
     public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'D';
 
 

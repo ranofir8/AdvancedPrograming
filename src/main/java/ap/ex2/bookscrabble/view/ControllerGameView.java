@@ -2,6 +2,7 @@ package ap.ex2.bookscrabble.view;
 
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
+import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
@@ -32,7 +33,8 @@ public class ControllerGameView extends GameView implements Initializable {
 
     // board & tiles
     private List<Tile> tilesInHand;
-    private ObjectProperty<Board> gameBoardProperty;
+    private Board gameBoard;
+    private ObjectProperty<GameInstance> gameInstanceProperty;
 
     // tile drawing
     private final double letterMargin = 0.25;
@@ -65,14 +67,18 @@ public class ControllerGameView extends GameView implements Initializable {
 
     public ControllerGameView() {
         this.isHostGame = new SimpleBooleanProperty();
-        this.gameBoardProperty = new SimpleObjectProperty<>();
+        this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.playersCount = new SimpleIntegerProperty();
         this.isPlayerTurn = new SimpleBooleanProperty();
 
         this.tilesInHand = new ArrayList<>();
         this.test_AddTiles();
-
-        this.isPlayerTurn.set(true);  // for testing only todo: remove
+        this.gameInstanceProperty.addListener((observableValue, g0, g1) -> {
+            this.gameBoard = g1.getGameBoard();
+            this.tilesInHand = g1.getPlayerStatus().getTilesInHand();
+            this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
+        });
+//        this.isPlayerTurn.set(true);  // for testing only todo: remove
     }
 
     public void initSceneBind() {
@@ -91,8 +97,8 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.playersCount.addListener((observableValue, n0, n1) -> this.startGameButton.setDisable(n1.intValue()< GameModel.MIN_PLAYERS));
 
-        this.gameBoardProperty.bind(this.myViewModel.gameBoardProperty);
-        this.myViewModel.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in V updated"));
+        this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
+        this.myViewModel.gameInstanceProperty.addListener((observableValue, board, t1) -> System.out.println("gameInstance (Board) in V updated"));
     }
 
     /**
@@ -111,6 +117,7 @@ public class ControllerGameView extends GameView implements Initializable {
                 switch (cmd) {
                     case UPDATE_GAME_BOARD:
                         this.drawGameBoard();
+                        this.drawTiles();
                         break;
                 }
             }
@@ -159,7 +166,7 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, this.boardCanvas.getWidth(), this.boardCanvas.getHeight());
 
-        Board b = this.gameBoardProperty.get();
+        Board b = this.gameInstanceProperty.get().getGameBoard();
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
@@ -225,7 +232,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
 
         int i = 0;
-        for (Tile t : tilesInHand) {
+        for (Tile t : this.tilesInHand) {
             double startX = i * (square * (1+tilePadding));
             gc.setFill(Color.GRAY);
             if (i == this.selectedTileIndex)
@@ -289,8 +296,8 @@ public class ControllerGameView extends GameView implements Initializable {
         return 0 <= col && col < this.tilesInHand.size() && row == 0;
     }
 
-    boolean IsValidBoardChoice(int row, int col) {
-        Tile t = this.gameBoardProperty.get().getTileAt(row, col);
+    boolean isValidBoardChoice(int row, int col) {
+        Tile t = this.gameInstanceProperty.get().getGameBoard().getTileAt(row, col);
         return t == null && !this.isSquareWithPlayerPlacement(row, col);
 
         //move to view model class ?
@@ -311,7 +318,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
     void clickedOnBoard(int row, int col){
         System.out.println("clickedOnBoard \t <" + row + ", " + col + "> \t selectedTileIndex=" + this.selectedTileIndex);
-        if (this.isTilesSelected() && !IsValidBoardChoice(row, col)) {
+        if (this.isTilesSelected() && !isValidBoardChoice(row, col)) {
             this.displayMSG(new guiMessage("This position is invalid", Alert.AlertType.INFORMATION));
             return;
         } else if (!this.isTilesSelected()) {

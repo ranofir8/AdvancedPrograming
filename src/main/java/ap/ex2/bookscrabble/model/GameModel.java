@@ -4,7 +4,10 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.scrabble.Tile;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 
 import java.net.Socket;
 import java.util.HashMap;
@@ -19,11 +22,12 @@ public abstract class GameModel extends Model {
     public ObjectProperty<GameInstance> gameInstanceProperty;
 
     public GameModel(String nickname) {
-        this.gi = new GameInstance(nickname);
+        this.gameInstanceProperty = new SimpleObjectProperty<>();
+        this.gameInstanceProperty.set(new GameInstance(nickname));
     }
 
     public GameInstance getGameInstance() {
-        return this.gi;
+        return this.gameInstanceProperty.get();
     }
 
     public abstract int getDisplayPort();
@@ -50,6 +54,9 @@ public abstract class GameModel extends Model {
             case Protocol.TURN_OF:
                 this.onTurnOf(msgExtra);
                 break;
+            case Protocol.SEND_NEW_TILES:
+                this.onGotNewTiles(msgExtra); //msgExtra contains the tiles
+                break;
             default:
                 return false; // not recognized
         }
@@ -75,19 +82,11 @@ public abstract class GameModel extends Model {
     }
 
     public void onStartGame() {
-        this.gi.onStartGame();
+        this.getGameInstance().onStartGame();
         notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
     public void onTurnOf(String turnOfNickname){
-        this.gi.setTurnOfNickname(turnOfNickname);
-        if (this.gi.getNickname().equals(turnOfNickname)) { //if it's my turn I play
-            //my turn //todo unfreeze board
-            //display "Your Turn"
-        } else {
-            //not my turn //todo freeze board and all presses
-            //display "Turn of "nickname"
-        }
-
+        this.getGameInstance().setTurnOfNickname(turnOfNickname);
     }
 }
