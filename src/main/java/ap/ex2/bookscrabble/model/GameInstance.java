@@ -17,14 +17,16 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
+
+
     enum GameState {
         WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
     }
 
     public ChangeBooleanProperty scoreBoardChangeEvent;
-    private HashMap<String, Integer> scoreBoard;
-    public ObjectProperty<Board> gameBoardProperty;
-    private PlayerStatus myPlayer;
+    private final HashMap<String, Integer> scoreBoard;
+    public Board gameBoard;
+    private final PlayerStatus myPlayer;
     private GameState gameState;
 
     public void setTurnOfNickname(String turnOfNickname) {
@@ -74,10 +76,6 @@ public class GameInstance {
      */
     public void updateGameBoard(String recentPlayerName, Word newWord) {
         this.updateScoreBoard(recentPlayerName, this.getGameBoard().tryPlaceWord(newWord));
-    }
-
-    private Board getGameBoard() {
-        return this.gameBoardProperty.get();
     }
 
     public String getNickname() {return this.myPlayer.nickName;}

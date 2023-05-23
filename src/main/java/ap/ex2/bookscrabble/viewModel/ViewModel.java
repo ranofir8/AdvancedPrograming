@@ -49,6 +49,6 @@ public abstract class ViewModel extends Observable implements Observer {
 
     protected abstract void requestChallenge();
 
-    protected abstract void giveupTurn();
+    protected abstract void giveUpTurn();
 
 }

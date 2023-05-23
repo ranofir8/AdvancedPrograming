@@ -36,7 +36,7 @@ public class GuestGameModel extends GameModel implements Observer {
         this.myHandler = new MyClientHandler(mySocket);
         this.myHandler.addObserver(this);
         this.myHandler.startHandlingClient();
-        this.myHandler.sendMsg(Protocol.GUEST_LOGIN_REQUEST + this.gi.getNickname());
+        this.myHandler.sendMsg(Protocol.GUEST_LOGIN_REQUEST + this.getGameInstance().getNickname());
     }
 
     @Override

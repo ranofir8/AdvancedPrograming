@@ -16,7 +16,7 @@ public abstract class GameModel extends Model {
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
     public static final int DRAW_START_AMOUNT = 7;
-    protected GameInstance gi;
+    public ObjectProperty<GameInstance> gameInstanceProperty;
 
     public GameModel(String nickname) {
         this.gi = new GameInstance(nickname);
@@ -56,14 +56,22 @@ public abstract class GameModel extends Model {
         return true;
     }
 
+    private void onGotNewTiles(String tilesGotten) {
+        for (char tileLetter : tilesGotten.toCharArray()) {
+            // take from Bag and add to hand, at the end update board in GUI
+            GameInstance gi = this.getGameInstance();
+            gi.getPlayerStatus().addTile(gi.getGameBag().getTile(tileLetter));
+        }
+        notifyViewModel(Command.UPDATE_GAME_BOARD);
+    }
 
 
     public List<PlayerRowView> getPlayerList() {
-        return this.gi.getPlayerList();
+        return this.getGameInstance().getPlayerList();
     }
 
-    protected void onNewPlayer(String newplayerName) {
-        this.gi.updateScoreBoard(newplayerName, 0);
+    protected void onNewPlayer(String newPlayerName) {
+        this.getGameInstance().updateScoreBoard(newPlayerName, 0);
     }
 
     public void onStartGame() {

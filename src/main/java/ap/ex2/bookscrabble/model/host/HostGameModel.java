@@ -45,7 +45,7 @@ public class HostGameModel extends GameModel implements Observer {
         });
         this.hostServer.addObserver(this);
 
-        this.hostServer.setMyNickname(this.gi.getNickname());
+        this.hostServer.setMyNickname(this.getGameInstance().getNickname());
 
         this.hostServer.start();
     }
@@ -63,6 +63,8 @@ public class HostGameModel extends GameModel implements Observer {
         this.selectTurnOrder();
 
         // draw tiles for players
+
+
         //outter loop of player amount
         //inner loop of tiles to player - 7
         //create a list of 7 random tiles
@@ -126,7 +128,7 @@ public class HostGameModel extends GameModel implements Observer {
                     this.onNewPlayer(args[1]);
                     break;
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
-                    this.gi.removeScoreBoardPlayer(args[1]);
+                    this.getGameInstance().removeScoreBoardPlayer(args[1]);
                     break;
             }
 

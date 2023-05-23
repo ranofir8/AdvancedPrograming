@@ -18,14 +18,13 @@ public class PlayerStatus {
     private List<Word.PositionedTile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
     public PlayerStatus(String nickName) {
-        this.isMyTurn = false;
         this.tiles = new ArrayList<Tile>();
         this.nickName = nickName;
         this.tilesInLimbo = new ArrayList<>();
     }
 
-    public void updateIsMyTurn(boolean status) {
-        this.isMyTurn = status;
+    public void updateTurnOf(String nickName) {
+        this.turnOfProperty.set(nickName);
     }
 
     // when the player gets a new tile

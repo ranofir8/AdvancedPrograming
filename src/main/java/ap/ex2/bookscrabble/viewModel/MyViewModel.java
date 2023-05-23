@@ -77,7 +77,7 @@ public class MyViewModel extends ViewModel {
         }
     }
 
-    private void updateplayerListGUI() {
+    private void updatePlayerListGUI() {
         Platform.runLater(() -> {
             List<PlayerRowView> l = myModel.getGameModel().getPlayerList();
             this.playerScoreboard.get().setAll(l);
@@ -129,12 +129,29 @@ public class MyViewModel extends ViewModel {
         GameModel gm = this.myModel.getGameModel();
         gm.getGameInstance().scoreBoardChangeEvent
                 .addListener((observableValue, oldVal, newVal) -> {
-                    this.updateplayerListGUI();
+                    this.updatePlayerListGUI();
                 });
         this.gameBoardProperty.bind(gm.getGameInstance().gameBoardProperty);
         this.gameBoardProperty.addListener((observableValue, board, t1) -> System.out.println("gameBoard in VM updated"));
 
         if (gm != null)
             gm.addObserver(this);
+    }
+
+    @Override
+    protected void sendWord() {
+        // todo - move limboTiles list to view, send it here
+//        this.myModel.getGameModel().sendWord();
+    }
+
+    @Override
+    protected void requestChallenge() {
+
+//        this.myModel.getGameModel().requestChallenge();
+    }
+
+    @Override
+    protected void giveUpTurn() {
+//        this.myModel.getGameModel().giveupTurn();
     }
 }
