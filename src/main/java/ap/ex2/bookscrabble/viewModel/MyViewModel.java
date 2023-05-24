@@ -112,12 +112,13 @@ public class MyViewModel extends ViewModel {
     }
 
     public String getStatusText() {
+        /* ??
         if (this.myModel.getGameModel() == null) {
             return "No game model.";
-        }
+        }*/
         GameInstance gi = this.myModel.getGameModel().getGameInstance();
         String currentGameStatus = gi.getCurrentGameStatus();
-        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus + " hello";
+        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
     }
 
     @Override
