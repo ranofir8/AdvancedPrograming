@@ -86,9 +86,9 @@ public abstract class GameModel extends Model {
                     return false;
                 int scoreOfWord = Integer.parseInt(extraArgs[0]);
                 String player = extraArgs[1];
-
+                System.out.println("needs to update score");
                 this.onUpdatePlayerScore(scoreOfWord, player);
-
+                break;
                 //this.gameInstanceProperty.get().setNikud(sahkan);
 
 
@@ -144,6 +144,7 @@ public abstract class GameModel extends Model {
         this.getGameInstance().onStartGame();
         notifyViewModel(Command.PLAY_START_GAME_SOUND);
         notifyViewModel(Command.UPDATE_GAME_BOARD);
+        System.out.println("game started");
     }
 
     public void onTurnOf(String turnOfNickname){
