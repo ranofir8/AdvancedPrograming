@@ -148,8 +148,36 @@ public class HostGameModel extends GameModel implements Observer {
         return hasHandled;
     }
 
-    protected void onBoardAssignment(Word gottenWord) {
+    /**
+     * messages the client the outcome of sending
+     * @param gottenWord
+     */
+    protected void onBoardAssignment(String player, Word gottenWord) {
+        int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
+        char protocolToSend = ' ';
+        if (scoreOfWord < 0) {
 
+            switch (scoreOfWord) {
+                case Board.CHECK_OUTSIDE_BOARD_LIMITS:
+                    protocolToSend = Protocol.ERROR_OUTSIDE_BOARD_LIMITS;
+                    break;
+                case Board.CHECK_NOT_ON_STAR:
+                    protocolToSend = Protocol.ERROR_NOT_ON_STAR;
+                    break;
+                case Board.CHECK_NOT_LEANS_ON_EXISTING_TILES:
+                    protocolToSend = Protocol.ERROR_NOT_LEANS_ON_EXISTING_TILES;
+                    break;
+                case Board.CHECK_NOT_MATCH_BOARD:
+                    protocolToSend = Protocol.ERROR_NOT_MATCH_BOARD;
+                    break;
+                case Board.CHECK_WORD_NOT_LEGAL:
+                    protocolToSend = Protocol.ERROR_WORD_NOT_LEGAL;
+                    break;
+            }
+        } else {
+            protocolToSend = Protocol.BOARD_ASSIGNMENT_ACCEPTED;
+        }
+        this.hostServer.sendMsgToPlayer(player, protocolToSend+"");
     }
 
 

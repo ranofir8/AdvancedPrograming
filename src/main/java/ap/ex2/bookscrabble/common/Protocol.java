@@ -18,7 +18,17 @@ public class Protocol {
     public static final char BOARD_ASSIGNMENT_ACCEPTED = '9';
     public static final char BOARD_ASSIGNMENT_REJECTED_CHALLENGE = 'A';
     public static final char BOARD_ASSIGNMENT_REJECTED_QUERY = 'B';
-    public static final char SEND_NEW_TILES = 'C';
-    public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'D';
-    public static final char BOARD_ASSIGNMENT_REQUEST = 'E';
+    public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'C';
+    public static final char SEND_NEW_TILES = 'D';
+
+
+    public static final char ERROR_OUTSIDE_BOARD_LIMITS = 'F';              //-1
+    public static final char ERROR_NOT_ON_STAR = 'G';                       //-2
+    public static final char ERROR_NOT_LEANS_ON_EXISTING_TILES = 'H';       //-3
+    public static final char ERROR_NOT_MATCH_BOARD = 'I';                   //-4
+    public static final char ERROR_WORD_NOT_LEGAL = 'J';                    //-5
+
+
+//cursors parking:|  | | | | | ty
+
 }
