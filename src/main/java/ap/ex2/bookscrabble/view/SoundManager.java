@@ -1,5 +1,7 @@
 package ap.ex2.bookscrabble.view;
 import ap.ex2.bookscrabble.R;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -16,10 +18,12 @@ public class SoundManager {
 
     public final static SoundManager singleton = new SoundManager();
 
-    private HashMap<String, MediaPlayer> loadedSounds;
+    private final HashMap<String, MediaPlayer> loadedSounds;
+    private final DoubleProperty masterVolume;
 
     private SoundManager() {
         this.loadedSounds = new HashMap<>();
+        this.masterVolume = new SimpleDoubleProperty();
     }
 
     private Media loadSoundFile(String fileName) throws FileNotFoundException {
@@ -33,17 +37,25 @@ public class SoundManager {
     public void playSound(String s) {
         this.loadedSounds.computeIfAbsent(s, s1 -> {
             try {
-                return new MediaPlayer(loadSoundFile(s));
+                MediaPlayer mp = new MediaPlayer(loadSoundFile(s));
+                mp.volumeProperty().bind(masterVolume);
+                return mp;
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
         });
         MediaPlayer mp = this.loadedSounds.get(s);
+
         if (mp == null) {
             System.out.println("could not load sound");
             return;
         }
         mp.seek(Duration.millis(0));
         mp.play();
+    }
+
+    // value between 0.0 and 1.0
+    public void bindMasterVolumeTo(DoubleProperty dp) {
+        this.masterVolume.bind(dp);
     }
 }

@@ -63,6 +63,8 @@ public class ControllerGameView extends GameView implements Initializable {
     private Canvas TilesCanvas;
     @FXML
     private Canvas boardCanvas;
+    @FXML
+    private Slider volumeSlider;
 
 
     public ControllerGameView() {
@@ -99,6 +101,8 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
         this.myViewModel.gameInstanceProperty.addListener((observableValue, board, t1) -> System.out.println("gameInstance (Board) in V updated"));
+
+        SoundManager.singleton.bindMasterVolumeTo(this.volumeSlider.valueProperty());
     }
 
     /**
@@ -118,6 +122,10 @@ public class ControllerGameView extends GameView implements Initializable {
                     case UPDATE_GAME_BOARD:
                         this.drawGameBoard();
                         this.drawTiles();
+                        break;
+                    case UPDATE_GAME_TILES:
+                        this.drawTiles();
+                        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
                         break;
                 }
             }
@@ -367,8 +375,8 @@ public class ControllerGameView extends GameView implements Initializable {
             this.resetBoardSelection();
             this.selectedTileIndex = col;
         }
-        if (AudioEnabled)
-            SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
+
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
 
         this.drawCanvases();
     }
@@ -392,8 +400,6 @@ public class ControllerGameView extends GameView implements Initializable {
 
     @FXML
     Button AudioButton;
-
-    boolean AudioEnabled = true;
 
     @FXML
     void changeAudioStatus(){

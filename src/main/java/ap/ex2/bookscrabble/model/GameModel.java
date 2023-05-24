@@ -61,7 +61,7 @@ public abstract class GameModel extends Model {
             // take from Bag and add to hand, at the end update board in GUI
             this.getGameInstance().getPlayerStatus().addTile(this._onGotNewTilesHelper(tileLetter));
         }
-        notifyViewModel(Command.UPDATE_GAME_BOARD);
+        notifyViewModel(Command.UPDATE_GAME_TILES);
     }
 
     protected abstract Tile _onGotNewTilesHelper(char tileLetter);
