@@ -78,9 +78,11 @@ public class HostGameModel extends GameModel implements Observer {
         this.sendStartingTiles();
 
         //todo in loop until the end of the game?
-        System.out.println("what?");
-        this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
+        this.nextTurn();
+    }
 
+    private void nextTurn() {
+        this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
     }
 
     private void sendStartingTiles() {
@@ -194,6 +196,7 @@ public class HostGameModel extends GameModel implements Observer {
             this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreOfWord + "," + player);
 
             // next turn
+            this.nextTurn();
 
         }
     }

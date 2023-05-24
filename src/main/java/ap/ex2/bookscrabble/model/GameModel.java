@@ -98,6 +98,7 @@ public abstract class GameModel extends Model {
 
     protected void onBoardUpdateByPlayer(String wordPlaced) {
         notifyViewModel(Command.UPDATE_GAME_BOARD);
+        notifyViewModel(Command.SOUND_NEW_WORD);
     }
 
     /**
@@ -131,7 +132,7 @@ public abstract class GameModel extends Model {
 
     protected void onNewPlayer(String newPlayerName) {
         this.onUpdatePlayerScore(0, newPlayerName);
-        notifyViewModel(Command.NEW_PLAYER_JOINED);
+        notifyViewModel(Command.SOUND_NEW_PLAYER_JOINED);
     }
 
     protected void onUpdatePlayerScore(int score, String player) {
@@ -163,5 +164,9 @@ public abstract class GameModel extends Model {
     }
 
     public void requestGiveUpTurn() {
+    }
+
+    public void stopGameOnCloseWindow() {
+        this.sendMsgToHost(Protocol.END_GAME + "");
     }
 }

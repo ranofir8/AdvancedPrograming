@@ -18,6 +18,9 @@ public class SoundManager {
     public final static String SOUND_PLAYER_JOINED = "playerJoined.wav";
     public final static String SOUND_STARTING_GAME = "startGame.wav";
     public final static String SOUND_OF_FAILURE = "soundOfFailure.mp3";
+    public final static String SOUND_NEW_WORD = "newWord.wav";
+    public final static String SOUND_POP = "pop.wav";
+    public final static String SOUND_YOUR_TURN = "yourTurn.wav";
 
 
     public final static SoundManager singleton = new SoundManager();
@@ -28,6 +31,13 @@ public class SoundManager {
     private SoundManager() {
         this.loadedSounds = new HashMap<>();
         this.masterVolume = new SimpleDoubleProperty();
+
+    }
+
+    public void enablePopSound() {
+        this.masterVolume.addListener((observableValue, number, t1) -> {
+            this.playSound(SOUND_POP);
+        });
     }
 
     private Media loadSoundFile(String fileName) throws FileNotFoundException {

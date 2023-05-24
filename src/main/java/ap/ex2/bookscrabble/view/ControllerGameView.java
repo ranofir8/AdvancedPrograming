@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble.view;
 
+import ap.ex2.bookscrabble.Config;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.model.GameInstance;
@@ -92,6 +93,7 @@ public class ControllerGameView extends GameView implements Initializable {
             this.tilesPlaced = this.playerStatus.getTilesInLimbo();
 
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
+
         });
     }
 
@@ -145,8 +147,12 @@ public class ControllerGameView extends GameView implements Initializable {
                     case PLAY_START_GAME_SOUND:
                         SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
                         break;
-                    case NEW_PLAYER_JOINED:
+                    case SOUND_NEW_PLAYER_JOINED:
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED);
+                        break;
+                    case SOUND_NEW_WORD:
+                        if (!this.isPlayerTurn.get())
+                            SoundManager.singleton.playSound(SoundManager.SOUND_NEW_WORD);
                         break;
                     case UPDATE_SCORE_BOARD:
                         break;
@@ -185,6 +191,15 @@ public class ControllerGameView extends GameView implements Initializable {
         this.scoreBoard.getColumns().add(nicknameCol);
         this.scoreBoard.getColumns().add(scoreCol);
         this.scoreBoard.getSortOrder().add(scoreCol);
+
+        Timer timer = new Timer("pop starter");
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+                SoundManager.singleton.enablePopSound();
+            }
+        };
+        timer.schedule(tt, 100L);
     }
 
     @FXML

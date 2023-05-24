@@ -1,5 +1,6 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
@@ -31,7 +32,10 @@ public class PlayerStatus {
         this.turnOfProperty = new SimpleStringProperty();
         this.isMyTurnProperty = new SimpleBooleanProperty();
         this.turnOfProperty.addListener((observableValue, s0, s1) -> this.isMyTurnProperty.set(s1.equals(this.nickName)));
-
+        this.isMyTurnProperty.addListener((observableValue, b0, b1) -> {
+            if (b1)
+                SoundManager.singleton.playSound(SoundManager.SOUND_YOUR_TURN);
+        });
     }
 
     public void updateTurnOf(String nickName) {
