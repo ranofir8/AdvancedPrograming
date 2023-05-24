@@ -91,6 +91,10 @@ public class GuestGameModel extends GameModel implements Observer {
                 this.onNewPlayer(newUsername);
                 break;
 
+            case Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER:
+                this.onBoardUpdateByPlayer(msgExtra);
+                break;
+
             default:
                 System.err.println("Unknown protocol message! " + msgProtocol);
                 return false;

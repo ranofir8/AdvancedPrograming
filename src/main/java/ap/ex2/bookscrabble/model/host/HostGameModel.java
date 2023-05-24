@@ -25,6 +25,7 @@ public class HostGameModel extends GameModel implements Observer {
         this.playersTurn = new ArrayList<String>(this.hostServer.getOnlinePlayers());
         Collections.shuffle(this.playersTurn);
     }
+
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
         super(nickname); //String configFileName
         this.hostPort = hostPort;

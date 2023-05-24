@@ -47,12 +47,15 @@ public abstract class GameModel extends Model {
             case Protocol.START_GAME:
                 this.onStartGame();
                 break;
+
             case Protocol.TURN_OF:
                 this.onTurnOf(msgExtra);
                 break;
+
             case Protocol.SEND_NEW_TILES:
                 this.onGotNewTiles(msgExtra); //msgExtra contains the tiles
                 break;
+
             case Protocol.ERROR_OUTSIDE_BOARD_LIMITS:
                 notifyViewModel(new String[]{"ERR", "Your word is outside the board's limits. Try again."});
                 break;
@@ -68,19 +71,30 @@ public abstract class GameModel extends Model {
             case Protocol.ERROR_WORD_NOT_LEGAL:
                 notifyViewModel(new String[]{"ERR", "The word you created isn't found in the dictionary. Do you want to challenge it? (if wrong you will lose " + GameModel.MISS_PENALTY + " points)."});
                 break;
+
             case Protocol.BOARD_ASSIGNMENT_ACCEPTED:
                 this.onBoardAssignmentAccepted();
                 break;
-            case Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER:
-                this.onBoardUpdateByPlayer(msgExtra);
-                break;
+
+            case Protocol.UPDATED_PLAYER_SCORE:
+                String[] extraArgs = msgExtra.split(",", 2);
+                if (extraArgs.length != 2)  // error, not valid
+                    return false;
+                int scoreOfWord = Integer.parseInt(extraArgs[0]);
+                String player = extraArgs[1];
+
+                this.onUpdatePlayerScore(scoreOfWord, player);
+
+                //this.gameInstanceProperty.get().setNikud(sahkan);
+
+
             default:
                 return false; // not recognized
         }
         return true;
     }
 
-    private void onBoardUpdateByPlayer(String wordPlaced) {
+    protected void onBoardUpdateByPlayer(String wordPlaced) {
         Word w = Word.getWordFromNetworkString(wordPlaced, this.getGameInstance().getGameBag()); // not removing tiles from bag
         int expectedScore = this.getGameInstance().gameBoard.tryPlaceWord(w);
         System.out.println("Expected score of: "+expectedScore);
@@ -116,7 +130,11 @@ public abstract class GameModel extends Model {
     }
 
     protected void onNewPlayer(String newPlayerName) {
-        this.getGameInstance().updateScoreBoard(newPlayerName, 0);
+        this.onUpdatePlayerScore(0, newPlayerName);
+    }
+
+    protected void onUpdatePlayerScore(int score, String player) {
+        this.getGameInstance().updateScoreBoard(player, score);
         notifyViewModel(Command.NEW_PLAYER_JOINED);
     }
 
