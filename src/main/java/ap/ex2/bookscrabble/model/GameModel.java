@@ -86,10 +86,8 @@ public abstract class GameModel extends Model {
                     return false;
                 int scoreOfWord = Integer.parseInt(extraArgs[0]);
                 String player = extraArgs[1];
-                System.out.println("needs to update score");
                 this.onUpdatePlayerScore(scoreOfWord, player);
                 break;
-                //this.gameInstanceProperty.get().setNikud(sahkan);
 
 
             default:
@@ -108,6 +106,7 @@ public abstract class GameModel extends Model {
     private void onBoardAssignmentAccepted() {
         //remove relevant tiles from hand
         this.getGameInstance().getPlayerStatus().removeTilesInLimbo();
+        this.notifyViewModel(Command.RESET_SELECTIONS);
         //put the tiles on the board:
 
         //update

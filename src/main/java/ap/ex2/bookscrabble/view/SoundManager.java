@@ -39,15 +39,19 @@ public class SoundManager {
     }
 
     public void playSound(String s) {
-        this.loadedSounds.computeIfAbsent(s, s1 -> {
-            try {
-                MediaPlayer mp = new MediaPlayer(loadSoundFile(s));
-                mp.volumeProperty().bind(masterVolume);
-                return mp;
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        synchronized (this) {
+
+            this.loadedSounds.computeIfAbsent(s, s1 -> {
+                try {
+                    MediaPlayer mp = new MediaPlayer(loadSoundFile(s));
+                    mp.volumeProperty().bind(masterVolume);
+                    return mp;
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        }
         MediaPlayer mp = this.loadedSounds.get(s);
 
         if (mp == null) {

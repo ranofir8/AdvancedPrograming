@@ -78,17 +78,21 @@ public class HostGameModel extends GameModel implements Observer {
         this.sendStartingTiles();
 
         //todo in loop until the end of the game?
-
+        System.out.println("what?");
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
 
     }
 
     private void sendStartingTiles() {
         for (String player : this.playersTurn) {
-            String startingTiles = this.dealNTiles(GameModel.DRAW_START_AMOUNT);
-            //message to the player his tiles
-            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
+            this.sendXTiles(player, GameModel.DRAW_START_AMOUNT);
         }
+    }
+
+    private void sendXTiles(String player, int countOfTiles) {
+        //message to the player his tiles
+        String startingTiles = this.dealNTiles(countOfTiles);
+        this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
     }
 
     private String dealNTiles(int n) {
@@ -182,8 +186,15 @@ public class HostGameModel extends GameModel implements Observer {
         } else {
             this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
-            this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + scoreOfWord + "," + player);
-            // send player new tiles todo
+            // send player new tiles
+            this.sendXTiles(player, gottenWord.tileAmount());
+            if (player == null) //host case
+                player = this.getGameInstance().getNickname();
+            // update scores
+            this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreOfWord + "," + player);
+
+            // next turn
+
         }
     }
 

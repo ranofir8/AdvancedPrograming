@@ -154,6 +154,10 @@ public class ControllerGameView extends GameView implements Initializable {
                         displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
                         SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
                         break;
+                    case RESET_SELECTIONS:
+                        resetBoardSelection();
+                        resetTileSelection();
+                        break;
                 }
             }
         }

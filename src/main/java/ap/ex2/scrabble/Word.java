@@ -22,6 +22,11 @@ public class Word {
 		return tmp;
 	}
 
+	public int tileAmount() {
+		return (int) Arrays.stream(this.tiles).filter(t -> t != null).count();
+
+	}
+
 	public Tile[] getTiles() {
 		return tiles;
 	}
