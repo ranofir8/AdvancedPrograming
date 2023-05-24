@@ -66,11 +66,14 @@ public class Tile {
 			return this.quantities.clone();
 		}
 
-		public Tile[] getTileArray(String s) {
+		public Tile[] getTileArray(String s, boolean doRemove) {
 			Tile[] ts = new Tile[s.length()];
 			int i = 0;
 			for (char c: s.toCharArray()) {
-				ts[i] = this.getTile(c);
+				if (doRemove)
+					ts[i] = this.getTile(c);
+				else
+					ts[i] = this.getTileNoRemove(c);
 				i++;
 			}
 			return ts;

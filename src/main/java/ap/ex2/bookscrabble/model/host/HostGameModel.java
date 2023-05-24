@@ -156,8 +156,8 @@ public class HostGameModel extends GameModel implements Observer {
     protected void onBoardAssignment(String player, Word gottenWord) {
         int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
         char protocolToSend = ' ';
+        String extra = "";
         if (scoreOfWord < 0) {
-
             switch (scoreOfWord) {
                 case Board.CHECK_OUTSIDE_BOARD_LIMITS:
                     protocolToSend = Protocol.ERROR_OUTSIDE_BOARD_LIMITS;
@@ -175,10 +175,12 @@ public class HostGameModel extends GameModel implements Observer {
                     protocolToSend = Protocol.ERROR_WORD_NOT_LEGAL;
                     break;
             }
+            this.hostServer.sendMsgToPlayer(player, protocolToSend + "");
         } else {
-            protocolToSend = Protocol.BOARD_ASSIGNMENT_ACCEPTED;
+            this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
+            this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
+            this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + scoreOfWord + "," + player);
         }
-        this.hostServer.sendMsgToPlayer(player, protocolToSend+"");
     }
 
 
@@ -186,10 +188,4 @@ public class HostGameModel extends GameModel implements Observer {
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
     }
-
-    @Override
-    protected void _sendBoardAssignmentToHost(Word w) {
-        this.onBoardAssignment(null, w); //the host sends himself the task
-    }
-
 }

@@ -6,6 +6,7 @@ import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
 import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.bookscrabble.view.SoundManager;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -57,6 +58,10 @@ public class MyViewModel extends ViewModel {
                 if (args[0].equals("MSG")) {
                     setChanged();
                     notifyObservers(new guiMessage(args[1], Alert.AlertType.INFORMATION));
+                } else if (args[0].equals("ERR")) {
+                    SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
+                    setChanged();
+                    notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
                 }
             } else if (arg instanceof Command) {
                 setChanged();
@@ -116,9 +121,11 @@ public class MyViewModel extends ViewModel {
         if (this.myModel.getGameModel() == null) {
             return "No game model.";
         }*/
-        GameInstance gi = this.myModel.getGameModel().getGameInstance();
-        String currentGameStatus = gi.getCurrentGameStatus();
-        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
+        System.out.println("no Status Text");
+        return "no";
+//        GameInstance gi = this.myModel.getGameModel().getGameInstance();
+//        String currentGameStatus = gi.getCurrentGameStatus();
+//        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
     }
 
     @Override

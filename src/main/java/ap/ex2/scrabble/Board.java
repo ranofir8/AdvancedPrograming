@@ -9,36 +9,36 @@ import ap.ex2.scrabble.Word.WordIterator;
 
 
 public class Board {
-	public static final int CHECK_ALL_GOOD = 						 0;
-	public static final int CHECK_OUTSIDE_BOARD_LIMITS = 			-1;
-	public static final int CHECK_NOT_ON_STAR = 					-2;
-	public static final int CHECK_NOT_LEANS_ON_EXISTING_TILES = 	-3;
-	public static final int CHECK_NOT_MATCH_BOARD = 				-4;
-	public static final int CHECK_WORD_NOT_LEGAL = 				-5;
+	public static final int CHECK_ALL_GOOD = 0;
+	public static final int CHECK_OUTSIDE_BOARD_LIMITS = -1;
+	public static final int CHECK_NOT_ON_STAR = -2;
+	public static final int CHECK_NOT_LEANS_ON_EXISTING_TILES = -3;
+	public static final int CHECK_NOT_MATCH_BOARD = -4;
+	public static final int CHECK_WORD_NOT_LEGAL = -5;
 
 	private static class Multiplier {
 		public final int multiplyWordBy;
 		public final int multiplyLetterBy;
-		
+
 		private Multiplier(int multiplyBy, boolean forWholeWord) {
 			this.multiplyLetterBy = forWholeWord ? 1 : multiplyBy;
 			this.multiplyWordBy = forWholeWord ? multiplyBy : 1;
 		}
-		
+
 		// default "multiplier"
 		private Multiplier() {
 			this(1, false);
 		}
 	}
-	
+
 	public static final int COL_NUM = 15;
 	public static final int ROW_NUM = 15;
-	
+
 	// multipliers[col][row], \/	->
 	private static final Multiplier[][] multipliers = Board.generateMultipliers();
 	private static Multiplier defaultMultiplier = new Multiplier();
-	
-	private Tile[][] mat;	// mat[col][row], \/	->
+
+	private Tile[][] mat;    // mat[col][row], \/	->
 	private boolean isEmpty;
 	private Function<Word, Boolean> atDictionaryCheck;
 
@@ -51,23 +51,23 @@ public class Board {
 	public Board() {
 		this(x -> true);
 	}
-	
+
 	// creates a multiplier triangle for the basic board
 	private static Multiplier[][] generateMultipliers() {
 		Multiplier[][] m = new Multiplier[(int)(Board.COL_NUM/2)+1][(int)(Board.ROW_NUM/2)+1];
-		
+
 		// double word score
 		m[0][0] = m[3][3] = m[4][4] = m[5][5] = m[6][6] = new Multiplier(2, true);
-		
+
 		// double word score
 		m[7][7] = m[7][0] = m[0][7] = new Multiplier(3, true);
-		
+
 		// double letter score
 		m[4][0] = m[1][1] = m[5][1] = m[7][4] = new Multiplier(2, false);
-		
+
 		// triple letter score
 		m[2][2] = m[6][2] = new Multiplier(3, false);
-		
+
 		return m;
 	}
 
@@ -83,7 +83,7 @@ public class Board {
 		}
 		return copyMat;
 	}
-	
+
 	// returns the tile at the specified position
 	public Tile getTileAt(int row, int col) {
 		if (0 > row || row >= Board.ROW_NUM)
@@ -92,7 +92,7 @@ public class Board {
 			return null;
 		return this.mat[col][row];
 	}
-	
+
 	// sets the given tile at the specified position
 	private void setTileAt(int row, int col, Tile t) {
 		if (0 > row || row >= Board.ROW_NUM)
@@ -128,7 +128,7 @@ public class Board {
 			if (w.getCol() + w.getTiles().length - 1 >= Board.COL_NUM)
 				return CHECK_OUTSIDE_BOARD_LIMITS;
 		}
-		
+
 		// leans on an existing word
 		boolean leansOnExsistingTiles = false;
 		boolean onStar = false;
@@ -137,11 +137,11 @@ public class Board {
 			PositionedTile data = it.next();
 			Tile boardTile = this.getTileAt(data.getRow(), data.getCol());
 			Tile wordTile = data.getTile();
-			
+
 			// board is empty, check if the word leans on the star tile
 			if (this.isEmpty && wordTile != null && this.isStarTile(data.getRow(), data.getCol()))
 				onStar = true;
-			// board is NOT empty, check if the word leans on another
+				// board is NOT empty, check if the word leans on another
 			else if (boardTile != null) {
 				leansOnExsistingTiles = true;
 				// if a place has a board tile and a word and they don't match
@@ -162,28 +162,28 @@ public class Board {
 	private boolean isStarTile(int y, int x) {
 		return x==7 && y==7;
 	}
-	
+
 	private boolean dictionaryLegal(Word w) {
 		return this.atDictionaryCheck.apply(w);
 	}
-	
+
 	// gets a word and returns all of the new words created on the board if that word will be placed
 	// returns only words of length at least 2 ; if w's length is less than 2, returns an empty list.
 	// the first word will always be the full current word
 	private ArrayList<Word> getWords(Word w) {
 		ArrayList<Word> l = new ArrayList<Word>();
-		
+
 		// put FULL current word, if it is one letter, stop and return empty list
 		Word fullWord = this.getFullWord(w);
 		if (fullWord.getTiles().length < 2)
 			return l;
 		l.add(fullWord);
-		
+
 		// go over letters in word and put the new words
 		WordIterator it = w.getInnerWordIterator();
 		while (it.hasNext()) {
 			PositionedTile data = it.next();
-			
+
 			Tile wordTile = data.getTile();
 			Tile boardTile = this.getTileAt(data.getRow(), data.getCol());
 			if (boardTile == null) {  // this tile is new, check words that come from it
@@ -195,28 +195,28 @@ public class Board {
 					l.add(newWord);
 			}
 		}
-		
+
 		return l;
 	}
-	
+
 	// gets a row, col that includes the word, a searching direction, and a "center" tiles
 	// center tiles will contain one tile for regular calls, and a list for FULL word searches
 	private Word getStartOfWordAt(int searchRow, int searchCol, boolean isVertical, Tile[] centerTiles) {
 		int deltaCol = isVertical ? 0 : 1;
 		int deltaRow = 1 - deltaCol;
-		
+
 		ArrayList<Tile> wordTiles = new ArrayList<Tile>();
-		
+
 		// previous tiles
 		int currentRow = searchRow, currentCol = searchCol;
 		while (this.getTileAt(currentRow - deltaRow, currentCol - deltaCol) != null) {
 			currentRow -= deltaRow;
 			currentCol -= deltaCol;
-			
+
 			wordTiles.add(0, this.getTileAt(currentRow, currentCol));
 		}
 		int startCol = currentCol, startRow = currentRow;
-		
+
 		// current tiles, reset current indices and append centerTiles
 		currentRow = searchRow - deltaRow;
 		currentCol = searchCol - deltaCol;
@@ -225,28 +225,28 @@ public class Board {
 			currentRow += deltaRow;
 			currentCol += deltaCol;
 		}
-		
+
 		// next tiles
 		while (this.getTileAt(currentRow + deltaRow, currentCol + deltaCol) != null) {
 			currentRow += deltaRow;
 			currentCol += deltaCol;
-			
+
 			wordTiles.add(this.getTileAt(currentRow, currentCol));
 		}
-		
+
 		return new Word(wordTiles.toArray(new Tile[0]), startRow, startCol, isVertical);
 	}
-	
+
 	// imagines all of w in the board
 	private Word getFullWord(Word w) {
 		return this.getStartOfWordAt(w.getRow(), w.getCol(), w.isVertical(), w.getTiles());
 	}
-	
+
 	// gets a word and returns its score
 	private int getScore(Word w) {
 		int[] score = {0};
 		int[] wordMult = {1};
-		
+
 		// go over letters in word and calculate their score
 		((Iterator<PositionedTile>) w.getInnerWordIterator()).forEachRemaining(data -> {
 			// get the multiplier of the current tile, if this tile is new
@@ -254,31 +254,31 @@ public class Board {
 			Multiplier mul = Board.getMultiplierAt(data.getRow(), data.getCol());
 			if (isStarTile(data.getRow(), data.getCol()) && boardTile != null)
 				mul = Board.defaultMultiplier;
-			
+
 			score[0] += data.getTile().score * mul.multiplyLetterBy;
 			wordMult[0] *= mul.multiplyWordBy;
 		});
-		
+
 		return score[0] * wordMult[0];
 	}
-	
+
 	// gets the multiplier of a tile
 	private static Multiplier getMultiplierAt(int row, int col) {
 		int effectiveRow = Math.abs(row - (int)(Board.ROW_NUM / 2));
 		int effectiveCol = Math.abs(col - (int)(Board.COL_NUM / 2));
-		
+
 		if (effectiveRow > effectiveCol) {
 			int tmp = effectiveRow;
 			effectiveRow = effectiveCol;
 			effectiveCol = tmp;
 		}
-		
+
 		Multiplier mul = Board.multipliers[effectiveCol][effectiveRow];
 		if (mul == null)
 			mul = Board.defaultMultiplier;
-		return mul;	
+		return mul;
 	}
-	
+
 	// gets a word with missing tiles, and fills them up will existing tiles
 	private Word fillEmptyWordPlaces(Word w) {
 		ArrayList<Tile> newTiles = new ArrayList<Tile>();
@@ -299,7 +299,7 @@ public class Board {
 		}
 		return new Word((newTiles.toArray(new Tile[0])), w.getRow(), w.getCol(), w.isVertical());
 	}
-	
+
 	// places a word on the board; return the score of that move
 	// if a negative score is returned, an error occurred
 	public int tryPlaceWord(Word word) {
@@ -307,9 +307,10 @@ public class Board {
 		Word filledWord = this.fillEmptyWordPlaces(word);
 		// if the word is not board legal, return 0
 		int tryPlaceErr = this.boardLegalInt(filledWord);
+		System.out.println("try place " + word);
 		if (tryPlaceErr != 0)
 			return tryPlaceErr;
-		
+
 		// the first word is the FULL w, check if it (and all of the other words) are legal
 		ArrayList<Word> newWords = this.getWords(filledWord);
 		boolean areAllLegal = newWords.stream().allMatch(w -> dictionaryLegal(w));
@@ -318,14 +319,14 @@ public class Board {
 		// calculate scores
 		int[] score = {0};
 		newWords.forEach(newWord -> score[0] += getScore(newWord));
-		
+
 		// place word tiles on the board
 		// go over tiles in FULL word and place them
 		((Iterator<PositionedTile>)filledWord.getInnerWordIterator()).forEachRemaining(data -> setTileAt(data.getRow(), data.getCol(), data.getTile()));
 
 		return score[0];
 	}
-	
+
 	public void printBoard() {
 		for (int row = 0; row < Board.ROW_NUM; row++) {
 			for (int col = 0; col < Board.COL_NUM; col++) {

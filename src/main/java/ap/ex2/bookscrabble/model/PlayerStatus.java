@@ -44,7 +44,7 @@ public class PlayerStatus {
     }
 
     // if the tiles are good, remove them from hand
-    public void removeTilesInLimbo(){
+    public void removeTilesInLimbo() {
         this.tilesInLimbo.clear();
     }
 
@@ -126,7 +126,7 @@ public class PlayerStatus {
 
         String wordString = sb.toString();
 
-        Tile[] ts = bg.getTileArray(wordString);
+        Tile[] ts = bg.getTileArray(wordString, false); //false = do not remove the tile
         int minRow = Collections.min(rowBin.keySet());
         int minCol = Collections.min(columnBin.keySet());
         Word newWord = new Word(ts, minRow, minCol, isVertical);

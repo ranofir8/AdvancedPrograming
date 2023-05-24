@@ -49,7 +49,7 @@ public class GuestGameModel extends GameModel implements Observer {
 
     @Override
     protected void sendMsgToHost(String msg) {
-        //todo
+        this.myHandler.sendMsg(msg);
     }
 
 
@@ -92,7 +92,7 @@ public class GuestGameModel extends GameModel implements Observer {
                 break;
 
             default:
-                System.err.println("Unknown protocol message!");
+                System.err.println("Unknown protocol message! " + msgProtocol);
                 return false;
         }
         return true;
@@ -101,11 +101,6 @@ public class GuestGameModel extends GameModel implements Observer {
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTile(tileLetter);
-    }
-
-    @Override
-    protected void _sendBoardAssignmentToHost(Word w) {
-        sendMsgToHost(Protocol.BOARD_ASSIGNMENT_REQUEST + w.toNetworkString());
     }
 
 
