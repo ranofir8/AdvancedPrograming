@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <!--Oh no :(-->
@@ -60,7 +61,51 @@
     <center>
         <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
             <children>
-                <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="520.0" />
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <VBox fx:id="legend" prefHeight="337.0" prefWidth="90.0" spacing="10.0">
+                            <HBox>
+                                <Rectangle fill="#009900FF" height="10" width="10" />
+                                <Label text="Standard">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#64CCFFFF" height="10" width="10" />
+                                <Label text="Double Letter">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#0099FFFF" height="10" width="10" />
+                                <Label text="Triple Letter">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#FFFF99FF" height="10" width="10" />
+                                <Label text="Double Word">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#FF3333FF" height="10" width="10" />
+                                <Label text="Triple Word">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                        </VBox>
+                        <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="300.0" />
+                    </children>
+                </HBox>
                 <Separator prefHeight="36.0" prefWidth="500.0" />
                 <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
                     <font>
