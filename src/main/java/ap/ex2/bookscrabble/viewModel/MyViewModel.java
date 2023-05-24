@@ -106,6 +106,11 @@ public class MyViewModel extends ViewModel {
         this.initGameModelBinds();
     }
 
+    @Override
+    protected String getTitleText() {
+        return "In game - " + this.myModel.getGameModel().getGameInstance().getNickname();
+    }
+
     public String getStatusText() {
         if (this.myModel.getGameModel() == null) {
             return "No game model.";

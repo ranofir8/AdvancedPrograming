@@ -30,6 +30,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
     private IntegerProperty playersCount;
     private BooleanProperty isPlayerTurn;
+    private BooleanProperty canSendWord;
 
     // board & tiles
     private List<Tile> tilesInHand;
@@ -64,6 +65,10 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Canvas boardCanvas;
     @FXML
+    Button skipTurnButton;
+    @FXML
+    Button sendWordButton;
+    @FXML
     private Slider volumeSlider;
 
 
@@ -72,15 +77,15 @@ public class ControllerGameView extends GameView implements Initializable {
         this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.playersCount = new SimpleIntegerProperty();
         this.isPlayerTurn = new SimpleBooleanProperty();
+        this.canSendWord = new SimpleBooleanProperty();
 
         this.tilesInHand = new ArrayList<>();
-        this.test_AddTiles();
+
         this.gameInstanceProperty.addListener((observableValue, g0, g1) -> {
             this.gameBoard = g1.getGameBoard();
             this.tilesInHand = g1.getPlayerStatus().getTilesInHand();
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
         });
-//        this.isPlayerTurn.set(true);  // for testing only todo: remove
     }
 
     public void initSceneBind() {
@@ -101,6 +106,9 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
         this.myViewModel.gameInstanceProperty.addListener((observableValue, board, t1) -> System.out.println("gameInstance (Board) in V updated"));
+
+        this.sendWordButton.disableProperty().bind(this.canSendWord.not());
+        this.skipTurnButton.disableProperty().bind(this.canSendWord);
 
         SoundManager.singleton.bindMasterVolumeTo(this.volumeSlider.valueProperty());
     }
@@ -126,6 +134,12 @@ public class ControllerGameView extends GameView implements Initializable {
                     case UPDATE_GAME_TILES:
                         this.drawTiles();
                         SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
+                        break;
+                    case PLAY_START_GAME_SOUND:
+                        SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
+                        break;
+                    case NEW_PLAYER_JOINED:
+                        SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED);
                         break;
                 }
             }
@@ -292,6 +306,8 @@ public class ControllerGameView extends GameView implements Initializable {
                 this.clickOnTiles(row, col);
         }
         this.drawCanvases();
+
+        this.canSendWord.set(!this.tilesPlaced.isEmpty());
     }
 
      /** @return true if the position on canvas is inside the board **/
@@ -325,7 +341,7 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     void clickedOnBoard(int row, int col){
-        System.out.println("clickedOnBoard \t <" + row + ", " + col + "> \t selectedTileIndex=" + this.selectedTileIndex);
+//        System.out.println("clickedOnBoard \t <" + row + ", " + col + "> \t selectedTileIndex=" + this.selectedTileIndex);
         if (this.isTilesSelected() && !isValidBoardChoice(row, col)) { // the player chose a tile but the placment is invalid
             this.displayMSG(new guiMessage("This position is invalid", Alert.AlertType.INFORMATION));
             System.out.println("the player chose a tile but the placment is invalid");
@@ -334,29 +350,24 @@ public class ControllerGameView extends GameView implements Initializable {
             // if there is a tile in the board from this turn, retrieve tile from board
             System.out.println("the board position is ok but there isn't a selected tile");
 
-//            if (this.gameInstanceProperty.get().getGameBoard().getTileAt(row,col) != null) //the tile is on the shared board -> can't remove!
-//                return;
             if (isSquareWithPlayerPlacement(row,col)){
                 Tile t = tilesPlaced.get(PositionOnBoardToInt(row,col));
-                System.out.println("removing tile ... " + t.letter);
+
                 this.tilesInHand.add(t);
-                tilesPlaced.remove(PositionOnBoardToInt(row,col));
+                tilesPlaced.remove(PositionOnBoardToInt(row, col));
+                SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
                 resetBoardSelection();
-                if (tilesPlaced.isEmpty())
-                    setSendWordButtonText(false);
             }
-        }
-        else {
+        } else {
             // there is a legal choice of tile to put on the board
             if (this.selectedTileIndex >= 0) {
                 this.selectedBoardRow = row;
                 this.selectedBoardCol = col;
-                if (AudioEnabled)
-                    SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
+
+                SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
 
                 Tile tileToMove = tilesInHand.remove(selectedTileIndex);
                 this.tilesPlaced.put(PositionOnBoardToInt(row, col), tileToMove);
-                setSendWordButtonText(true); //enable sending word
                 this.resetTileSelection();
             } else {
                 this.resetBoardSelection();
@@ -382,34 +393,18 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     @FXML
-    void sendWord(){
+    void sendWordAction() {
         //validate the choices are construct a word.
-        //send to model.
+        //send to model. todo
 //        this.myViewModel.sendWord();
         //model -> chack logic and known word, update boards , change player turn... continue
     }
 
     @FXML
-    Button sendWordButton;
-    void setSendWordButtonText(boolean enableSending){
-        if (enableSending)
-            sendWordButton.setText("send word");
-        else
-            sendWordButton.setText("skip turn");
+    void skipTurnAction() {
+        // todo
     }
 
-    @FXML
-    Button AudioButton;
-
-    @FXML
-    void changeAudioStatus(){
-        AudioEnabled = !AudioEnabled;
-        if (AudioEnabled)
-            AudioButton.setText("Turn Off Audio");
-        else
-            AudioButton.setText("Turn On Audio");
-
-    }
 
     private void resetTileSelection() {
         this.selectedTileIndex = -1;

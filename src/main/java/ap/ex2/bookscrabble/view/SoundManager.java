@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 public class SoundManager {
     public final static String SOUND_TILE_PRESSED = "tileSnap.wav";
     public final static String SOUND_TILE_ADD = "tileAdded.wav";
+    public final static String SOUND_PLAYER_JOINED = "playerJoined.wav";
+    public final static String SOUND_STARTING_GAME = "startGame.wav";
 
     public final static SoundManager singleton = new SoundManager();
 

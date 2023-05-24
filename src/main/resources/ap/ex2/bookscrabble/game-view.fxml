@@ -15,44 +15,41 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <top>
         <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="gameStatusLabel" alignment="TOP_LEFT" text="Nickname">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                     <VBox.margin>
-                        <Insets bottom="20.0" top="20.0"/>
+                        <Insets bottom="20.0" top="20.0" />
                     </VBox.margin>
                 </Label>
                 <HBox alignment="CENTER" prefHeight="109.0" prefWidth="500.0">
                     <children>
                         <Label fx:id="portNum" text="Port">
                             <HBox.margin>
-                                <Insets right="50.0"/>
+                                <Insets right="50.0" />
                             </HBox.margin>
                             <font>
-                                <Font size="18.0"/>
+                                <Font size="18.0" />
                             </font>
                         </Label>
                         <Label fx:id="countPlayers" text="Players in game">
                             <font>
-                                <Font size="18.0"/>
+                                <Font size="18.0" />
                             </font>
                         </Label>
-                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGameButtonAction"
-                                text="Start Game">
+                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGameButtonAction" text="Start Game">
                             <HBox.margin>
-                                <Insets left="50.0"/>
+                                <Insets left="50.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="drawButtonTest" mnemonicParsing="false" onAction="#drawGameBoard"
-                                text="DRAW TEST">
+                        <Button fx:id="drawButtonTest" mnemonicParsing="false" onAction="#drawGameBoard" text="DRAW TEST">
                             <HBox.margin>
-                                <Insets left="50.0"/>
+                                <Insets left="50.0" />
                             </HBox.margin>
                         </Button>
                     </children>
@@ -63,16 +60,16 @@
     <center>
         <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
             <children>
-                <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="520.0"/>
-                <Separator prefHeight="36.0" prefWidth="500.0"/>
+                <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="520.0" />
+                <Separator prefHeight="36.0" prefWidth="500.0" />
                 <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
                     <font>
-                        <Font name="System Bold" size="14.0"/>
+                        <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
                 <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="67.0" prefWidth="563.0">
                     <content>
-                        <Canvas fx:id="TilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="500.0"/>
+                        <Canvas fx:id="TilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="500.0" />
                     </content>
                 </ScrollPane>
             </children>
@@ -81,11 +78,22 @@
     <right>
         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="sendWordButton" mnemonicParsing="false" onAction="#sendWord" prefHeight="25.0"
-                        prefWidth="109.0" text="skip turn"/>
-                <Label text="Volume"/>
-                <Slider fx:id="volumeSlider" blockIncrement="0.2" majorTickUnit="0.1" max="1.0" minorTickCount="0"
-                        showTickMarks="true" value="0.7"/>
+                <Button fx:id="skipTurnButton" mnemonicParsing="false" onAction="#skipTurnAction" prefHeight="25.0" prefWidth="109.0" text="Skip turn">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin></Button>
+                <Button fx:id="sendWordButton" mnemonicParsing="false" onAction="#sendWordAction" prefHeight="25.0" prefWidth="109.0" text="Send Word">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin></Button>
+                <Label text="Volume">
+               <VBox.margin>
+                  <Insets bottom="2.0" top="5.0" />
+               </VBox.margin></Label>
+                <Slider fx:id="volumeSlider" blockIncrement="0.2" majorTickUnit="0.1" max="1.0" minorTickCount="0" showTickMarks="true" value="0.7">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin></Slider>
                 <TableView fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0">
                     <columns>
                     </columns>

@@ -36,8 +36,13 @@ public abstract class ViewModel extends Observable implements Observer {
     }
 
     public void showGameScene() {
-        this.setScene(this.sceneG);
+        Platform.runLater(() -> {
+            this.setScene(this.sceneG);
+            this.stage.setTitle(this.getTitleText());
+        });
     }
+
+    protected abstract String getTitleText();
 
     public abstract String getStatusText();
 

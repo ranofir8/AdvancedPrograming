@@ -75,10 +75,12 @@ public abstract class GameModel extends Model {
 
     protected void onNewPlayer(String newPlayerName) {
         this.getGameInstance().updateScoreBoard(newPlayerName, 0);
+        notifyViewModel(Command.NEW_PLAYER_JOINED);
     }
 
     public void onStartGame() {
         this.getGameInstance().onStartGame();
+        notifyViewModel(Command.PLAY_START_GAME_SOUND);
         notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
