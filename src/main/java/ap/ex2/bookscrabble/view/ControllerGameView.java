@@ -4,6 +4,7 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.beans.property.BooleanProperty;
@@ -21,31 +22,34 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import java.net.URL;
 import java.util.*;
 
 public class ControllerGameView extends GameView implements Initializable {
-    private BooleanProperty isHostGame;
+    private final BooleanProperty isHostGame;
 
-    private IntegerProperty playersCount;
-    private BooleanProperty isPlayerTurn;
-    private BooleanProperty canSendWord;
+    private final IntegerProperty playersCount;
+    private final BooleanProperty isPlayerTurn;
+    private final BooleanProperty canSendWord;
 
     // board & tiles
     private List<Tile> tilesInHand;
     private Board gameBoard;
-    private ObjectProperty<GameInstance> gameInstanceProperty;
+    private final ObjectProperty<GameInstance> gameInstanceProperty;
 
     // tile drawing
     private final double letterMargin = 0.25;
     private final double tilePadding = 0.1;
     private double squareOfBoard = 1;
     private double squareOfTiles = 1;
-    private static final Color boardSelectionBG = Color.color(1, 60.0/255, 200.0/255);
+    private static final Color boardSelectionBG = Color.color(1, 1, 1, 0.5);
+    private static final Color tempTextColor = Color.color(1, 170.0/255, 200.0/255);
 
     // board selections
-    private final HashMap<Integer, Tile> tilesPlaced = new HashMap<>();
+    private HashMap<Integer, Tile> tilesPlaced;
+    private PlayerStatus playerStatus;
     private int selectedBoardRow = -1;
     private int selectedBoardCol = -1;
     private int selectedTileIndex = -1;
@@ -83,7 +87,10 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.gameInstanceProperty.addListener((observableValue, g0, g1) -> {
             this.gameBoard = g1.getGameBoard();
-            this.tilesInHand = g1.getPlayerStatus().getTilesInHand();
+            this.playerStatus = g1.getPlayerStatus();
+            this.tilesInHand = this.playerStatus.getTilesInHand();
+            this.tilesPlaced = this.playerStatus.getTilesInLimbo();
+
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
         });
     }
@@ -141,6 +148,10 @@ public class ControllerGameView extends GameView implements Initializable {
                     case NEW_PLAYER_JOINED:
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED);
                         break;
+                    case INVALID_WORD_PLACEMENT:
+                        displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
+                        SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
+                        break;
                 }
             }
         }
@@ -194,51 +205,57 @@ public class ControllerGameView extends GameView implements Initializable {
         this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
         double square = this.squareOfBoard;
 
-        gc.setFont(Font.font("Arial", square * 0.6)); // Adjust the font size as needed
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, square * 0.6)); // Adjust the font size as needed
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
                 Color toFill;
-                if (row == this.selectedBoardRow && col == this.selectedBoardCol) {
-                    toFill = ControllerGameView.boardSelectionBG;
-                } else {
-                    switch (m) {
-                        case 11:
-                            toFill = Color.color(0, 153.0 / 255, 0);
-                            break;
-                        case 13:
-                            toFill = Color.color(0, 153.0 / 255, 1);
-                            break;
-                        case 12:
-                            toFill = Color.color(100.0 / 255, 204.0 / 255, 1);
-                            break;
-                        case 21:
-                            toFill = Color.color(1, 1, 153.0 / 255);
-                            break;
-                        case 31:
-                            toFill = Color.color(1, 51.0 / 255, 51.0 / 255);
-                            break;
-                        default:
-                            toFill = Color.GRAY;
-                            break;
-                    }
+
+                switch (m) {
+                    case 11:
+                        toFill = Color.color(0, 153.0 / 255, 0);
+                        break;
+                    case 13:
+                        toFill = Color.color(0, 153.0 / 255, 1);
+                        break;
+                    case 12:
+                        toFill = Color.color(100.0 / 255, 204.0 / 255, 1);
+                        break;
+                    case 21:
+                        toFill = Color.color(1, 1, 153.0 / 255);
+                        break;
+                    case 31:
+                        toFill = Color.color(1, 51.0 / 255, 51.0 / 255);
+                        break;
+                    default:
+                        toFill = Color.GRAY;
+                        break;
                 }
 
                 // drawing square of tile
                 gc.setFill(toFill);
                 gc.fillRect(col * square, row * square, square, square);
+                if (row == this.selectedBoardRow && col == this.selectedBoardCol) {
+                    gc.setFill(boardSelectionBG);
+                    gc.fillRect(col * square, row * square, square, square);
+                }
+
                 gc.strokeRect(col * square, row * square, square, square);
 
                 // drawing text of tile
+                boolean isTempTile = false;
                 Tile t = b.getTileAt(row, col);     // tile on board
                 if (this.isSquareWithPlayerPlacement(row, col)) {
-                    t = this.tilesPlaced.get(this.PositionOnBoardToInt(row, col));
-                    System.out.println("letter on the board\t[" + t.letter + "]");
+                    t = this.tilesPlaced.get(Board.positionToInt(row, col));
+                    isTempTile = true;
                 }
 
                 if (t != null) {
+
                     gc.setFill(Color.BLACK); // Set the text color to black
-                    gc.fillText("" + t.letter, (col + letterMargin) * square, (row + 1 - letterMargin) * square);
+                    if (isTempTile)
+                        gc.setFill(tempTextColor);
+                    gc.fillText(String.valueOf(t.letter), (col + letterMargin) * square, (row + 1 - letterMargin) * square);
                 }
             }
         }
@@ -265,13 +282,13 @@ public class ControllerGameView extends GameView implements Initializable {
             gc.setFill(Color.BLACK); // Set the text color to black
 
             gc.setFont(Font.font("Arial", square * 0.6)); // big letter font
-            gc.fillText("" + t.letter, startX + letterMargin * square, (1-letterMargin) * square);
+            gc.fillText(String.valueOf(t.letter), startX + letterMargin * square, (1-letterMargin) * square);
 
             gc.setFont(Font.font("Arial", square * 0.2)); // small letter font
             double startXletter = startX + (1-letterMargin*0.6) * square;
             if (t.score > 9)
                 startXletter -= letterMargin * 0.5  * square;
-            gc.fillText("" + t.score, startXletter, (1-letterMargin*0.5) * square);
+            gc.fillText(String.valueOf(t.score), startXletter, (1-letterMargin*0.5) * square);
 
             i++;
         }
@@ -331,13 +348,8 @@ public class ControllerGameView extends GameView implements Initializable {
         //check if this choice consists with the last ones.
     }
 
-    boolean isSquareWithPlayerPlacement(int row, int col) {
-        return tilesPlaced.containsKey(PositionOnBoardToInt(row, col));
-    }
-
-    /** @return int value of a point on the board **/
-    private int PositionOnBoardToInt(int row, int col) {
-        return row * Board.ROW_NUM + col;
+    private boolean isSquareWithPlayerPlacement(int row, int col) {
+        return tilesPlaced.containsKey(Board.positionToInt(row, col));
     }
 
     void clickedOnBoard(int row, int col){
@@ -348,16 +360,13 @@ public class ControllerGameView extends GameView implements Initializable {
             return;
         } else if (!this.isTilesSelected()) { // the board position is ok but there isn't a selected tile .
             // if there is a tile in the board from this turn, retrieve tile from board
-            System.out.println("the board position is ok but there isn't a selected tile");
 
-            if (isSquareWithPlayerPlacement(row,col)){
-                Tile t = tilesPlaced.get(PositionOnBoardToInt(row,col));
+            if (this.isSquareWithPlayerPlacement(row, col)) {
+                this.playerStatus.moveLimboToHand(Board.positionToInt(row, col));
 
-                this.tilesInHand.add(t);
-                tilesPlaced.remove(PositionOnBoardToInt(row, col));
                 SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
-                resetBoardSelection();
             }
+            resetBoardSelection();
         } else {
             // there is a legal choice of tile to put on the board
             if (this.selectedTileIndex >= 0) {
@@ -365,9 +374,8 @@ public class ControllerGameView extends GameView implements Initializable {
                 this.selectedBoardCol = col;
 
                 SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
+                this.playerStatus.moveHandToLimbo(this.selectedTileIndex, row, col);
 
-                Tile tileToMove = tilesInHand.remove(selectedTileIndex);
-                this.tilesPlaced.put(PositionOnBoardToInt(row, col), tileToMove);
                 this.resetTileSelection();
             } else {
                 this.resetBoardSelection();
@@ -396,7 +404,7 @@ public class ControllerGameView extends GameView implements Initializable {
     void sendWordAction() {
         //validate the choices are construct a word.
         //send to model. todo
-//        this.myViewModel.sendWord();
+        this.myViewModel.sendWord();
         //model -> chack logic and known word, update boards , change player turn... continue
     }
 

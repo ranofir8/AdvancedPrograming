@@ -143,19 +143,18 @@ public class MyViewModel extends ViewModel {
     }
 
     @Override
-    protected void sendWord() {
+    public void sendWord() {
         // todo - move limboTiles list to view, send it here
-//        this.myModel.getGameModel().sendWord();
+        this.myModel.getGameModel().requestSendWord();
     }
 
     @Override
     protected void requestChallenge() {
-
-//        this.myModel.getGameModel().requestChallenge();
+        this.myModel.getGameModel().requestChallenge();
     }
 
     @Override
     protected void giveUpTurn() {
-//        this.myModel.getGameModel().giveupTurn();
+        this.myModel.getGameModel().requestGiveUpTurn();
     }
 }

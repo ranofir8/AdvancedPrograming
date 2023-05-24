@@ -5,7 +5,9 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MyClientHandler;
+import ap.ex2.bookscrabble.model.host.HostGameModel;
 import ap.ex2.scrabble.Tile;
+import ap.ex2.scrabble.Word;
 
 import java.net.Socket;
 import java.util.Observable;
@@ -43,6 +45,11 @@ public class GuestGameModel extends GameModel implements Observer {
     @Override
     public void closeConnection() {
         this.myHandler.close();
+    }
+
+    @Override
+    protected void sendMsgToHost(String msg) {
+        //todo
     }
 
 
@@ -95,6 +102,12 @@ public class GuestGameModel extends GameModel implements Observer {
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTile(tileLetter);
     }
+
+    @Override
+    protected void _sendBoardAssignmentToHost(Word w) {
+        sendMsgToHost(Protocol.BOARD_ASSIGNMENT_REQUEST + w.toNetworkString());
+    }
+
 
     protected void finalize() {
         this.myHandler.close();

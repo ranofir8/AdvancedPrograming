@@ -48,11 +48,6 @@
                                 <Insets left="50.0" />
                             </HBox.margin>
                         </Button>
-                        <Button fx:id="drawButtonTest" mnemonicParsing="false" onAction="#drawGameBoard" text="DRAW TEST">
-                            <HBox.margin>
-                                <Insets left="50.0" />
-                            </HBox.margin>
-                        </Button>
                     </children>
                 </HBox>
             </children>

@@ -4,6 +4,7 @@ import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Tile;
+import ap.ex2.scrabble.Word;
 
 import java.io.IOException;
 import java.util.*;
@@ -52,6 +53,11 @@ public class HostGameModel extends GameModel implements Observer {
     @Override
     protected void closeConnection() {
         this.hostServer.close();
+    }
+
+    @Override
+    protected void sendMsgToHost(String msg) {
+        this.hostServer.sendMsgToPlayer(null, msg);
     }
 
 
@@ -132,12 +138,29 @@ public class HostGameModel extends GameModel implements Observer {
         boolean hasHandled = super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
 
         System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
+        switch (msgProtocol) {
+            case Protocol.BOARD_ASSIGNMENT_REQUEST:
+                Word gottenWord = Word.getWordFromNetworkString(msgExtra, this.getGameInstance().getGameBag());
+                this.onBoardAssignment(gottenWord);
+                break;
+        }
+
         return hasHandled;
     }
+
+    protected void onBoardAssignment(Word gottenWord) {
+
+    }
+
 
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
+    }
+
+    @Override
+    protected void _sendBoardAssignmentToHost(Word w) {
+        this.onBoardAssignment(w); //the host sends himself the task
     }
 
 }

@@ -4,6 +4,7 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Tile;
+import ap.ex2.scrabble.Word;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.util.List;
@@ -28,6 +29,8 @@ public abstract class GameModel extends Model {
     public abstract void establishConnection() throws Exception;
 
     protected abstract void closeConnection();
+
+    protected abstract void sendMsgToHost(String msg);
 
     protected void onRecvMessage(String sentBy, String msgContent) {
         // nickname will always be null, because only the host can send message to guests
@@ -86,5 +89,22 @@ public abstract class GameModel extends Model {
 
     public void onTurnOf(String turnOfNickname){
         this.getGameInstance().setTurnOfNickname(turnOfNickname);
+    }
+
+    public final void requestSendWord() {
+        Word w = this.getGameInstance().limboToWord();
+        if (w == null)
+            notifyViewModel(Command.INVALID_WORD_PLACEMENT);
+        else
+            _sendBoardAssignmentToHost(w);
+    }
+
+    protected abstract void _sendBoardAssignmentToHost(Word w);
+
+    public void requestChallenge() {
+        // todo
+    }
+
+    public void requestGiveUpTurn() {
     }
 }

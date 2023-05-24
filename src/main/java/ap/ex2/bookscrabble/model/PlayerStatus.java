@@ -8,9 +8,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import javax.crypto.BadPaddingException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This class is used by the model in order to update for each player the data he knows (and present it in his view).
@@ -19,13 +20,13 @@ public class PlayerStatus {
     public final String nickName;
     public BooleanProperty isMyTurnProperty;
     public StringProperty turnOfProperty;
-    private List<Tile> tiles;
-    private List<Word.PositionedTile> tilesInLimbo; // tiles that are not in the Board and not in Hand
+    private List<Tile> handTiles;
+    private HashMap<Integer, Tile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
     public PlayerStatus(String nickName) {
-        this.tiles = new ArrayList<Tile>();
+        this.handTiles = new ArrayList<Tile>();
         this.nickName = nickName;
-        this.tilesInLimbo = new ArrayList<>();
+        this.tilesInLimbo = new HashMap<>();
 
         this.turnOfProperty = new SimpleStringProperty();
         this.isMyTurnProperty = new SimpleBooleanProperty();
@@ -39,7 +40,7 @@ public class PlayerStatus {
 
     // when the player gets a new tile
     public void addTile(Tile t){
-        this.tiles.add(t);
+        this.handTiles.add(t);
     }
 
     // if the tiles are good, remove them from hand
@@ -48,11 +49,9 @@ public class PlayerStatus {
     }
 
     // if the tiles are not good, return them to the hand
-    public void putBackTilesInLimbo() {
+    public void putBackTilesFromLimbo() {
         // restore them into hand
-        this.tilesInLimbo.forEach(positionedTile -> {
-            this.tiles.add(positionedTile.getTile());
-        });
+        this.tilesInLimbo.forEach((integer, tile) -> this.handTiles.add(tile));
         this.tilesInLimbo.clear();
     }
 
@@ -63,19 +62,76 @@ public class PlayerStatus {
      * @param col - col he put on board
      */
     public void moveHandToLimbo(int tileIndex, int row, int col) {
-        Word.PositionedTile cur = new Word.PositionedTile(row,col,this.tiles.remove(tileIndex));
-        this.tilesInLimbo.add(cur);
-
+        this.tilesInLimbo.put(Board.positionToInt(row, col), this.handTiles.remove(tileIndex));
     }
 
     // moves tile from Limbo to Hand
     public void moveLimboToHand(int indexFromLimbo) {
-        this.tiles.add(this.tilesInLimbo.remove(indexFromLimbo).getTile());
+        this.handTiles.add(this.tilesInLimbo.remove(indexFromLimbo));
     }
 
-    public Word limboToWord() {
-        //todo
-        return null;
+    public Word limboToWord(Tile.Bag bg) {
+        HashMap<Integer, Character> columnBin = new HashMap<>();
+        HashMap<Integer, Character> rowBin = new HashMap<>();
+        boolean isVertical = false;
+
+        List<Word.PositionedTile> l = this.tilesInLimbo.entrySet().stream()
+                .map(entry -> Board.intToPositionedTile(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        for (Word.PositionedTile pt : l) {
+            columnBin.put(pt.getCol(), pt.getTile().letter);
+            rowBin.put(pt.getRow(), pt.getTile().letter);
+        }
+
+        HashMap<Integer, Character> relaventSet = null;
+        HashMap<Integer, Character> otherSet = null;
+
+        // check if all tiles form a straight line
+        if(columnBin.keySet().size() == 1 && rowBin.keySet().size() == 1) { //only one tile was added
+            // todo what if word is only one letter?
+            //determine if vertical or horizontal in some way
+            return null;
+        } else if (columnBin.size() == 1) {
+            isVertical = true;
+        } else if (rowBin.size() == 1) {
+            isVertical = false;
+        } else {
+            // todo - notify player
+            //illegal!
+            return null;
+        }
+
+        if (isVertical) {
+            relaventSet = rowBin;
+            otherSet = columnBin;
+        } else {
+            relaventSet = columnBin;
+            otherSet = rowBin;
+        }
+
+        // if the following lines are performed, then what the player put is legal
+        int minValue = Collections.min(relaventSet.keySet());
+        int maxValue = Collections.max(relaventSet.keySet());
+
+
+        int wordLen = maxValue - minValue + 1;
+
+
+        String s = IntStream.range(0, wordLen).mapToObj(x -> "_").collect(Collectors.joining());
+        StringBuilder sb = new StringBuilder(s);
+        for (Map.Entry<Integer, Character> entry : relaventSet.entrySet()) {
+            sb.setCharAt(entry.getKey() - minValue, entry.getValue());
+        }
+
+        String wordString = sb.toString();
+
+        Tile[] ts = bg.getTileArray(wordString);
+        int minRow = Collections.min(rowBin.keySet());
+        int minCol = Collections.min(columnBin.keySet());
+        Word newWord = new Word(ts, minRow, minCol, isVertical);
+
+        return newWord;
     }
 
 
@@ -84,6 +140,10 @@ public class PlayerStatus {
     }
 
     public List<Tile> getTilesInHand() {
-        return this.tiles; //*these tiles*
+        return this.handTiles; //*these tiles*
+    }
+
+    public HashMap<Integer, Tile> getTilesInLimbo() {
+        return this.tilesInLimbo;
     }
 }

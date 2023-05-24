@@ -65,6 +65,16 @@ public class Tile {
 		public int[] getQuantities() {
 			return this.quantities.clone();
 		}
+
+		public Tile[] getTileArray(String s) {
+			Tile[] ts = new Tile[s.length()];
+			int i = 0;
+			for (char c: s.toCharArray()) {
+				ts[i] = this.getTile(c);
+				i++;
+			}
+			return ts;
+		}
 	}
 	
 	public final char letter;

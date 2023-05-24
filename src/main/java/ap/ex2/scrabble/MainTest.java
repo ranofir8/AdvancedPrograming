@@ -36,7 +36,7 @@ public class MainTest {
 	
 	
 	
-	private static Tile[] get(Bag bg,String s) {
+	private static Tile[] get(Bag bg, String s) {
 		Tile[] ts=new Tile[s.length()];
 		int i=0;
 		for(char c: s.toCharArray()) {

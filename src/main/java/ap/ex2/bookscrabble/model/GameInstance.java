@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
-
+    public Word limboToWord() {
+        return this.getPlayerStatus().limboToWord(this.gameBag);
+    }
 
     enum GameState {
         WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED

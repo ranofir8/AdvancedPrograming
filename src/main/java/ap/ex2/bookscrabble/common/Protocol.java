@@ -20,6 +20,5 @@ public class Protocol {
     public static final char BOARD_ASSIGNMENT_REJECTED_QUERY = 'B';
     public static final char SEND_NEW_TILES = 'C';
     public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'D';
-
-
+    public static final char BOARD_ASSIGNMENT_REQUEST = 'E';
 }

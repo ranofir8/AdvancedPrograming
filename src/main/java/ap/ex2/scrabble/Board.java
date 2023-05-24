@@ -288,6 +288,7 @@ public class Board {
 		// place word tiles on the board
 		// go over tiles in FULL word and place them
 		((Iterator<PositionedTile>)filledWord.getInnerWordIterator()).forEachRemaining(data -> setTileAt(data.getRow(), data.getCol(), data.getTile()));
+		this.printBoard();
 		return score[0];
 	}
 	
@@ -303,5 +304,15 @@ public class Board {
 			System.out.println();
 		}
 		System.out.println("\n");
+	}
+
+	/** @return int value of a point on the board **/
+	public static int positionToInt(int row, int col) {
+		return row * Board.ROW_NUM + col;
+	}
+
+	public static PositionedTile intToPositionedTile(int index, Tile t) {
+		int r = index / Board.ROW_NUM, c = index % Board.ROW_NUM;
+		return new PositionedTile(r, c, t);
 	}
 }
