@@ -91,10 +91,6 @@ public class GuestGameModel extends GameModel implements Observer {
                 this.onNewPlayer(newUsername);
                 break;
 
-            case Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER:
-                this.onBoardUpdateByPlayer(msgExtra);
-                break;
-
             default:
                 System.err.println("Unknown protocol message! " + msgProtocol);
                 return false;
@@ -107,6 +103,13 @@ public class GuestGameModel extends GameModel implements Observer {
         return this.getGameInstance().getGameBag().getTile(tileLetter);
     }
 
+    @Override
+    protected void onBoardUpdateByPlayer(String wordPlaced) {
+        Word w = Word.getWordFromNetworkString(wordPlaced, this.getGameInstance().getGameBag()); // not removing tiles from bag
+        int expectedScore = this.getGameInstance().gameBoard.tryPlaceWord(w);
+        System.out.println("Expected score of: "+expectedScore);
+        super.onBoardUpdateByPlayer(wordPlaced);
+    }
 
     protected void finalize() {
         this.myHandler.close();

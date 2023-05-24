@@ -151,13 +151,13 @@ public class HostGameModel extends GameModel implements Observer {
         return hasHandled;
     }
 
-
     /**
      * messages the client the outcome of sending
      * @param gottenWord
      */
     protected void onBoardAssignment(String player, Word gottenWord) {
         int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
+        System.out.println("Score from host: "+ scoreOfWord);
         char protocolToSend = ' ';
         String extra = "";
         if (scoreOfWord < 0) {
@@ -183,7 +183,7 @@ public class HostGameModel extends GameModel implements Observer {
             this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
             this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + scoreOfWord + "," + player);
-
+            // send player new tiles todo
         }
     }
 

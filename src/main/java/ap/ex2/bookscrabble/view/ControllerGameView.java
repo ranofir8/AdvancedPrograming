@@ -148,6 +148,8 @@ public class ControllerGameView extends GameView implements Initializable {
                     case NEW_PLAYER_JOINED:
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED);
                         break;
+                    case UPDATE_SCORE_BOARD:
+                        break;
                     case INVALID_WORD_PLACEMENT:
                         displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
                         SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);

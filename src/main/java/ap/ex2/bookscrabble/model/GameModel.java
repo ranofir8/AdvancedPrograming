@@ -76,6 +76,10 @@ public abstract class GameModel extends Model {
                 this.onBoardAssignmentAccepted();
                 break;
 
+            case Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER:
+                this.onBoardUpdateByPlayer(msgExtra);
+                break;
+
             case Protocol.UPDATED_PLAYER_SCORE:
                 String[] extraArgs = msgExtra.split(",", 2);
                 if (extraArgs.length != 2)  // error, not valid
@@ -95,9 +99,6 @@ public abstract class GameModel extends Model {
     }
 
     protected void onBoardUpdateByPlayer(String wordPlaced) {
-        Word w = Word.getWordFromNetworkString(wordPlaced, this.getGameInstance().getGameBag()); // not removing tiles from bag
-        int expectedScore = this.getGameInstance().gameBoard.tryPlaceWord(w);
-        System.out.println("Expected score of: "+expectedScore);
         notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
@@ -131,11 +132,12 @@ public abstract class GameModel extends Model {
 
     protected void onNewPlayer(String newPlayerName) {
         this.onUpdatePlayerScore(0, newPlayerName);
+        notifyViewModel(Command.NEW_PLAYER_JOINED);
     }
 
     protected void onUpdatePlayerScore(int score, String player) {
         this.getGameInstance().updateScoreBoard(player, score);
-        notifyViewModel(Command.NEW_PLAYER_JOINED);
+        System.out.println("updated score of " + player + " by " + score);
     }
 
     public void onStartGame() {
