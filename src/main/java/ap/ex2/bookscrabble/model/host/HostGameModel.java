@@ -150,6 +150,7 @@ public class HostGameModel extends GameModel implements Observer {
         return hasHandled;
     }
 
+
     /**
      * messages the client the outcome of sending
      * @param gottenWord
@@ -181,6 +182,7 @@ public class HostGameModel extends GameModel implements Observer {
             this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
             this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + scoreOfWord + "," + player);
+
         }
     }
 
