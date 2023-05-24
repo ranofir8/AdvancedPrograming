@@ -76,6 +76,7 @@ public class HostGameModel extends GameModel implements Observer {
         //create a list of 7 random tiles
         this.sendStartingTiles();
 
+        //todo in loop until the end of the game?
 
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
 

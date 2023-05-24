@@ -72,7 +72,7 @@ public class Word {
 		}
 		int row = Integer.parseInt(parts[0]);
 		int col = Integer.parseInt(parts[1]);
-		Tile[] t = bag.getTileArray(parts[2]);
+		Tile[] t = bag.getTileArray(parts[2],false);
 		boolean b = Boolean.parseBoolean(parts[3]);
 
 		return new Word(t, row, col, b);
