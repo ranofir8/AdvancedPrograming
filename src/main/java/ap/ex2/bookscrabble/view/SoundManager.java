@@ -17,6 +17,8 @@ public class SoundManager {
     public final static String SOUND_TILE_ADD = "tileAdded.wav";
     public final static String SOUND_PLAYER_JOINED = "playerJoined.wav";
     public final static String SOUND_STARTING_GAME = "startGame.wav";
+    public final static String SOUND_OF_FAILURE = "soundOfFailure.mp3";
+
 
     public final static SoundManager singleton = new SoundManager();
 
