@@ -2,13 +2,20 @@ package ap.ex2.scrabble;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.function.Function;
 
 import ap.ex2.scrabble.Word.PositionedTile;
 import ap.ex2.scrabble.Word.WordIterator;
 
 
 public class Board {
+	public static final int CHECK_ALL_GOOD = 						 0;
+	public static final int CHECK_OUTSIDE_BOARD_LIMITS = 			-1;
+	public static final int CHECK_NOT_ON_STAR = 					-2;
+	public static final int CHECK_NOT_LEANS_ON_EXISTING_TILES = 	-3;
+	public static final int CHECK_NOT_MATCH_BOARD = 				-4;
+	public static final int CHECK_WORD_NOT_LEGAL = 				-5;
+
 	private static class Multiplier {
 		public final int multiplyWordBy;
 		public final int multiplyLetterBy;
@@ -33,10 +40,16 @@ public class Board {
 	
 	private Tile[][] mat;	// mat[col][row], \/	->
 	private boolean isEmpty;
+	private Function<Word, Boolean> atDictionaryCheck;
 
-	public Board() {
+	public Board(Function<Word, Boolean> atDictionaryCheck) {
 		this.mat = new Tile[Board.COL_NUM][Board.ROW_NUM];
 		this.isEmpty = true;
+		this.atDictionaryCheck = atDictionaryCheck;
+	}
+
+	public Board() {
+		this(x -> true);
 	}
 	
 	// creates a multiplier triangle for the basic board
@@ -89,23 +102,36 @@ public class Board {
 		this.mat[col][row] = t;
 		this.isEmpty = false;
 	}
-	
+
 	public boolean boardLegal(Word w) {
+		return this.boardLegalInt(w) == 0;
+	}
+
+	/**
+	 * @return int status of Word
+	 *  if everything is good, returns 0
+	 * 	if the word is outside the borders, returns -1
+	 *  if the word is not on star (and it should be), returns -2
+	 *  if the word is not leaning on existing tiles, returns -3
+	 *  if the word does not match the board, returns -4
+	 */
+	public int boardLegalInt(Word w) {
 		// the word is inside the board
 		if (w.getCol() < 0 || w.getCol() >= Board.COL_NUM)
-			return false;
+			return CHECK_OUTSIDE_BOARD_LIMITS;
 		if (w.getRow() < 0 || w.getRow() >= Board.ROW_NUM)
-			return false;
+			return CHECK_OUTSIDE_BOARD_LIMITS;
 		if (w.isVertical()) {
 			if (w.getRow() + w.getTiles().length - 1 >= Board.ROW_NUM)
-				return false;
+				return CHECK_OUTSIDE_BOARD_LIMITS;
 		} else {
 			if (w.getCol() + w.getTiles().length - 1 >= Board.COL_NUM)
-				return false;
+				return CHECK_OUTSIDE_BOARD_LIMITS;
 		}
 		
 		// leans on an existing word
 		boolean leansOnExsistingTiles = false;
+		boolean onStar = false;
 		WordIterator it = w.getSurroundIterator();
 		while (it.hasNext()) {
 			PositionedTile data = it.next();
@@ -114,16 +140,22 @@ public class Board {
 			
 			// board is empty, check if the word leans on the star tile
 			if (this.isEmpty && wordTile != null && this.isStarTile(data.getRow(), data.getCol()))
-				return true;
+				onStar = true;
 			// board is NOT empty, check if the word leans on another
 			else if (boardTile != null) {
 				leansOnExsistingTiles = true;
 				// if a place has a board tile and a word and they don't match
 				if (wordTile != null && !boardTile.equals(wordTile))
-					return false;
+					return CHECK_NOT_MATCH_BOARD;
 			}
 		}
-		return leansOnExsistingTiles;
+
+		if (this.isEmpty && !onStar)
+			return CHECK_NOT_ON_STAR;
+		else if (!this.isEmpty && !leansOnExsistingTiles)
+			return CHECK_NOT_LEANS_ON_EXISTING_TILES;
+		else
+			return CHECK_ALL_GOOD;
 	}
 
 	// returns True is the coordinates are of the star tile
@@ -132,7 +164,7 @@ public class Board {
 	}
 	
 	private boolean dictionaryLegal(Word w) {
-		return true;
+		return this.atDictionaryCheck.apply(w);
 	}
 	
 	// gets a word and returns all of the new words created on the board if that word will be placed
@@ -269,18 +301,20 @@ public class Board {
 	}
 	
 	// places a word on the board; return the score of that move
+	// if a negative score is returned, an error occurred
 	public int tryPlaceWord(Word word) {
 		// all of the previous methods assume filled words!
 		Word filledWord = this.fillEmptyWordPlaces(word);
 		// if the word is not board legal, return 0
-		if (!this.boardLegal(filledWord))
-			return 0;
+		int tryPlaceErr = this.boardLegalInt(filledWord);
+		if (tryPlaceErr != 0)
+			return tryPlaceErr;
 		
 		// the first word is the FULL w, check if it (and all of the other words) are legal
 		ArrayList<Word> newWords = this.getWords(filledWord);
 		boolean areAllLegal = newWords.stream().allMatch(w -> dictionaryLegal(w));
 		if (!areAllLegal)
-			return 0;
+			return CHECK_WORD_NOT_LEGAL;
 		// calculate scores
 		int[] score = {0};
 		newWords.forEach(newWord -> score[0] += getScore(newWord));
@@ -288,7 +322,7 @@ public class Board {
 		// place word tiles on the board
 		// go over tiles in FULL word and place them
 		((Iterator<PositionedTile>)filledWord.getInnerWordIterator()).forEachRemaining(data -> setTileAt(data.getRow(), data.getCol(), data.getTile()));
-		this.printBoard();
+
 		return score[0];
 	}
 	
@@ -316,3 +350,4 @@ public class Board {
 		return new PositionedTile(r, c, t);
 	}
 }
+

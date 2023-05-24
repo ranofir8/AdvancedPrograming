@@ -3,6 +3,7 @@ package ap.ex2.bookscrabble.model.host;
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 
@@ -141,7 +142,7 @@ public class HostGameModel extends GameModel implements Observer {
         switch (msgProtocol) {
             case Protocol.BOARD_ASSIGNMENT_REQUEST:
                 Word gottenWord = Word.getWordFromNetworkString(msgExtra, this.getGameInstance().getGameBag());
-                this.onBoardAssignment(gottenWord);
+                this.onBoardAssignment(msgSentBy, gottenWord);
                 break;
         }
 
@@ -188,7 +189,7 @@ public class HostGameModel extends GameModel implements Observer {
 
     @Override
     protected void _sendBoardAssignmentToHost(Word w) {
-        this.onBoardAssignment(w); //the host sends himself the task
+        this.onBoardAssignment(null, w); //the host sends himself the task
     }
 
 }

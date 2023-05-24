@@ -3,6 +3,10 @@ package ap.ex2.bookscrabble.common;
 public class Protocol {
     // messages from guest to host
     public static final char GUEST_LOGIN_REQUEST = '0';
+    public static final char BOARD_ASSIGNMENT_REQUEST = 'E';    // QUERY
+    public static final char BOARD_CHALLENGE_REQUEST = 'K';     // CHALLENGE
+    public static final char SKIP_TURN_REQUEST = 'L';           // SKIP TURN
+
 
     // messages from host to guest
     public static final char HOST_LOGIN_ACCEPT = '1';
@@ -11,8 +15,6 @@ public class Protocol {
     public static final char PLAYER_UPLOAD = '4';
     public static final char START_GAME = '5';
     public static final char END_GAME = '6';
-
-//cursors parking:| | | |
 
     public static final char TURN_OF = '8';
     public static final char BOARD_ASSIGNMENT_ACCEPTED = '9';

@@ -53,6 +53,10 @@ public abstract class GameModel extends Model {
             case Protocol.SEND_NEW_TILES:
                 this.onGotNewTiles(msgExtra); //msgExtra contains the tiles
                 break;
+            case Protocol.BOARD_ASSIGNMENT_REQUEST:
+                // todo
+                break;
+
             default:
                 return false; // not recognized
         }
