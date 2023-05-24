@@ -57,7 +57,28 @@ public class Word {
 			return false;
 		return true;
 	}
-	
+
+	public String toNetworkString() {
+		// example of pattern: "2,4,FARM,false"
+		return this.row + "," + this.col + "," + this + "," + this.vertical;
+	}
+
+	public static Word getWordFromNetworkString(String networkString, Tile.Bag bag) {
+		// construct a Word object using a String "2,4,FARM,false"
+		// bag to get tiles from
+		String[] parts = networkString.split(",");
+		if (parts.length != 4) {
+			return null;
+		}
+		int row = Integer.parseInt(parts[0]);
+		int col = Integer.parseInt(parts[1]);
+		Tile[] t = bag.getTileArray(parts[2]);
+		boolean b = Boolean.parseBoolean(parts[3]);
+
+		return new Word(t, row, col, b);
+		// Tile[] tiles, int row, int col, boolean vertical
+	}
+
 	public static class PositionedTile {
 		private final int tRow;
 		private final int tCol;

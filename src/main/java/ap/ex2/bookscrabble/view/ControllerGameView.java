@@ -402,6 +402,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
     @FXML
     void sendWordAction() {
+
         //validate the choices are construct a word.
         //send to model. todo
         this.myViewModel.sendWord();
