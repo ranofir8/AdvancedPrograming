@@ -21,6 +21,8 @@ public class BookScrabbleHandler implements SimpleClientHandler {
             throw new RuntimeException(e);
         }
 
+        System.out.println("server got input: " + inputString);
+
         String[] splittedArray = inputString.split(",");
         ArrayList<String> splittedList = new ArrayList<>(Arrays.asList(splittedArray));
 
