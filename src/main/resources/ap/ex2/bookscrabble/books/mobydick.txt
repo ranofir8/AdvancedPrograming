@@ -4344,7 +4344,7 @@ dinner, and chowder for supper, till you began to look for
 fish-bones coming through your clothes. The area before 
 the house was paved with clam-shells. Mrs. Hussey wore 
 a polished necklace of codfish vertebra ; and Hosea 
-Hussey had his account-books bound in superior old 
+Hussey had his account-ap.ex2.bookscrabble.books bound in superior old
 shark-skin. There was a fishy flavour to the milk, too, 
 which I could not at all account for, till one morning 
 happening to take a stroll along the beach among some 
@@ -7693,7 +7693,7 @@ Nevertheless, though of real knowledge there be little,
 
 CETOLOGY 165 
 
-yet of books there are a plenty ; and so in some small 
+yet of ap.ex2.bookscrabble.books there are a plenty ; and so in some small
 degree, with Cetology, or the science of whales. Many are 
 the men, small and great, old and new, landsmen and sea- 
 men, who have at large or in little, written of the whale. 
@@ -7737,10 +7737,10 @@ for a new proclamation. This is Charing Cross ; hear ye !
 good people all, the Greenland whale is deposed, the 
 great Sperm whale now reigneth ! 
 
-There are only two books in being which at all pretend 
+There are only two ap.ex2.bookscrabble.books in being which at all pretend
 to put the living Sperm whale before you, and at the same 
 time, in the remotest degree succeed in the attempt. 
-Those books are Beale's and Bennett's ; both in their 
+Those ap.ex2.bookscrabble.books are Beale's and Bennett's ; both in their
 time surgeons to the English South -Sea whale -ships, and 
 both exact and reliable men. The original matter 
 touching the Sperm whale to be found in their volumes is 
@@ -11145,7 +11145,7 @@ seating himself before it, you would have seen him intently
 study the various lines and shadings which there met his 
 eye ; and with slow but steady pencil trace additional 
 courses over spaces that before were blank. At intervals, 
-he would refer to piles of old log-books beside him, wherein 
+he would refer to piles of old log-ap.ex2.bookscrabble.books beside him, wherein
 were set down the seasons and places in which, on various 
 former voyages of various ships, sperm whales had been 
 captured or seen. 
@@ -14630,7 +14630,7 @@ and Jonah's whale, as depicted in the prints of old Bibles
 and the cuts of old primers. What shall be said of these ? 
 As for the bookbinder's whale winding like a vine-stalk 
 round the stock of a descending anchor as stamped and 
-gilded on the backs and title-pages of many books both 
+gilded on the backs and title-pages of many ap.ex2.bookscrabble.books both
 old and new that is a very picturesque but purely 
 fabulous creature, imitated, I take it, from the like figures 
 on antique vases. Though universally denominated a 
@@ -14648,7 +14648,7 @@ even down to a comparatively late period, dolphins were
 popularly supposed to be a species of the leviathan. 
 
 In the vignettes and other embellishments of some 
-ancient books you will at times meet with very curious 
+ancient ap.ex2.bookscrabble.books you will at times meet with very curious
 touches at the whale, where all manner of spouts, jets 
 d'eau, hot springs and cold, Saratoga and Baden-Baden, 
 come bubbling up from his unexhausted brain. In the 
@@ -14816,7 +14816,7 @@ TRUE PICTURES OF WHALING SCENES
 IN connection with the monstrous pictures of whales, I 
 am strongly tempted here to enter upon those still more 
 monstrous stories of them which are to be found in certain 
-books, both ancient and modern, especially hi Pliny, 
+ap.ex2.bookscrabble.books, both ancient and modern, especially hi Pliny,
 Purchas, Hakluyt, Harris, Cuvier, etc. But I pass that 
 matter by. 
 

@@ -42,10 +42,6 @@ public class GenericServer {
             while (!this.stop) {
                 try {
                     Socket client = server.accept();
-                    //Ran temp add
-                    System.out.println("Ran temp add");
-                    System.out.println(client.getInputStream());
-
                     SimpleClientHandler newHandler = GenericServer.cloneHandler(this.ch);
 
                     if (newHandler != null) {

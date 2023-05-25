@@ -1323,7 +1323,7 @@ Over the exit of the Arrakeen landing field, crudely carved as though with a poo
     "What if the Emperor gets wind of this?" Halleck asked. "He's very jealous of his CHOAM profits, m'Lord."
     Leto smiled. "We'll bank the entire tithe openly in the name of Shaddam IV and deduct it legally from our levy support costs. Let the Harkonnens fight that! And we'll be ruining a few more of the locals who grew fat under the Harkonnen system. No more graft!" 
     A grin twisted Halleck's face. "Ahh, m'Lord, a beautiful low blow. Would that I could see the Baron's face when he learns of this."
-    The Duke turned to Hawat. "Thufir, did you get those account books you said you could buy?"
+    The Duke turned to Hawat. "Thufir, did you get those account ap.ex2.bookscrabble.books you said you could buy?"
     "Yes, my Lord. They're being examined in detail even now. I've skimmed them, though, and can give a first approximation." 
     "Give it, then."
     "The Harkonnens took ten billion Solaris out of here every three hundred and thirty Standard days."
@@ -5385,11 +5385,11 @@ The concept of progress acts as a protective mechanism to shield us from the ter
     "I wouldn't think of it!"
     The Count smiled. "Sardaukar commanders could be found who'd confess they acted without orders because they wanted a battle with your Fremen scum."
     "Many might doubt such a confession," the Baron said, but the threat staggered him. Are Sardaukar truly that disciplined? he wondered.
-    "The Emperor does wish to audit your books," the Count said. 
+    "The Emperor does wish to audit your ap.ex2.bookscrabble.books," the Count said.
     "Any time." 
     "You . . . ah . . . have no objections?"
     "None. My CHOAM Company directorship will bear the closest scrutiny." And he thought: Let him bring a false accusation against me and have it exposed. I shall stand there, Promethean, saying: "Behold me, I am wronged. " Then let him bring any other accusation against me, even a true one. The Great Houses will not believe a second attack from an accuser once proved wrong.
-    "No doubt your books will bear the closest scrutiny," the Count muttered.
+    "No doubt your ap.ex2.bookscrabble.books will bear the closest scrutiny," the Count muttered.
     "Why is the Emperor so interested in exterminating the Fremen?" the Baron asked.
     "You wish the subject to be changed, eh?" The Count shrugged. "It is the Sardaukar who wish it, not the Emperor. They needed practice in killing . . . and they hate to see a task left undone." 
     Does he think to frighten me by reminding me that he is supported by bloodthirsty killers? the Baron wondered.
@@ -8100,10 +8100,10 @@ Beyond a critical point within a finite space, freedom diminishes as numbers inc
     Salt.
     Now, he was certain.
     There'd been open water on Arrakis -- once. He began reexamining the evidence of the dry wells where trickles of water had appeared and vanished, never to return.
-    Kynes set his newly trained Fremen limnologists to work: their chief clue, leathery scraps of matter sometimes found with the spice-mass after a blow. This had been ascribed to a fictional "sandtrout" in Fremen folk stories. As facts grew into evidence, a creature emerged to explain these leathery scraps -- a sandswimmer that blocked off water into fertile pockets within the porous lower strata below the 280° (absolute) line.
+    Kynes set his newly trained Fremen limnologists to work: their chief clue, leathery scraps of matter sometimes found with the spice-mass after a blow. This had been ascribed to a fictional "sandtrout" in Fremen folk stories. As facts grew into evidence, a creature emerged to explain these leathery scraps -- a sandswimmer that blocked off water into fertile pockets within the porous lower strata below the 280ï¿½ (absolute) line.
     This "water-stealer" died by the millions in each spice-blow. A five-degree change in temperature could kill it. The few survivors entered a semidormant cyst-hibernation to emerge in six years as small (about three meters long) sandworms. Of these, only a few avoided their larger brothers and pre-spice water pockets to emerge into maturity as the giant shai-hulud. (Water is poisonous to shai-hulud as the Fremen had long known from drowning the rare "stunted worm" of the Minor Erg to produce the awareness-spectrum narcotic they call Water of Life. The "stunted worm" is a primitive form of shai-hulud that reaches a length of only about nine meters.)
     Now they had the circular relationship: little maker to pre-spice mass; little maker to shai-hulud; shai-hulud to scatter the spice upon which fed microscopic creatures called sand plankton; the sand plankton, food for shai-hulud, growing, burrowing, becoming little makers.
-    Kynes and his people turned their attention from these great relationships and focused now on micro-ecology. First, the climate: the sand surface often reached temperatures of 344° to 350° (absolute). A foot below ground it might be 55° cooler; a foot above ground, 25° cooler. Leaves or black shade could provide another 18° of cooling. Next, the nutrients: sand of Arrakis is mostly a product of worm digestion; dust (the truly omnipresent problem there) is produced by the constant surface creep, the "saltation" movement of sand. Coarse grains are found on the downwind sides of dunes. The windward side is packed smooth and hard. Old dunes are yellow (oxidized), young dunes are the color of the parent rock -- usually gray.
+    Kynes and his people turned their attention from these great relationships and focused now on micro-ecology. First, the climate: the sand surface often reached temperatures of 344ï¿½ to 350ï¿½ (absolute). A foot below ground it might be 55ï¿½ cooler; a foot above ground, 25ï¿½ cooler. Leaves or black shade could provide another 18ï¿½ of cooling. Next, the nutrients: sand of Arrakis is mostly a product of worm digestion; dust (the truly omnipresent problem there) is produced by the constant surface creep, the "saltation" movement of sand. Coarse grains are found on the downwind sides of dunes. The windward side is packed smooth and hard. Old dunes are yellow (oxidized), young dunes are the color of the parent rock -- usually gray.
     Downwind sides of old dunes provided the first plantation areas. The Fremen aimed first for a cycle of poverty grass with peatlike hair cilia to intertwine, mat and fix the dunes by depriving the wind of its big weapon: movable grains.
     Adaptive zones were laid out in the deep south far from Harkonnen watchers. The mutated poverty grasses were planted first along the downwind (slipface) of the chosen dunes that stood across the path of the prevailing westerlies. With the downwind face anchored, the windward face grew higher and higher and the grass was moved to keep pace. Giant sifs (long dunes with sinuous crest) of more than 1,500 meters height were produced this way.
     When barrier dunes reached sufficient height, the windward faces were planted with tougher sword grasses. Each structure on a base about six times as thick as its height was anchored -- "fixed." 

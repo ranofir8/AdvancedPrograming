@@ -594,7 +594,7 @@ you think you can explain all this in a letter? These
 people will never understand him! He’ll be famous — 
 a legend — I wouldn’t be surprised if today was 
 known as Harry Potter Day in the future — there will 
-be books written about Harry — every child in our 
+be ap.ex2.bookscrabble.books written about Harry — every child in our
 world will know his name!” 
 
 “Exactly,” said Dumbledore, looking very seriously 
@@ -1542,7 +1542,7 @@ like a giant elastic band. No one, ever, in his whole
 life, had written to him. Who would? He had no 
 friends, no other relatives — he didn’t belong to the 
 library, so he’d never even got rude notes asking for 
-books back. Yet here it was, a letter, addressed so 
+ap.ex2.bookscrabble.books back. Yet here it was, a letter, addressed so
 plainly there could be no mistake: 
 
 Mr. H. Potter 
@@ -1725,7 +1725,7 @@ program had been canceled; there was a large
 birdcage, which had once held a parrot that Dudley 
 had swapped at school for a real air rifle, which was 
 up on a shelf with the end all bent because Dudley 
-had sat on it. Other shelves were full of books. They 
+had sat on it. Other shelves were full of ap.ex2.bookscrabble.books. They
 were the only things in the room that looked as 
 though they’d never been touched. 
 
@@ -2407,7 +2407,7 @@ Dear Mr. Potter,
 We are pleased to inform you that you have been 
 accepted at Hogwarts School of Witchcraft and 
 Wizardry. Please find enclosed a list of all necessary 
-books and equipment. 
+ap.ex2.bookscrabble.books and equipment.
 
 Term begins on September 1. We await your owl by no 
 later than July 31. 
@@ -2763,7 +2763,7 @@ fight.
 “Haven’t I told you he’s not going?” he hissed. “He’s 
 going to Stonewall High and he’ll be grateful for it. I’ve 
 read those letters and he needs all sorts of rubbish — 
-spell books and wands and — ” 
+spell ap.ex2.bookscrabble.books and wands and — ”
 
 “If he wants ter go, a great Muggle like you won’t stop 
 him,” growled Hagrid. “Stop Lily an’ James Potter’s 
@@ -2831,7 +2831,7 @@ man, Dumbledore.”
 
 “It’s gettin’ late and we’ve got lots ter do tomorrow,” 
 said Hagrid loudly. “Gotta get up ter town, get all yer 
-books an’ that.” 
+ap.ex2.bookscrabble.books an’ that.”
 
 Page | 66 Harry Potter and the Philosophers Stone - J.K. Rowling 
 
@@ -3226,7 +3226,7 @@ restaurants and cinemas, but nowhere that looked as
 if it could sell you a magic wand. This was just an 
 ordinary street full of ordinary people. Could there 
 really be piles of wizard gold buried miles beneath 
-them? Were there really shops that sold spell books 
+them? Were there really shops that sold spell ap.ex2.bookscrabble.books
 and broomsticks? Might this not all be some huge 
 joke that the Dursleys had cooked up? If Harry hadn’t 
 known that the Dursleys had no sense of humor, he 
@@ -3366,7 +3366,7 @@ you, he’s usually tremblin’.”
 “Is he always that nervous?” 
 
 “Oh, yeah. Poor bloke. Brilliant mind. He was fine 
-while he was studyin’ outta books but then he took a 
+while he was studyin’ outta ap.ex2.bookscrabble.books but then he took a
 year off ter get some firsthand experience. ... They say 
 he met vampires in the Black Forest, and there was a 
 nasty bit o’ trouble with a hag — never been the same 
@@ -3430,7 +3430,7 @@ ever — ” There were shops selling robes, shops selling
 telescopes and strange silver instruments Harry had 
 never seen before, windows stacked with barrels of 
 bat spleens and eels’ eyes, tottering piles of spell 
-books, quills, and rolls of parchment, potion bottles, 
+ap.ex2.bookscrabble.books, quills, and rolls of parchment, potion bottles,
 globes of the moon. ... 
 
 “Gringotts,” said Hagrid. 
@@ -3694,7 +3694,7 @@ his head, and began to pin it to the right length.
 
 “Yes,” said Harry. 
 
-“My father’s next door buying my books and mother’s 
+“My father’s next door buying my ap.ex2.bookscrabble.books and mother’s
 up the street looking at wands,” said the boy. He had 
 a bored, drawling voice. “Then I’m going to drag them 
 off to look at racing brooms. I don’t see why first years 
@@ -3852,12 +3852,12 @@ Page | 89 Harry Potter and the Philosophers Stone - J.K. Rowling
 
 
 
-They bought Harry’s school books in a shop called 
+They bought Harry’s school ap.ex2.bookscrabble.books in a shop called
 Flourish and Blotts where the shelves were stacked to 
-the ceiling with books as large as paving stones 
-bound in leather; books the size of postage stamps in 
-covers of silk; books full of peculiar symbols and a 
-few books with nothing in them at all. Even Dudley, 
+the ceiling with ap.ex2.bookscrabble.books as large as paving stones
+bound in leather; ap.ex2.bookscrabble.books the size of postage stamps in
+covers of silk; ap.ex2.bookscrabble.books full of peculiar symbols and a
+few ap.ex2.bookscrabble.books with nothing in them at all. Even Dudley,
 who never read anything, would have been wild to get 
 his hands on some of these. Hagrid almost had to 
 drag Harry away from Curses and Counter-curses 
@@ -4227,7 +4227,7 @@ ways, it did become a bit depressing after a while.
 
 Harry kept to his room, with his new owl for 
 company. He had decided to call her Hedwig, a name 
-he had found in A History of Magic. His school books 
+he had found in A History of Magic. His school ap.ex2.bookscrabble.books
 were very interesting. He lay on his bed reading late 
 into the night, Hedwig swooping in and out of the 
 open window as she pleased. It was lucky that Aunt 
@@ -5139,7 +5139,7 @@ just for practice and it’s all worked for me. Nobody in
 my family’s magic at all, it was ever such a surprise 
 when I got my letter, but I was ever so pleased, of 
 course, I mean, it’s the very best school of witchcraft 
-there is, I’ve heard — I’ve learned all our course books 
+there is, I’ve heard — I’ve learned all our course ap.ex2.bookscrabble.books
 by heart, of course, I just hope it will be enough — I’m 
 Hermione Granger, by the way, who are you?” 
 
@@ -5147,7 +5147,7 @@ She said all this very fast.
 
 Harry looked at Ron, and was relieved to see by his 
 stunned face that he hadn’t learned all the course 
-books by heart either. 
+ap.ex2.bookscrabble.books by heart either.
 
 “I’m Ron Weasley,” Ron muttered. 
 
@@ -5161,7 +5161,7 @@ Page | 118 Harry Potter and the Philosophers Stone - J.K. Rowling
 
 
 “Are you really?” said Hermione. “I know all about 
-you, of course — I got a few extra books for 
+you, of course — I got a few extra ap.ex2.bookscrabble.books for
 background reading, and you’re in Modern Magical 
 History and The Rise and Fall of the Dark Arts and 
 Great Wizarding Events of the Twentieth Century.” 
@@ -6502,7 +6502,7 @@ and dates, and got Emeric the Evil and Uric the
 Oddball mixed up. 
 
 Professor Flitwick, the Charms teacher, was a tiny 
-little wizard who had to stand on a pile of books to 
+little wizard who had to stand on a pile of ap.ex2.bookscrabble.books to
 see over his desk. At the start of their first class he 
 took the roll call, and when he reached Harry’s name 
 he gave an excited squeak and toppled out of sight. 
@@ -6715,7 +6715,7 @@ were shaking with laughter.
 eh, Potter?” 
 
 Harry forced himself to keep looking straight into 
-those cold eyes. He had looked through his books at 
+those cold eyes. He had looked through his ap.ex2.bookscrabble.books at
 the Dursleys’, but did Snape expect him to remember 
 everything in One Thousand Magical Herbs and 
 Fungi ? 
@@ -8346,7 +8346,7 @@ Harry’s broomstick had arrived.
 
 “Now, don’t forget that nice wrist movement we’ve 
 been practicing!” squeaked Professor Flitwick, 
-perched on top of his pile of books as usual. “Swish 
+perched on top of his pile of ap.ex2.bookscrabble.books as usual. “Swish
 and flick, remember, swish and flick. And saying the 
 magic words properly is very important, too — never 
 Page | 191 Harry Potter and the Philosophers Stone - J.K. Rowling 
@@ -8865,7 +8865,7 @@ Page | 203 Harry Potter and the Philosophers Stone - J.K. Rowling
 
 
 
-“Library books are not to be taken outside the 
+“Library ap.ex2.bookscrabble.books are not to be taken outside the
 school,” said Snape. “Give it to me. Five points from 
 Gryffindor.” 
 
@@ -9613,7 +9613,7 @@ all,” said Hermione.
 
 “Unless you’d like to tell us and save us the trouble?” 
 Harry added. “We must’ve been through hundreds of 
-books already and we can’t find him anywhere — just 
+ap.ex2.bookscrabble.books already and we can’t find him anywhere — just
 
 
 
@@ -9631,7 +9631,7 @@ somewhere.”
 and they left Hagrid looking disgruntled and hurried 
 off to the library. 
 
-They had indeed been searching books for Flamel’s 
+They had indeed been searching ap.ex2.bookscrabble.books for Flamel’s
 name ever since Hagrid had let it slip, because how 
 else were they going to find out what Snape was 
 trying to steal? The trouble was, it was very hard to 
@@ -9642,18 +9642,18 @@ Magical Names of Our Time ; he was missing, too, from
 Important Modern Magical Discoveries, and A Study of 
 Recent Developments in Wizardry. And then, of 
 course, there was the sheer size of the library; tens of 
-thousands of books; thousands of shelves; hundreds 
+thousands of ap.ex2.bookscrabble.books; thousands of shelves; hundreds
 of narrow rows. 
 
 Hermione took out a list of subjects and titles she had 
 decided to search while Ron strode off down a row of 
-books and started pulling them off the shelves at 
+ap.ex2.bookscrabble.books and started pulling them off the shelves at
 random. Harry wandered over to the Restricted 
 Section. He had been wondering for a while if Flamel 
 wasn’t somewhere in there. Unfortunately, you 
 needed a specially signed note from one of the 
-teachers to look in any of the restricted books, and he 
-knew he’d never get one. These were the books 
+teachers to look in any of the restricted ap.ex2.bookscrabble.books, and he
+knew he’d never get one. These were the ap.ex2.bookscrabble.books
 containing powerful Dark Magic never taught at 
 Hogwarts, and only read by older students studying 
 advanced Defense Against the Dark Arts. 
@@ -10039,14 +10039,14 @@ was. He set off, drawing the Invisibility Cloak tight
 around him as he walked. 
 
 The library was pitch-black and very eerie. Harry lit a 
-lamp to see his way along the rows of books. The 
+lamp to see his way along the rows of ap.ex2.bookscrabble.books. The
 lamp looked as if it was floating along in midair, and 
 even though Harry could feel his arm supporting it, 
 the sight gave him the creeps. 
 
 The Restricted Section was right at the back of the 
 library. Stepping carefully over the rope that 
-separated these books from the rest of the library, he 
+separated these ap.ex2.bookscrabble.books from the rest of the library, he
 held up his lamp to read the titles. 
 
 They didn’t tell him much. Their peeling, faded gold 
@@ -10055,7 +10055,7 @@ understand. Some had no title at all. One book had a
 dark stain on it that looked horribly like blood. The 
 hairs on the back of Harry’s neck prickled. Maybe he 
 was imagining it, maybe not, but he thought a faint 
-whispering was coming from the books, as though 
+whispering was coming from the ap.ex2.bookscrabble.books, as though
 they knew someone was there who shouldn’t be. 
 
 He had to start somewhere. Setting the lamp down 
@@ -10485,7 +10485,7 @@ Page | 239 Harry Potter and the Philosophers Stone - J.K. Rowling
 
 
 and I didn’t get a single pair. People will insist on 
-giving me books.” 
+giving me ap.ex2.bookscrabble.books.”
 
 It was only when he was back in bed that it struck 
 Harry that Dumbledore might not have been quite 
@@ -10534,7 +10534,7 @@ Page | 241 Harry Potter and the Philosophers Stone - J.K. Rowling
 They had almost given up hope of ever finding Flamel 
 in a library book, even though Harry was still sure 
 he’d read the name somewhere. Once term had 
-started, they were back to skimming through books 
+started, they were back to skimming through ap.ex2.bookscrabble.books
 for ten minutes during their breaks. Harry had even 
 less time than the other two, because Quidditch 
 practice had started again. 
@@ -11262,7 +11262,7 @@ Hermione thoughtfully.
 
 “I’m going to see what section he was in,” said Ron, 
 who’d had enough of working. He came back a 
-minute later with a pile of books in his arms and 
+minute later with a pile of ap.ex2.bookscrabble.books in his arms and
 slammed them down on the table. 
 
 Page | 258 Harry Potter and the Philosophers Stone - J.K. Rowling 
@@ -11667,7 +11667,7 @@ bed.
 
 “It’s not just my hand,” he whispered, “although that 
 feels like it’s about to fall off. Malfoy told Madam 
-Pomfrey he wanted to borrow one of my books so he 
+Pomfrey he wanted to borrow one of my ap.ex2.bookscrabble.books so he
 could come and have a good laugh at me. He kept 
 threatening to tell her what really bit me — I’ve told 
 her it was a dog, but I don’t think she believes me — I 
@@ -12070,7 +12070,7 @@ him how to break his Anti-Dark Force spell — ”
 
 “Maybe Snape’s found out how to get past him 
 without asking Hagrid,” said Ron, looking up at the 
-thousands of books surrounding them. “I bet there’s a 
+thousands of ap.ex2.bookscrabble.books surrounding them. “I bet there’s a
 book somewhere in here telling you how to get past a 
 giant three-headed dog. So what do we do, Harry?” 
 
@@ -13057,7 +13057,7 @@ suddenly rang across the hall.
 “What are you three doing inside?” 
 
 It was Professor McGonagall, carrying a large pile of 
-books. 
+ap.ex2.bookscrabble.books.
 
 “We want to see Professor Dumbledore,” said 
 Hermione, rather bravely, Harry and Ron thought. 
@@ -13097,7 +13097,7 @@ the Ministry of Magic, Potter?”
 “Professor — it’s about the Sorcerer’s Stone — ” 
 
 Whatever Professor McGonagall had expected, it 
-wasn’t that. The books she was carrying tumbled out 
+wasn’t that. The ap.ex2.bookscrabble.books she was carrying tumbled out
 of her arms, but she didn’t pick them up. 
 
 “How do you know — ?” she spluttered. 
@@ -13122,7 +13122,7 @@ Page | 300 Harry Potter and the Philosophers Stone - J.K. Rowling
 
 “Potter, I know what I’m talking about,” she said 
 shortly. She bent down and gathered up the fallen 
-books. “I suggest you all go back outside and enjoy 
+ap.ex2.bookscrabble.books. “I suggest you all go back outside and enjoy
 the sunshine.” 
 
 But they didn’t. 
@@ -13274,7 +13274,7 @@ alone?”
 
 “Of course not,” said Hermione briskly. “How do you 
 think you’d get to the Stone without us? I’d better go 
-and look through my books, there might be 
+and look through my ap.ex2.bookscrabble.books, there might be
 something useful. ...” 
 
 “But if we get caught, you two will be expelled, too.” 

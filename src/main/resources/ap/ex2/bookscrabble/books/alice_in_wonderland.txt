@@ -823,7 +823,7 @@ but then--always to have lessons to learn!  Oh, I shouldn't like THAT!'
 
   `Oh, you foolish Alice!' she answered herself.  `How can you
 learn lessons in here?  Why, there's hardly room for YOU, and no
-room at all for any lesson-books!'
+room at all for any lesson-ap.ex2.bookscrabble.books!'
 
   And so she went on, taking first one side and then the other,
 and making quite a conversation of it altogether; but after a few
@@ -3038,7 +3038,7 @@ to be no chance of this, so she began looking at everything about
 her, to pass away the time.
 
   Alice had never been in a court of justice before, but she had
-read about them in books, and she was quite pleased to find that
+read about them in ap.ex2.bookscrabble.books, and she was quite pleased to find that
 she knew the name of nearly everything there.  `That's the
 judge,' she said to herself, `because of his great wig.'
 

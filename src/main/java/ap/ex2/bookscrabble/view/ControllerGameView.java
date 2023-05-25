@@ -293,7 +293,6 @@ public class ControllerGameView extends GameView implements Initializable {
         }
     }
 
-
     /**
      *t the function draws a star on the board in the locetion provided.
      */

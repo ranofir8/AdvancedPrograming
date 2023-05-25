@@ -17,7 +17,6 @@ public class BookScrabbleClient {
     public BookScrabbleClient(String ip, int port) {
         this.ip = ip;
         this.port = port;
-
     }
 
     public void establishConnection() throws Exception{
@@ -46,7 +45,6 @@ public class BookScrabbleClient {
 
         String res = in.nextLine();
 
-
         in.close();
         out.close();
         bookServer.close();
@@ -54,40 +52,25 @@ public class BookScrabbleClient {
         return res.equals("true");
     }*/
 
-    public static void runClient(int port,String query,boolean result) {
-        try {
-            Socket server=new Socket("localhost",port);
-            PrintWriter out=new PrintWriter(server.getOutputStream());
-            Scanner in=new Scanner(server.getInputStream());
-            out.println(query);
-            out.flush();
-            String res=in.nextLine();
-            if((result && !res.equals("true")) || (!result && !res.equals("false")))
-                System.out.println("problem getting the right answer from the server (-10)");
-            in.close();
-            out.close();
-            server.close();
-        } catch (IOException e) {
-            System.out.println("your code ran into an IOException (-10)");
-        }
-    }
 
     public static void main(String[] args) throws IOException {
         int port = 6000;
+        BookScrabbleClient bsc = new BookScrabbleClient("127.0.0.1", port);
 
-        Socket server=new Socket("localhost",port);
-        PrintWriter out=new PrintWriter(server.getOutputStream());
-        Scanner in=new Scanner(server.getInputStream());
+//        boolean res = bsc.runClient("Q,magic254573");
+        boolean res = bsc.queryWord("magic");
+        System.out.println("server returned [q]: " + res);
 
-        out.println("q,HarryPotter.txt,Harry"); //input is not accepted by the server
+        boolean res2 = bsc.challengeWord("magic");
+        System.out.println("server returned [c]: " + res2);
 
-        //BookScrabbleClient bsc = new BookScrabbleClient("127.0.0.1", port);
-        //runClient(port, "Q,HarryPotter.txt,Harry", true);
-        /*runClient(port, "Q,s1.txt,s2.txt,"+s2[4], true);
-        runClient(port, "Q,s1.txt,s2.txt,2"+s1[1], false);
-        runClient(port, "Q,s1.txt,s2.txt,3"+s2[4], false);
-        runClient(port, "C,s1.txt,s2.txt,"+s1[9], true);
-        runClient(port, "C,s1.txt,s2.txt,#"+s2[1], false);*/
+        boolean res3 = bsc.pingServer();
+        System.out.println("server returned [p]: " + res3);
+
+
+//      *     ******   *****   ***   *****
+//      *     *    *       *    *    *   *
+//           ***   *       *    *    *   *
 
     }
 }

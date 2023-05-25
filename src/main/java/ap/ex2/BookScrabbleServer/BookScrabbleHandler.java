@@ -4,6 +4,7 @@ package ap.ex2.BookScrabbleServer;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BookScrabbleHandler implements SimpleClientHandler {
     private PrintWriter out;
@@ -30,6 +31,7 @@ public class BookScrabbleHandler implements SimpleClientHandler {
         String answer = "";
         DictionaryManager dm = DictionaryManager.get();
         String[] parameters = splittedList.toArray(new String[]{}); // (String[]) splittedList.toArray();
+
         switch (clientCharacter) {
             case 'q':
                 answer = ""+dm.query(parameters);

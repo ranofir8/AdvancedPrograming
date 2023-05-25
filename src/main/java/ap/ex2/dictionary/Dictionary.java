@@ -1,9 +1,16 @@
 package ap.ex2.dictionary;
 //213630171
 
+import ap.ex2.bookscrabble.R;
+
+import javax.net.ssl.HandshakeCompletedEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 
 public class Dictionary {
@@ -27,7 +34,7 @@ public class Dictionary {
 			FileReader fr = null;
 			BufferedReader br = null;
 			try {
-				fr = new FileReader(fileName);
+				fr = R.getFileReaderFromResource("books/" + fileName);
 				br = new BufferedReader(fr);
 				
 				String line = null;

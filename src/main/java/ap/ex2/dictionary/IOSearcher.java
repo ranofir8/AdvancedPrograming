@@ -1,8 +1,11 @@
 package ap.ex2.dictionary;
 
+import ap.ex2.bookscrabble.R;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class IOSearcher implements FileSearcher {
@@ -18,7 +21,7 @@ public class IOSearcher implements FileSearcher {
 			FileReader fr = null;
 			BufferedReader br = null;
 			try {
-				fr = new FileReader(fileName);
+				fr = R.getFileReaderFromResource("books/" + fileName);
 				br = new BufferedReader(fr);
 				
 				String line = null;

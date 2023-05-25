@@ -44,7 +44,7 @@ public class DictionaryManager {
     }
 
     // Gets a list of Strings.
-    // the last string is the Query, and the others are file names of books
+    // the last string is the Query, and the others are file names of ap.ex2.bookscrabble.books
     public boolean query(String... files) {
         return this.applyInAllBooks(word -> (dictionary -> dictionary.query(word)), files);
     }
