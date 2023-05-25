@@ -78,7 +78,8 @@ public class BookScrabbleClient {
         Socket server=new Socket("localhost",port);
         PrintWriter out=new PrintWriter(server.getOutputStream());
         Scanner in=new Scanner(server.getInputStream());
-        out.println("connect");
+
+        out.println("q,HarryPotter.txt,Harry"); //input is not accepted by the server
 
         //BookScrabbleClient bsc = new BookScrabbleClient("127.0.0.1", port);
         //runClient(port, "Q,HarryPotter.txt,Harry", true);

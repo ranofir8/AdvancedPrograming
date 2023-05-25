@@ -1,6 +1,6 @@
 book_scrabble_ip,127.0.0.1
 book_scrabble_port,6000
 host_port,18020
-default_guest_ip2,home.savoray.com
-default_guest_ip,192.168.1.158
+default_guest_ip,home.savoray.com
+default_guest_ip2,192.168.1.158
 default_guest_port,18020
