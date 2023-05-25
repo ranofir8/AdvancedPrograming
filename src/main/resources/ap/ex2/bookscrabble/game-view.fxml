@@ -16,7 +16,7 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <top>
         <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
             <children>
@@ -95,28 +95,28 @@
                            </HBox.margin></Label>
                             </HBox>
                      <HBox.margin>
-                        <Insets left="5.0" />
+                        <Insets left="5.0" top="15.0" />
                      </HBox.margin>
                         </VBox>
-                        <Canvas fx:id="boardCanvas" height="337.0" onMouseClicked="#clickedOnCanvasEvent" width="300.0" />
+                        <Canvas fx:id="boardCanvas" height="450.0" onMouseClicked="#clickedOnCanvasEvent" width="450.0" />
                     </children>
                 </HBox>
                 <Separator prefHeight="36.0" prefWidth="500.0" />
-                <Label alignment="CENTER" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
+                <Label alignment="CENTER" prefHeight="23.0" prefWidth="90.0" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="67.0" prefWidth="563.0">
+                <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="38.0" prefWidth="426.0">
                     <content>
-                        <Canvas fx:id="TilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="500.0" />
+                        <Canvas fx:id="TilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="463.0" />
                     </content>
                 </ScrollPane>
             </children>
         </VBox>
     </center>
     <right>
-        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+        <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="158.0" BorderPane.alignment="CENTER">
             <children>
                 <Button fx:id="skipTurnButton" mnemonicParsing="false" onAction="#skipTurnAction" prefHeight="25.0" prefWidth="109.0" text="Skip turn">
                <VBox.margin>
@@ -134,9 +134,13 @@
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </VBox.margin></Slider>
-                <TableView fx:id="scoreBoard" prefHeight="514.0" prefWidth="158.0">
+            <Button fx:id="Instructions" layoutX="35.0" layoutY="50.0" mnemonicParsing="false" onAction="#ShowInstructions" prefHeight="28.0" prefWidth="152.0" text="Show Game Instructions" />
+                <TableView fx:id="scoreBoard" prefHeight="134.0" prefWidth="158.0">
                     <columns>
                     </columns>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
+               </VBox.margin>
                 </TableView>
             </children>
         </VBox>

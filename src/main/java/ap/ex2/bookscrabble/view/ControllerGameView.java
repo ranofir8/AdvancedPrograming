@@ -256,6 +256,8 @@ public class ControllerGameView extends GameView implements Initializable {
                 // drawing square of tile
                 gc.setFill(toFill);
                 gc.fillRect(col * square, row * square, square, square);
+                if (row == 7 && col ==7) // star position
+                    drawStar((double)(col+0.5)*square, (double) (row+0.5)*square, (double) square /2);
                 if (row == this.selectedBoardRow && col == this.selectedBoardCol) {
                     gc.setFill(boardSelectionBG);
                     gc.fillRect(col * square, row * square, square, square);
@@ -280,6 +282,38 @@ public class ControllerGameView extends GameView implements Initializable {
                 }
             }
         }
+    }
+
+
+    /**
+     *t the function draws a star on the board in the locetion provided.
+     */
+    private void drawStar(double x, double y, double size) {
+
+        GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
+        double[] xPoints = new double[10];
+        double[] yPoints = new double[10];
+        double innerRadius = size / 2.5;
+        double outerRadius = size;
+
+        for (int i = 0; i < 10; i++) {
+            double radius = (i % 2 == 0) ? outerRadius : innerRadius;
+            double angle = Math.PI * i / 5 - Math.PI / 2;
+            xPoints[i] = x + radius * Math.cos(angle);
+            yPoints[i] = y + radius * Math.sin(angle);
+        }
+
+        gc.setFill(Color.YELLOW);
+        gc.fillPolygon(xPoints, yPoints, 10);
+
+        // Draw the outline of the star
+        gc.setStroke(Color.SILVER);
+        gc.setLineWidth(2);
+        gc.strokePolygon(xPoints, yPoints, 10);
+
+        gc.setStroke(Color.BLACK); // get back the black color
+
+
     }
 
     public void drawTiles() {
@@ -346,6 +380,11 @@ public class ControllerGameView extends GameView implements Initializable {
         this.drawCanvases();
 
         this.canSendWord.set(!this.tilesPlaced.isEmpty());
+    }
+
+    @FXML
+    void ShowInstructions(){
+        this.displayMSG(new guiMessage("Instructions: ..............", Alert.AlertType.INFORMATION));
     }
 
      /** @return true if the position on canvas is inside the board **/
