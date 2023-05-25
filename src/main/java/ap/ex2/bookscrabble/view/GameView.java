@@ -30,6 +30,7 @@ public abstract class GameView implements View {
         Platform.runLater(() -> {
             Alert alert = new Alert(messageToDisplay.alert);
             alert.setTitle(messageToDisplay.title);
+            alert.setHeaderText(messageToDisplay.title);
             alert.setContentText(messageToDisplay.message);
             alert.showAndWait();
         });
