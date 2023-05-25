@@ -43,12 +43,11 @@ public class BookScrabbleHandler implements SimpleClientHandler {
                 answer = "pong";
                 break;
             default:
-                answer = "invalid query";
+                answer = "invalid request";
                 break;
         }
         this.out.println(answer);
         this.out.flush();
-
     }
 
     @Override

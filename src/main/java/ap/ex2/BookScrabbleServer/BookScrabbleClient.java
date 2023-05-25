@@ -2,7 +2,6 @@ package ap.ex2.BookScrabbleServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,30 +13,14 @@ public class BookScrabbleClient {
     private PrintWriter outToClient;
     private Socket mySocket;
 
+
+
     public BookScrabbleClient(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    public void establishConnection() throws Exception{
-        this.mySocket = new Socket(this.ip, this.port);
-        System.out.println("GUEST SOCKET CREATED");
-        this.inFromClient = new BufferedReader(new InputStreamReader(this.mySocket.getInputStream()));
-        this.outToClient = new PrintWriter(this.mySocket.getOutputStream());
-
-//        Socket mySocket = new Socket(this.hostIP, this.hostPort);
-//        this.myHandler = new MyClientHandler(mySocket);
-//        this.myHandler.addObserver(this);
-//        this.myHandler.startHandlingClient();
-//        this.myHandler.sendMsg(Protocol.GUEST_LOGIN_REQUEST + this.getGameInstance().getNickname());
-
-    }
-
-    public void sendMsg(String msgToSend) {
-        this.outToClient.println(msgToSend);
-    }
-
-    /*public boolean runClient(String query) throws IOException {
+    private String runClient(String query) throws IOException {
         Socket bookServer = new Socket(this.ip, this.port);
         PrintWriter out = new PrintWriter(bookServer.getOutputStream(), true);
         Scanner in = new Scanner(bookServer.getInputStream());
@@ -49,8 +32,23 @@ public class BookScrabbleClient {
         out.close();
         bookServer.close();
 
-        return res.equals("true");
-    }*/
+        return res;
+    }
+
+    // add Q, to word
+    public boolean queryWord(String word) throws IOException {
+        return this.runClient("q," + word).equals("true");
+    }
+
+    // add C, to word
+    public boolean challengeWord(String word) throws IOException {
+        return this.runClient("c," + word).equals("true");
+
+    }
+
+    public boolean pingServer() throws IOException {
+        return this.runClient("p,*").equals("pong");
+    }
 
 
     public static void main(String[] args) throws IOException {

@@ -23,7 +23,7 @@ public class Dictionary {
 	public Dictionary(String...fileNames) {
 		this.existingWords = new CacheManager(400, new LRU());
 		this.nonExistingWords = new CacheManager(100, new LFU());
-		this.bloom = new BloomFilter(256, "MD5", "SHA1");
+		this.bloom = new BloomFilter(256*256, "MD5", "SHA1");
 		this.fileNames = fileNames;
 		
 		this.fillBloomFilter();
@@ -43,6 +43,9 @@ public class Dictionary {
 					Arrays.stream(line.trim().split(" ")).forEach(bloom::add);
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				throw new RuntimeException(e);
 			} finally {
 				if (fr != null)
 					try {
@@ -76,7 +79,8 @@ public class Dictionary {
 		synchronized (this) {
 			this.parIO = new ParIOSearcher();
 		}
-		return this.updateCache(word, this.parIO.search(word, this.fileNames));
+		boolean b = this.parIO.search(word, this.fileNames);
+		return this.updateCache(word, b);
 	}
 	
 	// synchronized in order to get consistent results about this.parIO 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 // ************************
 public class DictionaryManager {
     private static DictionaryManager staticDict = new DictionaryManager();
+    private static final String[] allFiles = "alice_in_wonderland.txt,bible.txt,Frank Herbert - Dune.txt,mobydick.txt,shakespeare.txt,The Matrix.txt".split(",");
     private HashMap<String, Dictionary> dictMap; //map between name of .txt file and a dictionary
 
     private DictionaryManager() {
@@ -28,6 +29,10 @@ public class DictionaryManager {
         ArrayList<String> filesArrayList = new ArrayList<>(Arrays.asList(files));
         // the last one is the word to search
         String queryWord = filesArrayList.remove(filesArrayList.size() - 1);
+
+        // if the client wants 0 books, put all of the books here:
+        if (filesArrayList.size() == 0)
+            filesArrayList = new ArrayList<>(Arrays.asList(allFiles));
 
         for (String fileName : filesArrayList) {
             if (!this.dictMap.containsKey(fileName))

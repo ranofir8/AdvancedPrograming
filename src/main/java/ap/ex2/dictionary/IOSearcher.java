@@ -31,7 +31,8 @@ public class IOSearcher implements FileSearcher {
 						return true; // the word was found
 					
 				}
-			} catch (IOException e) {
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
 				return false; // an exception occurred
 			} finally {
 				if (fr != null)
