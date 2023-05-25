@@ -55,6 +55,7 @@ public class GenericServer {
                                 newHandler.close(); // closing streams with client
                                 client.close();     // closing client socket
                             } catch (IOException e) {
+                                System.out.println("error in new handler");
                                 throw new RuntimeException(e);
                             }
                         };
