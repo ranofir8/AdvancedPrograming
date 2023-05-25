@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.Command;
+import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Tile;
@@ -19,6 +20,8 @@ public abstract class GameModel extends Model {
     public GameModel(String nickname) {
         this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.gameInstanceProperty.set(new GameInstance(nickname));
+
+        this.gameInstanceProperty.get().gameStatusChangeEvent.addListener((observableValue, gameInstance, t1) -> notifyViewModel(new Command2VM(Command.UPDATE_GAME_STATUS_TEXT)));
     }
 
     public GameInstance getGameInstance() {
@@ -144,7 +147,6 @@ public abstract class GameModel extends Model {
         this.getGameInstance().onStartGame();
         notifyViewModel(Command.PLAY_START_GAME_SOUND);
         notifyViewModel(Command.UPDATE_GAME_BOARD);
-        System.out.println("game started");
     }
 
     public void onTurnOf(String turnOfNickname){

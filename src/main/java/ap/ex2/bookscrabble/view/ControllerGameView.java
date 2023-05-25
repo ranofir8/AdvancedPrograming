@@ -107,7 +107,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.startGameButton.setDisable(true);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
-        this.myViewModel.gameStatusUpdateEvent.addListener((observableValue, s, t1) -> this.gameStatusLabel.textProperty().set(this.myViewModel.getStatusText()));
+        this.gameStatusLabel.textProperty().bind(this.myViewModel.gameStatusStringProperty);
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
         this.playersCount.bind(this.myViewModel.countPlayers);
 
@@ -148,7 +148,7 @@ public class ControllerGameView extends GameView implements Initializable {
                         SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
                         break;
                     case SOUND_NEW_PLAYER_JOINED:
-                        SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED);
+                        SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED, true);
                         break;
                     case SOUND_NEW_WORD:
                         if (!this.isPlayerTurn.get())
@@ -177,6 +177,7 @@ public class ControllerGameView extends GameView implements Initializable {
 //        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
 
         this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
+        this.tilesSP.minViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
 
         TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
@@ -200,6 +201,8 @@ public class ControllerGameView extends GameView implements Initializable {
             }
         };
         timer.schedule(tt, 100L);
+
+        this.drawGameBoard();
     }
 
     @FXML
@@ -220,7 +223,11 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, this.boardCanvas.getWidth(), this.boardCanvas.getHeight());
 
-        Board b = this.gameInstanceProperty.get().getGameBoard();
+        Board b;
+        if (this.gameInstanceProperty.get() == null)
+            b = new Board();
+        else
+            b = this.gameInstanceProperty.get().getGameBoard();
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
@@ -265,6 +272,9 @@ public class ControllerGameView extends GameView implements Initializable {
 
                 gc.strokeRect(col * square, row * square, square, square);
 
+
+                if (this.tilesPlaced == null)
+                    continue;
                 // drawing text of tile
                 boolean isTempTile = false;
                 Tile t = b.getTileAt(row, col);     // tile on board
@@ -274,7 +284,6 @@ public class ControllerGameView extends GameView implements Initializable {
                 }
 
                 if (t != null) {
-
                     gc.setFill(Color.BLACK); // Set the text color to black
                     if (isTempTile)
                         gc.setFill(tempTextColor);
@@ -303,13 +312,13 @@ public class ControllerGameView extends GameView implements Initializable {
             yPoints[i] = y + radius * Math.sin(angle);
         }
 
-        gc.setFill(Color.YELLOW);
+        gc.setFill(Color.ORANGERED);
         gc.fillPolygon(xPoints, yPoints, 10);
 
-        // Draw the outline of the star
-        gc.setStroke(Color.SILVER);
-        gc.setLineWidth(2);
-        gc.strokePolygon(xPoints, yPoints, 10);
+//        // Draw the outline of the star
+//        gc.setStroke(Color.SILVER);
+//        gc.setLineWidth(2);
+//        gc.strokePolygon(xPoints, yPoints, 10);
 
         gc.setStroke(Color.BLACK); // get back the black color
 
@@ -383,8 +392,21 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     @FXML
-    void ShowInstructions(){
-        this.displayMSG(new guiMessage("Instructions: ..............", Alert.AlertType.INFORMATION));
+    void ShowInstructions() {
+        this.displayMSG(new guiMessage("Welcome again. You're probably familiar with the game rules but here's a" +
+                " quick reminder :)\n\n" +
+        "The game is played in rounds of turns. After turn order is determined randomly, the game starts. During his" +
+                " turn, a player is able to put tiles on empty squares. After doing so correctly, meaning put a tile " +
+                "or tiles which are all in the same row or column, such that all new words created from up to down" +
+                " and from left to right are valid by dictionary, score will be given to that player based on those" +
+                " new words and any special squares they cover.\n\n" +
+        "Notice, at the start of the game the first player should put a legal word which in it one of the tiles" +
+                " covers on the start square. If he isn't able to do so he can pass his turn, and the next player" +
+                " must cover a star/pass and so on until the star is covered.\n\n" +
+        "Notice 2, if a player thinks the fast dictionary algorithm didn't detect correctly a valid word, they" +
+                " may challenge the dictionary with a slower but more precised algorithm. If this challenge failed," +
+                " the player will lose points!\n\n" +
+        "GOOD LUCK, ENJOY!", Alert.AlertType.INFORMATION, "Instructions"));
     }
 
      /** @return true if the position on canvas is inside the board **/

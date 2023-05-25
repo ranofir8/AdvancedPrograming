@@ -17,7 +17,7 @@ import java.util.Observable;
 
 public class MyViewModel extends ViewModel {
     public ObjectProperty<GameInstance> gameInstanceProperty;
-    private MainScreenModel myModel;
+
 
     public IntegerProperty countPlayers;
 
@@ -27,7 +27,7 @@ public class MyViewModel extends ViewModel {
     public StringProperty hostIP;
 
     public StringProperty nicknamePropertyTextField;
-    public ChangeBooleanProperty gameStatusUpdateEvent;
+    public StringProperty gameStatusStringProperty;
 
     public StringProperty resultHostPort;
     public ObjectProperty<ObservableList<PlayerRowView>> playerScoreboard;
@@ -41,7 +41,7 @@ public class MyViewModel extends ViewModel {
 
         this.resultHostPort = new SimpleStringProperty();
         this.nicknamePropertyTextField = new SimpleStringProperty();
-        this.gameStatusUpdateEvent = new ChangeBooleanProperty();
+        this.gameStatusStringProperty = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
         this.gameInstanceProperty = new SimpleObjectProperty<>();
@@ -76,6 +76,10 @@ public class MyViewModel extends ViewModel {
                         String s = "port is: "+(int) cmd.args;
                         this.resultHostPort.set(s);
                         break;
+                    case UPDATE_GAME_STATUS_TEXT:
+                        System.out.println("status changed!");
+                        Platform.runLater(() ->this.gameStatusStringProperty.set(this.myModel.getGameStatusText()));
+                        break;
                 }
             }
         }
@@ -109,23 +113,12 @@ public class MyViewModel extends ViewModel {
         }
 
         this.initGameModelBinds();
+        this.gameInstanceProperty.get().gameStatusChangeEvent.alertChanged();
     }
 
     @Override
     protected String getTitleText() {
         return "In game - " + this.myModel.getGameModel().getGameInstance().getNickname();
-    }
-
-    public String getStatusText() {
-        /* ??
-        if (this.myModel.getGameModel() == null) {
-            return "No game model.";
-        }*/
-        System.out.println("no Status Text");
-        return "no";
-//        GameInstance gi = this.myModel.getGameModel().getGameInstance();
-//        String currentGameStatus = gi.getCurrentGameStatus();
-//        return "Nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
     }
 
     @Override

@@ -28,4 +28,5 @@ public class BookScrabbleClient {
 
         return res.equals("true");
     }
+
 }

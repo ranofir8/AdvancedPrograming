@@ -11,8 +11,9 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-public abstract class GameView implements View{
+public abstract class GameView implements View {
     protected MyViewModel myViewModel;
+
 
 
     @FXML
@@ -28,10 +29,9 @@ public abstract class GameView implements View{
     protected void displayMSG(guiMessage messageToDisplay) {
         Platform.runLater(() -> {
             Alert alert = new Alert(messageToDisplay.alert);
-            alert.setTitle("Message");
+            alert.setTitle(messageToDisplay.title);
             alert.setContentText(messageToDisplay.message);
             alert.showAndWait();
         });
     }
-
 }

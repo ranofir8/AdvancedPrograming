@@ -1,13 +1,12 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
 import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 
 import javax.crypto.BadPaddingException;
 import java.util.*;
@@ -20,7 +19,7 @@ import java.util.stream.IntStream;
 public class PlayerStatus {
     public final String nickName;
     public BooleanProperty isMyTurnProperty;
-    public StringProperty turnOfProperty;
+    private StringProperty turnOfProperty;
     private List<Tile> handTiles;
     private HashMap<Integer, Tile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
@@ -143,11 +142,23 @@ public class PlayerStatus {
         return this.isMyTurnProperty.get();
     }
 
+    public String getTurnOfWho() {
+        return this.turnOfProperty.get();
+    }
+
     public List<Tile> getTilesInHand() {
         return this.handTiles; //*these tiles*
     }
 
     public HashMap<Integer, Tile> getTilesInLimbo() {
         return this.tilesInLimbo;
+    }
+
+    public void setTurnOf(String turnOfNickname) {
+        this.turnOfProperty.set(turnOfNickname);
+    }
+
+    public void bindToPlayerTurn(ChangeBooleanProperty cbp) {
+        cbp.changeByProperty(this.turnOfProperty);
     }
 }

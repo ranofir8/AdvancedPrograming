@@ -1,14 +1,12 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
+import ap.ex2.bookscrabble.view.GameView;
 import ap.ex2.bookscrabble.view.PlayerRowView;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +16,15 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
+    public ChangeBooleanProperty scoreBoardChangeEvent;
+    public ChangeBooleanProperty gameStatusChangeEvent;
+    private final HashMap<String, Integer> scoreBoard;
+    public Board gameBoard;
+    private final PlayerStatus myPlayer;
+    private ObjectProperty<GameState> gameStateProperty;
+    private Tile.Bag gameBag;
+
+
     public Word limboToWord() {
         return this.getPlayerStatus().limboToWord(this.gameBag);
     }
@@ -26,15 +33,8 @@ public class GameInstance {
         WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
     }
 
-    public ChangeBooleanProperty scoreBoardChangeEvent;
-    private final HashMap<String, Integer> scoreBoard;
-    public Board gameBoard;
-    private final PlayerStatus myPlayer;
-    private GameState gameState;
-    private Tile.Bag gameBag;
-
     public void setTurnOfNickname(String turnOfNickname) {
-        this.myPlayer.turnOfProperty.set(turnOfNickname);
+        this.myPlayer.setTurnOf(turnOfNickname);
     }
 
     /**
@@ -46,7 +46,13 @@ public class GameInstance {
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
         this.scoreBoardChangeEvent = new ChangeBooleanProperty();
-        this.gameState = GameState.WAITING_FOR_PLAYERS;
+        this.gameStatusChangeEvent = new ChangeBooleanProperty();  // update on GameState and Turn change
+        this.gameStateProperty = new SimpleObjectProperty<>();
+
+        this.gameStatusChangeEvent.changeByProperty(this.gameStateProperty);
+        this.myPlayer.bindToPlayerTurn(this.gameStatusChangeEvent);
+
+        this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS);
 
         updateScoreBoard(nickName, 0);
     }
@@ -91,11 +97,14 @@ public class GameInstance {
     }
 
     public String getCurrentGameStatus() {
-        switch (this.gameState) {
+        switch (this.gameStateProperty.get()) {
             case WAITING_FOR_PLAYERS:
                 return "Waiting for players to join";
             case PLAYING:
-                 return this.isMyTurn() ? "It's your turn":"somebody else is playing";
+                if (this.isMyTurn())
+                    return "It's your turn!";
+                else
+                    return  this.getPlayerStatus().getTurnOfWho() + " is playing right now...";
             case GAME_ENDED:
                 return "Game ended";
         }
@@ -107,7 +116,8 @@ public class GameInstance {
     }
 
     public void onStartGame() {
-        this.gameState = GameState.PLAYING;
+        System.out.println("game started");
+        this.gameStateProperty.set(GameState.PLAYING);
         this.gameBoard = new Board();
         this.gameBag = new Tile.Bag();
     }

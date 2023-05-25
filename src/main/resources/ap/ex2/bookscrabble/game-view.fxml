@@ -16,11 +16,11 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="608.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="661.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <top>
         <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="gameStatusLabel" alignment="TOP_LEFT" text="Nickname">
+                <Label fx:id="gameStatusLabel" alignment="TOP_LEFT" contentDisplay="CENTER" text="Nickname\nNewline">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -56,9 +56,9 @@
     <center>
         <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
             <children>
-                <HBox prefHeight="100.0" prefWidth="200.0">
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <VBox fx:id="legend" prefHeight="337.0" prefWidth="90.0" spacing="10.0">
+                        <VBox fx:id="legend" prefHeight="435.0" spacing="10.0">
                             <HBox>
                                 <Rectangle fill="#009900FF" height="10" width="10" />
                                 <Label text="Standard">
@@ -95,7 +95,7 @@
                            </HBox.margin></Label>
                             </HBox>
                      <HBox.margin>
-                        <Insets left="5.0" top="15.0" />
+                        <Insets left="15.0" top="15.0" />
                      </HBox.margin>
                         </VBox>
                         <Canvas fx:id="boardCanvas" height="450.0" onMouseClicked="#clickedOnCanvasEvent" width="450.0" />
@@ -134,7 +134,7 @@
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" />
                </VBox.margin></Slider>
-            <Button fx:id="Instructions" layoutX="35.0" layoutY="50.0" mnemonicParsing="false" onAction="#ShowInstructions" prefHeight="28.0" prefWidth="152.0" text="Show Game Instructions" />
+            <Button fx:id="Instructions" mnemonicParsing="false" onAction="#ShowInstructions" prefHeight="28.0" prefWidth="152.0" text="Show Game Instructions" />
                 <TableView fx:id="scoreBoard" prefHeight="134.0" prefWidth="158.0">
                     <columns>
                     </columns>

@@ -46,4 +46,11 @@ public class MyMainScreenModel extends MainScreenModel {
         this.afterStartingModel();
     }
 
+    public String getGameStatusText() {
+        if (this.getGameModel() == null)
+            return "No game model.";
+        GameInstance gi = this.getGameModel().getGameInstance();
+        String currentGameStatus = gi.getCurrentGameStatus();
+        return "Your nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
+    }
 }
