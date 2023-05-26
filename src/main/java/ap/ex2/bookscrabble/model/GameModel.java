@@ -108,6 +108,15 @@ public abstract class GameModel extends Model {
         return true;
     }
 
+    private void onGameCrash() {
+        //todo
+    }
+
+    private void onGameWinner() {
+        notifyViewModel(Command.DISPLAY_WINNER);
+        this.closeConnection();
+    }
+
     private void onChallengeAccepted() {
         notifyViewModel(new String[]{"MSG", "Your challenge attempt is accepted, I'm sorry for the confusion :("});
         SoundManager.singleton.playSound(SoundManager.SOUND_OF_APPROVAL);

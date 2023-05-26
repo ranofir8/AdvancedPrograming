@@ -8,8 +8,10 @@ import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /*
@@ -123,6 +125,9 @@ public class GameInstance {
         this.gameBoard = new Board();
 
         this.gameBag = new Tile.Bag();
+    }
+    public String getWinner() {
+        return Collections.max(this.scoreBoard.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
     public PlayerStatus getPlayerStatus() {

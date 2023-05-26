@@ -161,4 +161,8 @@ public class PlayerStatus {
     public void bindToPlayerTurn(ChangeBooleanProperty cbp) {
         cbp.changeByProperty(this.turnOfProperty);
     }
+
+    public int getSumOfTiles() {
+        return this.handTiles.stream().mapToInt(tile ->tile.score).sum();
+    }
 }

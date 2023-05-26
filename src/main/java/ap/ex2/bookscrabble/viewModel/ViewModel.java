@@ -34,22 +34,7 @@ public abstract class ViewModel extends Observable implements Observer {
 
         this.stage.setOnCloseRequest(event -> {
             event.consume();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exit Confirmation");
-            alert.setHeaderText("Are you sure you want to exit?");
-            alert.setContentText("This action will finish the game immediately");
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                System.out.println("User confirmed exit.");
-                exit(1);
-//                stage.close();
-
-                // todo shutdown client handler/server handler
-            } else {
-                // If the user clicks "Cancel", continue
-                System.out.println("User canceled exit.");
-            }
         });
 
     }

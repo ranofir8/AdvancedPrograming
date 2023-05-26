@@ -30,6 +30,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.System.exit;
+
 public class ControllerGameView extends GameView implements Initializable {
     private final BooleanProperty isHostGame;
 
@@ -169,9 +171,26 @@ public class ControllerGameView extends GameView implements Initializable {
                         Platform.runLater(this::displayChallengeAlert);
                         //this.displayChallengeAlert();
                         break;
+
+                    case DISPLAY_WINNER:
+                        SoundManager.singleton.playSound(SoundManager.SOUND_OF_WIN);
+                        Platform.runLater(this::displayWinner);
+                        break;
                 }
             }
         }
+    }
+
+    private void displayWinner() {
+        this.gameStatusLabel.textProperty().unbind();
+        String winner = this.gameInstanceProperty.get().getWinner();
+        this.gameStatusLabel.textProperty().set("The winner is: " + winner);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game End");
+        alert.setHeaderText("The game has come to an end!");
+        alert.setContentText("The winner is: " + winner +", Congrats!");
+        Optional<ButtonType> result = alert.showAndWait();
+        exit(0);//bye bye
     }
 
     private void displayChallengeAlert() {

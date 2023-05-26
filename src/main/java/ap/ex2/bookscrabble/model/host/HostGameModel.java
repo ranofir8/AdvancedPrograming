@@ -117,7 +117,7 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     private void nextTurn() {
-        this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle()); //todo they catch it and freeze
+        this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle());
     }
 
     private void sendStartingTiles() {
@@ -132,6 +132,10 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
     }
 
+    /**
+     * @param n - number of tiles
+     * @return a string of the tiles
+     */
     private String dealNTiles(int n) {
         // todo what to do if the bank is empty?
         return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand())
@@ -260,8 +264,14 @@ public class HostGameModel extends GameModel implements Observer {
         } else {
             this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
+
             // send player new tiles
-            this.sendXTiles(player, gottenWord.tileAmount());
+            int tileAmount = gottenWord.tileAmount();
+            this.tilesOfPlayer.computeIfPresent(player, (s, integer) -> integer - tileAmount);
+
+            if (this.tilesOfPlayer.get(player) < GameModel.DRAW_START_AMOUNT) {
+                this.sendXTiles(player, tileAmount);
+            }
 
             // update scores
             this.sendUpdateScoreToAll(player, scoreOfWord);

@@ -31,7 +31,4 @@ public class Protocol {
     public static final char ERROR_NOT_MATCH_BOARD = 'I';                   //-4
     public static final char ERROR_WORD_NOT_LEGAL = 'J';                    //-5
 
-
-//cursors parking:|  | | | | | ty
-
 }
