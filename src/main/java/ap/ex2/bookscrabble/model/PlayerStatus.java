@@ -93,15 +93,12 @@ public class PlayerStatus {
 
         // check if all tiles form a straight line
         if(columnBin.keySet().size() == 1 && rowBin.keySet().size() == 1) { //only one tile was added
-            // todo what if word is only one letter?
-            //determine if vertical or horizontal in some way
-            return null;
+            isVertical = true;
         } else if (columnBin.size() == 1) {
             isVertical = true;
         } else if (rowBin.size() == 1) {
             isVertical = false;
         } else {
-            // todo - notify player
             //illegal!
             return null;
         }
