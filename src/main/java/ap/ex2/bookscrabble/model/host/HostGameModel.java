@@ -2,18 +2,14 @@ package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
-import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
-import ap.ex2.bookscrabble.common.Command;
-import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,6 +19,7 @@ public class HostGameModel extends GameModel implements Observer {
     private HostServer hostServer;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
     private volatile boolean ignoreDictionary;
+    private HashMap<String, Integer> tilesOfPlayer;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -38,6 +35,7 @@ public class HostGameModel extends GameModel implements Observer {
         this.ignoreDictionary = false;
         this.hostPort = hostPort;
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
+        this.tilesOfPlayer = new HashMap<>();
     }
 
 
@@ -116,6 +114,7 @@ public class HostGameModel extends GameModel implements Observer {
         });
     }
 
+    // send all players which turn it is, and go to the next turn
     private void nextTurn() {
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle());
     }
@@ -126,10 +125,36 @@ public class HostGameModel extends GameModel implements Observer {
         }
     }
 
+    /**
+     * message to the player his tiles.
+     * @param player - nickname of a player
+     * @param countOfTiles - number of tiles to send
+     */
     private void sendXTiles(String player, int countOfTiles) {
-        //message to the player his tiles
-        String startingTiles = this.dealNTiles(countOfTiles);
-        this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + startingTiles);
+        String tilesToDeal = this.dealNTiles(countOfTiles);
+        this.tilesOfPlayer.computeIfAbsent(player, s -> 0);
+        this.tilesOfPlayer.computeIfPresent(player, (s, tiles) -> tiles + tilesToDeal.length());
+        if (tilesToDeal.length() != 0) { // there are no tiles left
+            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToDeal);
+        } else {
+            this.startEndingTheGame();
+        }
+    }
+
+    /**
+     * when the game actually ends or a player leaves during a game this function is called.
+     */
+    private void startEndingTheGame() {
+        // da gaim has kom to en end. tell it to evriwone
+        // request from all players how much score they have left
+        this.hostServer.sendMsgToAll(Protocol.TURN_OF + "");
+        this.hostServer.sendMsgToAll(String.valueOf(Protocol.END_GAME_TILE_SUM_REQUEST));
+    }
+
+    private void announceGameEndWinner() {
+        // when every player answered with their sum in hand
+        String winner = this.getGameInstance().getWinner();
+        this.hostServer.sendMsgToAll(Protocol.END_GAME_WINNER + "" + winner);
     }
 
     /**
@@ -137,8 +162,8 @@ public class HostGameModel extends GameModel implements Observer {
      * @return a string of the tiles
      */
     private String dealNTiles(int n) {
-        // todo what to do if the bank is empty?
-        return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand())
+        // todo what to do if the bank is empty? - end of game!
+        return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand()).filter(Objects::nonNull)
                 .map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
     }
 
@@ -177,7 +202,6 @@ public class HostGameModel extends GameModel implements Observer {
                     this.getGameInstance().removeScoreBoardPlayer(args[1]);
                     break;
             }
-
         }
     }
 
@@ -185,17 +209,33 @@ public class HostGameModel extends GameModel implements Observer {
     protected boolean handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
         boolean hasHandled = super.handleProtocolMsg(msgSentBy, msgProtocol, msgExtra);
 
-        System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
+        if (msgSentBy == null) //host case
+            msgSentBy = this.getGameInstance().getNickname();
+
+//        System.out.println("The player " + msgSentBy + " sent: " + msgExtra);
         switch (msgProtocol) {
             case Protocol.BOARD_ASSIGNMENT_REQUEST:
                 Word gottenWord = Word.getWordFromNetworkString(msgExtra, this.getGameInstance().getGameBag());
                 this.onBoardAssignment(msgSentBy, gottenWord);
-
                 break;
+
             case Protocol.BOARD_CHALLENGE_REQUEST:
                 this.onChallengeRequest(msgSentBy);
-
                 //System.out.println("He dares to challenge >:D ");
+                break;
+
+            case Protocol.SKIP_TURN_REQUEST:
+                this.onSkipTurnRequest(msgSentBy);
+                break;
+
+            case Protocol.END_GAME_TILE_SUM_RESPONSE:
+                int x;
+                try {
+                    x = Integer.parseInt(msgExtra);
+                } catch (NumberFormatException e) {
+                    x = 100;
+                }
+                this.onEndGameTileSumResponse(msgSentBy, x);
                 break;
         }
 
@@ -203,10 +243,13 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     private void onChallengeRequest(String player) {
+        if (this.playerIllegal(player)) //Gilad weird scenarios
+            return;
+
         //challenge the words
         boolean challengeAccepted = Arrays.stream(this.getNotLegalWords()).allMatch(word -> this.myBookScrabbleClient.challengeWord(word));
         //message result to the client
-        if(challengeAccepted) {
+        if (challengeAccepted) {
             this.ignoreDictionary = true; //this variable makes sure that after a challenge is handled the query window won't show up again
 
             this.hostServer.sendMsgToPlayer(player, String.valueOf(Protocol.BOARD_ASSIGNMENT_ACCEPTED_CHALLENGE));
@@ -220,14 +263,39 @@ public class HostGameModel extends GameModel implements Observer {
         //update score accordingly and
         int pts = challengeAccepted ? GameModel.HIT_CHALLENGE_BONUS : GameModel.MISS_CHALLENGE_PENALTY;
         this.sendUpdateScoreToAll(player, pts);
+    }
 
-
+    private boolean playerIllegal(String player) {
+        if (!this.getGameInstance().isTurnOf(player)) {
+            this.hostServer.sendMsgToPlayer(player, String.valueOf(Protocol.INVALID_ACTION));
+            return true;
+        }
+        return false;
     }
 
     private void onSkipTurnRequest(String player) {
-        // give him a tile
+        if (this.playerIllegal(player)) //Gilad weird scenarios
+            return;
 
+        // give him a tile
+        sendXTiles(player, 1);
         // next turn
+        this.nextTurn();
+    }
+
+    private void onEndGameTileSumResponse(String player, int points) {
+        // update scoreboard todo
+        if (points < 0) {
+            // cheater!!! sum can't be negative
+            points = Integer.MAX_VALUE;
+        }
+
+        sendUpdateScoreToAll(player, -1 * points);
+        this.tilesOfPlayer.remove(player);
+        // if the last player sent, announce winner!
+        if (this.tilesOfPlayer.isEmpty())
+            this.announceGameEndWinner();
+
     }
 
     /**
@@ -235,6 +303,9 @@ public class HostGameModel extends GameModel implements Observer {
      * @param gottenWord
      */
     protected void onBoardAssignment(String player, Word gottenWord) {
+        if (this.playerIllegal(player)) //Gilad weird scenarios
+            return;
+
         int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
         this.ignoreDictionary = false;
         System.out.println("Score from host: "+ scoreOfWord);
@@ -282,8 +353,6 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
-        if (player == null) //host case
-            player = this.getGameInstance().getNickname();
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
     }
 
@@ -292,5 +361,4 @@ public class HostGameModel extends GameModel implements Observer {
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
     }
-
 }

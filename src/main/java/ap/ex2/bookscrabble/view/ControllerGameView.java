@@ -97,7 +97,6 @@ public class ControllerGameView extends GameView implements Initializable {
             this.tilesPlaced = this.playerStatus.getTilesInLimbo();
 
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
-
         });
     }
 
@@ -121,7 +120,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.myViewModel.gameInstanceProperty.addListener((observableValue, board, t1) -> System.out.println("gameInstance (Board) in V updated"));
 
         this.sendWordButton.disableProperty().bind(this.canSendWord.not());
-        this.skipTurnButton.disableProperty().bind(this.canSendWord);
+        this.skipTurnButton.disableProperty().bind(this.isPlayerTurn.not());
 
         SoundManager.singleton.bindMasterVolumeTo(this.volumeSlider.valueProperty());
     }
@@ -166,6 +165,7 @@ public class ControllerGameView extends GameView implements Initializable {
                     case RESET_SELECTIONS:
                         resetBoardSelection();
                         resetTileSelection();
+
                         break;
                     case DISPLAY_CHALLENGE_PROMPT:
                         Platform.runLater(this::displayChallengeAlert);
@@ -545,7 +545,7 @@ public class ControllerGameView extends GameView implements Initializable {
 
     @FXML
     void skipTurnAction() {
-        // todo
+        this.myViewModel.giveUpTurn();
     }
 
 

@@ -16,13 +16,14 @@ public class SoundManager {
     public final static String SOUND_TILE_PRESSED = "tileSnap.wav";
     public final static String SOUND_TILE_ADD = "tileAdded.wav";
     public final static String SOUND_PLAYER_JOINED = "playerJoined.wav";
-    public final static String SOUND_STARTING_GAME = "startGame.wav";
+    public final static String SOUND_STARTING_GAME = "startGame3.wav";
     public final static String SOUND_OF_FAILURE = "soundOfFailure.mp3";
     public final static String SOUND_NEW_WORD = "newWord.wav";
     public final static String SOUND_POP = "pop.wav";
     public final static String SOUND_YOUR_TURN = "yourTurn.wav";
     public static final String SOUND_OF_APPROVAL = "soundOfApproval.wav";
     public static final String SOUND_OF_REJECTED = "soundOfRejected.wav";
+    public static final String SOUND_OF_WIN = "soundOfWin.mp3";
 
 
     public final static SoundManager singleton = new SoundManager();

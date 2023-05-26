@@ -72,10 +72,12 @@ public class MyViewModel extends ViewModel {
                     case GO_TO_GAME_SCENE:
                         this.showGameScene();
                         break;
+
                     case DISPLAY_PORT:
                         String s = "port is: "+(int) cmd.args;
                         this.resultHostPort.set(s);
                         break;
+
                     case UPDATE_GAME_STATUS_TEXT:
                         Platform.runLater(() ->this.gameStatusStringProperty.set(this.myModel.getGameStatusText()));
                         break;
@@ -136,7 +138,6 @@ public class MyViewModel extends ViewModel {
                     this.updatePlayerListGUI();
                 });
         this.gameInstanceProperty.bind(gm.gameInstanceProperty);
-        this.gameInstanceProperty.addListener((observableValue, o0, o1) -> System.out.println("gameInstance (Board) in VM updated"));
 
         if (gm != null)
             gm.addObserver(this);

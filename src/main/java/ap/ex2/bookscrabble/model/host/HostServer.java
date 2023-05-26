@@ -43,6 +43,7 @@ public class HostServer extends Observable implements Observer {
 
     // send a message to a specific guest
     public void sendMsgToPlayer(String nickName, String msgToSend) {
+        // nickName = null => ELSE; nickName = hostName => ELSE
         if (this.playersSockets.get(nickName) != null) {
             this.playersSockets.get(nickName).sendMsg(msgToSend);
         } else {

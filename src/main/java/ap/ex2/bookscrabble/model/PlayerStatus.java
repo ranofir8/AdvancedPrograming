@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
+import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
@@ -24,7 +25,7 @@ public class PlayerStatus {
     private HashMap<Integer, Tile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
     public PlayerStatus(String nickName) {
-        this.handTiles = new ArrayList<Tile>();
+        this.handTiles = new ArrayList<>();
         this.nickName = nickName;
         this.tilesInLimbo = new HashMap<>();
 

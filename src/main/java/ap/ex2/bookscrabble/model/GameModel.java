@@ -57,6 +57,10 @@ public abstract class GameModel extends Model {
                 this.onTurnOf(msgExtra);
                 break;
 
+            case Protocol.GAME_CRASH_ERROR:
+                this.onGameCrash();
+                break;
+
             case Protocol.SEND_NEW_TILES:
                 this.onGotNewTiles(msgExtra); //msgExtra contains the tiles
                 break;
@@ -64,15 +68,19 @@ public abstract class GameModel extends Model {
             case Protocol.ERROR_OUTSIDE_BOARD_LIMITS:
                 notifyViewModel(new String[]{"ERR", "Your word is outside the board's limits. Try again."});
                 break;
+
             case Protocol.ERROR_NOT_ON_STAR:
                 notifyViewModel(new String[]{"ERR", "The first word must be on the star tile. Try again."});
                 break;     //cursor parking: |   |
+
             case Protocol.ERROR_NOT_LEANS_ON_EXISTING_TILES:
                 notifyViewModel(new String[]{"ERR", "Your word does not lean on existing tiles. Try again."});
                 break;
+
             case Protocol.ERROR_NOT_MATCH_BOARD:
                 notifyViewModel(new String[]{"ERR", "Your word does not match the board's state. Try again."});
                 break;
+
             case Protocol.ERROR_WORD_NOT_LEGAL:
                 this.onWordNotLegal(msgExtra.split(","));
                 break;
@@ -100,6 +108,14 @@ public abstract class GameModel extends Model {
 
             case Protocol.BOARD_ASSIGNMENT_REJECTED_CHALLENGE:
                 this.onChallengeRejected();
+                break;
+
+            case Protocol.END_GAME_TILE_SUM_REQUEST:
+                this.onEndGameTileSumRequest();
+                break;
+
+            case Protocol.END_GAME_WINNER:
+                this.onGameWinner();
                 break;
 
             default:
@@ -153,9 +169,7 @@ public abstract class GameModel extends Model {
         //remove relevant tiles from hand
         this.getGameInstance().getPlayerStatus().removeTilesInLimbo();
         this.notifyViewModel(Command.RESET_SELECTIONS);
-        //put the tiles on the board:
-
-        //update
+        //put the tiles on the board - on turn of
     }
 
     private void onGotNewTiles(String tilesGotten) {
@@ -191,8 +205,15 @@ public abstract class GameModel extends Model {
         notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
-    public void onTurnOf(String turnOfNickname){
+    public void onTurnOf(String turnOfNickname) {
         this.getGameInstance().setTurnOfNickname(turnOfNickname);
+        this.getGameInstance().getPlayerStatus().putBackTilesFromLimbo();
+        this.notifyViewModel(Command.RESET_SELECTIONS);
+        this.notifyViewModel(Command.UPDATE_GAME_BOARD);
+    }
+
+    protected void onEndGameTileSumRequest() {
+        this.sendMsgToHost(Protocol.END_GAME_TILE_SUM_RESPONSE + "" + this.getGameInstance().getPlayerStatus().getSumOfTiles());
     }
 
     public final void requestSendWord() {
@@ -208,9 +229,10 @@ public abstract class GameModel extends Model {
     }
 
     public void requestGiveUpTurn() {
+        sendMsgToHost(String.valueOf(Protocol.SKIP_TURN_REQUEST));
     }
 
-    public void stopGameOnCloseWindow() {
-        this.sendMsgToHost(Protocol.END_GAME + "");
-    }
+//    public void stopGameOnCloseWindow() { // todo
+//        this.sendMsgToHost(Protocol.END_GAME + "");
+//    }
 }

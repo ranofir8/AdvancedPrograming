@@ -32,6 +32,10 @@ public class GameInstance {
         return this.getPlayerStatus().limboToWord(this.gameBag);
     }
 
+    public boolean isTurnOf(String player) { //Gilad weird scenarios
+        return (player == null && this.isMyTurn()) || (this.myPlayer.getTurnOfWho().equals(player));
+    }
+
     enum GameState {
         WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
     }
