@@ -19,7 +19,7 @@ public class Protocol {
     public static final char TURN_OF = '8';
     public static final char BOARD_ASSIGNMENT_ACCEPTED = '9';
     public static final char BOARD_ASSIGNMENT_REJECTED_CHALLENGE = 'A';
-    public static final char BOARD_ASSIGNMENT_REJECTED_QUERY = 'B';
+    public static final char BOARD_ASSIGNMENT_ACCEPTED_CHALLENGE = 'B';
     public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'C';
     public static final char UPDATED_PLAYER_SCORE = 'M';
     public static final char SEND_NEW_TILES = 'D';

@@ -40,12 +40,17 @@ public class Board {
 
 	private Tile[][] mat;    // mat[col][row], \/	->
 	private boolean isEmpty;
-	private Function<Word, Boolean> atDictionaryCheck;
+	private Function<String, Boolean> atDictionaryCheck;
+	private List<String> notLegalWords;
 
-	public Board(Function<Word, Boolean> atDictionaryCheck) {
+	public Board(Function<String, Boolean> atDictionaryCheck) {
 		this.mat = new Tile[Board.COL_NUM][Board.ROW_NUM];
 		this.isEmpty = true;
 		this.atDictionaryCheck = atDictionaryCheck;
+	}
+
+	public void setDictioaryCheck(Function<String,Boolean> dictFunc) {
+		this.atDictionaryCheck = dictFunc;
 	}
 
 	public Board() {
@@ -163,8 +168,10 @@ public class Board {
 		return x==7 && y==7;
 	}
 
-	private boolean dictionaryLegal(Word w) {
-		return this.atDictionaryCheck.apply(w);
+	private boolean dictionaryLegal(String word) {
+		boolean r = this.atDictionaryCheck.apply(word);
+		System.out.println("got from server: " + r);
+		return r;
 	}
 
 	// gets a word and returns all of the new words created on the board if that word will be placed
@@ -307,10 +314,10 @@ public class Board {
 		Word filledWord = this.fillEmptyWordPlaces(word);
 		// if the word is not board legal, return 0
 		int tryPlaceErr = this.boardLegalInt(filledWord);
-		System.out.println("try place " + word);
-		if (tryPlaceErr != 0)
+		System.out.println("trying to place " + word);
+		if (tryPlaceErr != 0) {
 			return tryPlaceErr;
-
+		}
 		// the first word is the FULL w, check if it (and all of the other words) are legal
 		ArrayList<Word> newWords = this.getWords(filledWord);
 		boolean areAllLegal = newWords.stream().allMatch(w -> dictionaryLegal(w));

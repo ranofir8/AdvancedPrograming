@@ -41,13 +41,22 @@ public class BookScrabbleClient {
     }
 
     // add C, to word
-    public boolean challengeWord(String word) throws IOException {
-        return this.runClient("c," + word).equals("true");
+    public boolean challengeWord(String word) {
+        try {
+            return this.runClient("c," + word).equals("true");
+        } catch (IOException e) {
+            System.out.println("challenge exception :(");
+            return false;
+        }
 
     }
 
-    public boolean pingServer() throws IOException {
-        return this.runClient("p,*").equals("pong");
+    public boolean pingServer() {
+        try {
+            return this.runClient("p,*").equals("pong");
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 

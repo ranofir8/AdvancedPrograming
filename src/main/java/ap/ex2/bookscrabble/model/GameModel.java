@@ -14,7 +14,8 @@ public abstract class GameModel extends Model {
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
     public static final int DRAW_START_AMOUNT = 7;
-    private static final int MISS_PENALTY = 600;
+    public static final int MISS_CHALLENGE_PENALTY = -5;
+    public static final int HIT_CHALLENGE_BONUS = 5;
     public ObjectProperty<GameInstance> gameInstanceProperty;
 
     public GameModel(String nickname) {
@@ -72,7 +73,7 @@ public abstract class GameModel extends Model {
                 notifyViewModel(new String[]{"ERR", "Your word does not match the board's state. Try again."});
                 break;
             case Protocol.ERROR_WORD_NOT_LEGAL:
-                notifyViewModel(new String[]{"ERR", "The word you created isn't found in the dictionary. Do you want to challenge it? (if wrong you will lose " + GameModel.MISS_PENALTY + " points)."});
+                this.onWordNotLegal(msgExtra.split(","));
                 break;
 
             case Protocol.BOARD_ASSIGNMENT_ACCEPTED:
@@ -97,6 +98,30 @@ public abstract class GameModel extends Model {
                 return false; // not recognized
         }
         return true;
+    }
+
+    private void onChallengeAccepted() {
+        notifyViewModel(new String[]{"MSG", "Your challenge attempt is accepted, I'm sorry for the confusion :("});
+        SoundManager.singleton.playSound(SoundManager.SOUND_OF_APPROVAL);
+        // send word again (now it will be accepted)
+        this.requestSendWord();
+    }
+
+    private void onChallengeRejected() {
+        notifyViewModel(new String[]{"MSG", "Your challenge attempt is rejected, you wasted the server's time!"});
+        SoundManager.singleton.playSound(SoundManager.SOUND_OF_REJECTED);
+    }
+
+    private void onWordNotLegal(String[] illeagalWords) {
+        this.gameInstanceProperty.get().setNotLegalWords(illeagalWords);
+        notifyViewModel(Command.DISPLAY_CHALLENGE_PROMPT);
+    }
+
+    public String[] getNotLegalWords() {
+        String[] a = this.getGameInstance().getNotLegalWords();
+        if (a == null)
+            return new String[0];
+        return a;
     }
 
     protected void onBoardUpdateByPlayer(String wordPlaced) {
@@ -162,7 +187,7 @@ public abstract class GameModel extends Model {
     }
 
     public void requestChallenge() {
-        // todo
+        sendMsgToHost(String.valueOf(Protocol.BOARD_CHALLENGE_REQUEST));
     }
 
     public void requestGiveUpTurn() {

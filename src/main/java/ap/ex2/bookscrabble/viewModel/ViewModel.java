@@ -12,6 +12,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+import static java.lang.System.exit;
+
 public abstract class ViewModel extends Observable implements Observer {
     public abstract void startGameModel(); // called when join/host buttons are pressed
     protected Stage stage;
@@ -40,6 +42,7 @@ public abstract class ViewModel extends Observable implements Observer {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 System.out.println("User confirmed exit.");
+                exit(1);
 //                stage.close();
 
                 // todo shutdown client handler/server handler

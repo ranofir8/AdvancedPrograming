@@ -8,7 +8,9 @@ import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,6 +19,7 @@ public class HostGameModel extends GameModel implements Observer {
     private int hostPort;
     private HostServer hostServer;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
+    private volatile boolean ignoreDictionary;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -27,10 +30,19 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
-        super(nickname); //String configFileName
+        super(nickname); // String name
+
+        this.ignoreDictionary = false;
         this.hostPort = hostPort;
 
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
+    }
+
+
+    private void tryPingingBookServer() throws ConnectException {
+        if (!this.myBookScrabbleClient.pingServer()) {
+            throw new ConnectException("Dictionary book server is offline.");
+        }
     }
 
     @Override
@@ -77,7 +89,6 @@ public class HostGameModel extends GameModel implements Observer {
         //create a list of 7 random tiles
         this.sendStartingTiles();
 
-        //todo in loop until the end of the game?
         this.nextTurn();
     }
 
@@ -152,9 +163,42 @@ public class HostGameModel extends GameModel implements Observer {
                 Word gottenWord = Word.getWordFromNetworkString(msgExtra, this.getGameInstance().getGameBag());
                 this.onBoardAssignment(msgSentBy, gottenWord);
                 break;
+            case Protocol.BOARD_CHALLENGE_REQUEST:
+                this.onChallengeRequest(msgSentBy);
+
+                //System.out.println("He dares to challenge >:D ");
+                break;
         }
 
         return hasHandled;
+    }
+
+    private void onChallengeRequest(String player) {
+        //challenge the words
+        boolean challengeAccepted = Arrays.stream(this.getNotLegalWords()).allMatch(word -> this.myBookScrabbleClient.challengeWord(word));
+        //message result to the client
+        if(challengeAccepted) {
+            this.ignoreDictionary = true; //this variable makes sure that after a challenge is handled the query window won't show up again
+
+            this.hostServer.sendMsgToPlayer(player, String.valueOf(Protocol.BOARD_ASSIGNMENT_ACCEPTED_CHALLENGE));
+            // after challenge attempt accepted, player will query again and *should* be accepted!
+        } else {
+            this.hostServer.sendMsgToPlayer(player, String.valueOf(Protocol.BOARD_ASSIGNMENT_REJECTED_CHALLENGE));
+            // skip the player's turn
+            this.onSkipTurnRequest(player);
+        }
+
+        //update score accordingly and
+        int pts = challengeAccepted ? GameModel.HIT_CHALLENGE_BONUS : GameModel.MISS_CHALLENGE_PENALTY;
+        this.sendUpdateScoreToAll(player, pts);
+
+
+    }
+
+    private void onSkipTurnRequest(String player) {
+        // give him a tile
+
+        // next turn
     }
 
     /**

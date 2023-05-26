@@ -63,7 +63,7 @@ public class MyViewModel extends ViewModel {
                     setChanged();
                     notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
                 }
-            } else if (arg instanceof Command) {
+            } else if (arg instanceof Command) { // Command are directed to the view layer
                 setChanged();
                 notifyObservers(arg);
             } else if (arg instanceof Command2VM) {

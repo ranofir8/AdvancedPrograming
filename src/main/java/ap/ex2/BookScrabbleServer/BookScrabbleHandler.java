@@ -35,9 +35,13 @@ public class BookScrabbleHandler implements SimpleClientHandler {
         switch (clientCharacter) {
             case 'q':
                 answer = ""+dm.query(parameters);
+                if (BookScrabbleHandler.TESTING)
+                    answer = "false";
                 break;
             case 'c':
                 answer = ""+dm.challenge(parameters);
+                if (BookScrabbleHandler.TESTING)
+                    answer = "true";
                 break;
             case 'p':
                 answer = "pong";

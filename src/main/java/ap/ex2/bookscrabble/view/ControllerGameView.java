@@ -8,6 +8,7 @@ import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -164,8 +165,41 @@ public class ControllerGameView extends GameView implements Initializable {
                         resetBoardSelection();
                         resetTileSelection();
                         break;
+                    case DISPLAY_CHALLENGE_PROMPT:
+                        Platform.runLater(this::displayChallengeAlert);
+                        //this.displayChallengeAlert();
+                        break;
                 }
             }
+        }
+    }
+
+    private void displayChallengeAlert() {
+        ButtonType challengeBu = new ButtonType("Challenge", ButtonBar.ButtonData.YES);
+        ButtonType skipBu = new ButtonType("Skip turn", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", challengeBu, skipBu);
+
+        alert.setTitle("Challenge Option");
+        alert.setHeaderText("Do you want to challenge?");
+        String[] illegal = this.myViewModel.gameInstanceProperty.get().getNotLegalWords();
+
+        String illegalListString = Arrays.stream(illegal).map(x -> "\t* " + x).collect(Collectors.joining("\n"));
+
+        alert.setContentText("The following word(s) you created were not found in the dictionary: \n" +
+                illegalListString + "\n" +
+                "Do you want to challenge the server with those words?\n\n" +
+                "If wrong you will lose " + Math.abs(GameModel.MISS_CHALLENGE_PENALTY) + " points and be skipped, " +
+                "But if you are correct, you will earn " + GameModel.HIT_CHALLENGE_BONUS + " points.");
+
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.YES) {
+            // challenge
+            this.myViewModel.requestChallenge();
+        } else {
+            //cancel option
+            this.skipTurnAction();
+            // skip turn todo
         }
     }
 
