@@ -59,7 +59,6 @@ public class MyViewModel extends ViewModel {
                     setChanged();
                     notifyObservers(new guiMessage(args[1], Alert.AlertType.INFORMATION));
                 } else if (args[0].equals("ERR")) {
-                    SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
                     setChanged();
                     notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
                 }

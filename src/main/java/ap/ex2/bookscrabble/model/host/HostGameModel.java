@@ -262,18 +262,18 @@ public class HostGameModel extends GameModel implements Observer {
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
             // send player new tiles
             this.sendXTiles(player, gottenWord.tileAmount());
-            if (player == null) //host case
-                player = this.getGameInstance().getNickname();
+
             // update scores
             this.sendUpdateScoreToAll(player, scoreOfWord);
 
             // next turn
             this.nextTurn();
-
         }
     }
 
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
+        if (player == null) //host case
+            player = this.getGameInstance().getNickname();
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
     }
 
