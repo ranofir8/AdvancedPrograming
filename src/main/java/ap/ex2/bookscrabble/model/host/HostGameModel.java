@@ -2,10 +2,13 @@ package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
+import ap.ex2.bookscrabble.common.Command;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -34,7 +37,6 @@ public class HostGameModel extends GameModel implements Observer {
 
         this.ignoreDictionary = false;
         this.hostPort = hostPort;
-
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
     }
 
@@ -53,6 +55,9 @@ public class HostGameModel extends GameModel implements Observer {
     @Override
     public void establishConnection() throws IOException {
         System.out.println("HOST STARTED SERVER");
+
+        this.tryPingingBookServer();
+
         // bind to host port
         this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
@@ -75,6 +80,9 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
 
+    /**
+     * [step 1] the host tells everybody the game starts
+     */
     public void hostStartGame() { //This happens when the host starts a game
         this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
 
@@ -90,6 +98,22 @@ public class HostGameModel extends GameModel implements Observer {
         this.sendStartingTiles();
 
         this.nextTurn();
+    }
+
+    /**
+     * [step 2] The host actually creates the game board
+     */
+    @Override
+    protected void onStartGame() {
+        super.onStartGame();  // creates board and init gameInstance
+        // pass dictionary check for the host
+        this.gameInstanceProperty.get().getGameBoard().setDictioaryCheck(w-> {
+            try {
+                return ignoreDictionary || myBookScrabbleClient.queryWord(w);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void nextTurn() {
@@ -162,6 +186,7 @@ public class HostGameModel extends GameModel implements Observer {
             case Protocol.BOARD_ASSIGNMENT_REQUEST:
                 Word gottenWord = Word.getWordFromNetworkString(msgExtra, this.getGameInstance().getGameBag());
                 this.onBoardAssignment(msgSentBy, gottenWord);
+
                 break;
             case Protocol.BOARD_CHALLENGE_REQUEST:
                 this.onChallengeRequest(msgSentBy);
@@ -207,6 +232,7 @@ public class HostGameModel extends GameModel implements Observer {
      */
     protected void onBoardAssignment(String player, Word gottenWord) {
         int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
+        this.ignoreDictionary = false;
         System.out.println("Score from host: "+ scoreOfWord);
         char protocolToSend = ' ';
         String extra = "";
@@ -226,9 +252,11 @@ public class HostGameModel extends GameModel implements Observer {
                     break;
                 case Board.CHECK_WORD_NOT_LEGAL:
                     protocolToSend = Protocol.ERROR_WORD_NOT_LEGAL;
+                    List<String> illegals = this.getGameInstance().getGameBoard().getNotLegalWords();
+                    extra = String.join(",", illegals);
                     break;
             }
-            this.hostServer.sendMsgToPlayer(player, protocolToSend + "");
+            this.hostServer.sendMsgToPlayer(player, protocolToSend + extra);
         } else {
             this.hostServer.sendMsgToPlayer(player, Protocol.BOARD_ASSIGNMENT_ACCEPTED + "");
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
@@ -237,7 +265,7 @@ public class HostGameModel extends GameModel implements Observer {
             if (player == null) //host case
                 player = this.getGameInstance().getNickname();
             // update scores
-            this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreOfWord + "," + player);
+            this.sendUpdateScoreToAll(player, scoreOfWord);
 
             // next turn
             this.nextTurn();
@@ -245,9 +273,14 @@ public class HostGameModel extends GameModel implements Observer {
         }
     }
 
+    private void sendUpdateScoreToAll(String player, int scoreIncrament) {
+        this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
+    }
+
 
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
     }
+
 }

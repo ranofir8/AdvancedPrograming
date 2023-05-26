@@ -21,9 +21,12 @@ public class SoundManager {
     public final static String SOUND_NEW_WORD = "newWord.wav";
     public final static String SOUND_POP = "pop.wav";
     public final static String SOUND_YOUR_TURN = "yourTurn.wav";
+    public static final String SOUND_OF_APPROVAL = "soundOfApproval.wav";
+    public static final String SOUND_OF_REJECTED = "soundOfRejected.wav";
 
 
     public final static SoundManager singleton = new SoundManager();
+
 
     private final HashMap<String, MediaPlayer> loadedSounds;
     private final DoubleProperty masterVolume;

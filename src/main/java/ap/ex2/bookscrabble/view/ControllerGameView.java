@@ -28,6 +28,7 @@ import javafx.scene.text.FontWeight;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ControllerGameView extends GameView implements Initializable {
     private final BooleanProperty isHostGame;
@@ -158,8 +159,7 @@ public class ControllerGameView extends GameView implements Initializable {
                     case UPDATE_SCORE_BOARD:
                         break;
                     case INVALID_WORD_PLACEMENT:
-                        displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
-                        SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
+                        this.displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
                         break;
                     case RESET_SELECTIONS:
                         resetBoardSelection();

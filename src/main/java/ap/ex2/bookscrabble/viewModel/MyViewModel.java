@@ -53,7 +53,7 @@ public class MyViewModel extends ViewModel {
     @Override
     public void update(Observable o, Object arg) { //updates from MyMainScreen Model
         if (o == this.myModel || o == this.myModel.getGameModel()) {
-            if (arg instanceof String[]) {
+            if (arg instanceof String[]) {  // short messages that are sent to the View
                 String[] args = (String[]) arg;
                 if (args[0].equals("MSG")) {
                     setChanged();
@@ -66,7 +66,8 @@ public class MyViewModel extends ViewModel {
             } else if (arg instanceof Command) { // Command are directed to the view layer
                 setChanged();
                 notifyObservers(arg);
-            } else if (arg instanceof Command2VM) {
+            } else if (arg instanceof Command2VM) { //Command2VM are handled here!
+                // things that are sent to the ViewModel using Command2VM
                 Command2VM cmd = (Command2VM) arg;
                 switch (cmd.command) {
                     case GO_TO_GAME_SCENE:
@@ -77,7 +78,6 @@ public class MyViewModel extends ViewModel {
                         this.resultHostPort.set(s);
                         break;
                     case UPDATE_GAME_STATUS_TEXT:
-                        System.out.println("status changed!");
                         Platform.runLater(() ->this.gameStatusStringProperty.set(this.myModel.getGameStatusText()));
                         break;
                 }
@@ -150,12 +150,12 @@ public class MyViewModel extends ViewModel {
     }
 
     @Override
-    protected void requestChallenge() {
+    public void requestChallenge() {
         this.myModel.getGameModel().requestChallenge();
     }
 
     @Override
-    protected void giveUpTurn() {
+    public void giveUpTurn() {
         this.myModel.getGameModel().requestGiveUpTurn();
     }
 }

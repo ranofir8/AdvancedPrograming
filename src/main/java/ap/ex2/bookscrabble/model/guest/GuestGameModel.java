@@ -107,7 +107,6 @@ public class GuestGameModel extends GameModel implements Observer {
     protected void onBoardUpdateByPlayer(String wordPlaced) {
         Word w = Word.getWordFromNetworkString(wordPlaced, this.getGameInstance().getGameBag()); // not removing tiles from bag
         int expectedScore = this.getGameInstance().gameBoard.tryPlaceWord(w);
-        System.out.println("Expected score of: "+expectedScore);
         super.onBoardUpdateByPlayer(wordPlaced);
     }
 

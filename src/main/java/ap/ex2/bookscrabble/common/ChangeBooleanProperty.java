@@ -12,7 +12,6 @@ public class ChangeBooleanProperty extends SimpleBooleanProperty {
     @Override
     public void addListener(ChangeListener<? super Boolean> changeListener) {
         super.addListener(changeListener);
-        System.out.println("bound to");
         alertChanged();
     }
 

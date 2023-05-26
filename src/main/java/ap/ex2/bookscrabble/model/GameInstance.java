@@ -23,6 +23,7 @@ public class GameInstance {
     private final PlayerStatus myPlayer;
     private ObjectProperty<GameState> gameStateProperty;
     private Tile.Bag gameBag;
+    private String[] notLegalWords;
 
 
     public Word limboToWord() {
@@ -53,6 +54,7 @@ public class GameInstance {
         this.myPlayer.bindToPlayerTurn(this.gameStatusChangeEvent);
 
         this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS);
+        this.notLegalWords = null;
 
         updateScoreBoard(nickName, 0);
     }
@@ -119,6 +121,7 @@ public class GameInstance {
         System.out.println("game started");
         this.gameStateProperty.set(GameState.PLAYING);
         this.gameBoard = new Board();
+
         this.gameBag = new Tile.Bag();
     }
 
@@ -134,4 +137,11 @@ public class GameInstance {
         return this.gameBoard;
     }
 
+    public void setNotLegalWords(String[] notLegalWords) {
+        this.notLegalWords = notLegalWords;
+    }
+
+    public String[] getNotLegalWords() {
+        return notLegalWords;
+    }
 }

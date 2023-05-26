@@ -4,6 +4,7 @@ import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.ObjectProperty;
@@ -93,6 +94,13 @@ public abstract class GameModel extends Model {
                 this.onUpdatePlayerScore(scoreOfWord, player);
                 break;
 
+            case Protocol.BOARD_ASSIGNMENT_ACCEPTED_CHALLENGE:
+                this.onChallengeAccepted();
+                break;
+
+            case Protocol.BOARD_ASSIGNMENT_REJECTED_CHALLENGE:
+                this.onChallengeRejected();
+                break;
 
             default:
                 return false; // not recognized
@@ -168,7 +176,7 @@ public abstract class GameModel extends Model {
         System.out.println("updated score of " + player + " by " + score);
     }
 
-    public void onStartGame() {
+    protected void onStartGame() {
         this.getGameInstance().onStartGame();
         notifyViewModel(Command.PLAY_START_GAME_SOUND);
         notifyViewModel(Command.UPDATE_GAME_BOARD);

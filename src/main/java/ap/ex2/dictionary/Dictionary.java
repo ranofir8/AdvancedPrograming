@@ -19,16 +19,18 @@ public class Dictionary {
 	private BloomFilter bloom;
 	private volatile ParIOSearcher parIO;
 	private String[] fileNames;
-	
+
 	public Dictionary(String...fileNames) {
 		this.existingWords = new CacheManager(400, new LRU());
 		this.nonExistingWords = new CacheManager(100, new LFU());
 		this.bloom = new BloomFilter(256*256, "MD5", "SHA1");
 		this.fileNames = fileNames;
-		
+
+		System.out.print("Indexing book(s) " + String.join(", ", fileNames) + "... \t");
 		this.fillBloomFilter();
+		System.out.println("done.");
 	}
-	
+
 	private void fillBloomFilter() {
 		for (String fileName : fileNames) {
 			FileReader fr = null;
@@ -36,7 +38,7 @@ public class Dictionary {
 			try {
 				fr = R.getFileReaderFromResource("books/" + fileName);
 				br = new BufferedReader(fr);
-				
+
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					// from: https://stackoverflow.com/questions/1128723
@@ -57,24 +59,24 @@ public class Dictionary {
 			}
 		}
 	}
-	
+
 	public boolean query(String word) {
 		if (this.existingWords.query(word))
 			return true;
-		
+
 		if (this.nonExistingWords.query(word))
 			return false;
-		
+
 		return this.updateCache(word, this.bloom.contains(word));
 	}
-	
+
 	// updates the relevant cache regarding Word
 	private boolean updateCache(String word, boolean answer) {
 		CacheManager cm = answer ? this.existingWords : this.nonExistingWords;
 		cm.add(word);
 		return answer;
 	}
-	
+
 	public boolean challenge(String word) {
 		synchronized (this) {
 			this.parIO = new ParIOSearcher();
@@ -82,8 +84,8 @@ public class Dictionary {
 		boolean b = this.parIO.search(word, this.fileNames);
 		return this.updateCache(word, b);
 	}
-	
-	// synchronized in order to get consistent results about this.parIO 
+
+	// synchronized in order to get consistent results about this.parIO
 	public synchronized void close() {
 		if (this.parIO != null)
 			this.parIO.stop();

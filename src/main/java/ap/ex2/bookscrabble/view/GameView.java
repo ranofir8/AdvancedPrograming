@@ -29,6 +29,8 @@ public abstract class GameView implements View {
     protected void displayMSG(guiMessage messageToDisplay) {
         Platform.runLater(() -> {
             Alert alert = new Alert(messageToDisplay.alert);
+            if (messageToDisplay.alert == Alert.AlertType.ERROR)
+                SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
             alert.setTitle(messageToDisplay.title);
             alert.setHeaderText(messageToDisplay.title);
             alert.setContentText(messageToDisplay.message);

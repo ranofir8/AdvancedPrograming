@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class HelloApplication extends Application {
         // this will contain the code
         FXMLLoader fxmlLoaderH = new FXMLLoader(R.getResource(GameView.SCENE_HELLO_FXML));
         FXMLLoader fxmlLoaderG = new FXMLLoader(R.getResource(GameView.SCENE_GAME_FXML));
+
+        stage.getIcons().add(new Image(HelloApplication.class.getResourceAsStream("icon.png")));
 
         Scene sceneH = new Scene(fxmlLoaderH.load(), 1200, 800);
         Scene sceneG = new Scene(fxmlLoaderG.load(), 1200, 800);

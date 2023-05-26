@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BookScrabbleHandler implements SimpleClientHandler {
+    private static final boolean TESTING = true;
+
     private PrintWriter out;
     private BufferedReader in;
 
@@ -21,8 +23,6 @@ public class BookScrabbleHandler implements SimpleClientHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println("server got input: " + inputString);
 
         String[] splittedArray = inputString.split(",");
         ArrayList<String> splittedList = new ArrayList<>(Arrays.asList(splittedArray));

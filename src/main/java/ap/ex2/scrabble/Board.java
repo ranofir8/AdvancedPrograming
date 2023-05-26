@@ -2,7 +2,10 @@ package ap.ex2.scrabble;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ap.ex2.scrabble.Word.PositionedTile;
 import ap.ex2.scrabble.Word.WordIterator;
@@ -15,6 +18,8 @@ public class Board {
 	public static final int CHECK_NOT_LEANS_ON_EXISTING_TILES = -3;
 	public static final int CHECK_NOT_MATCH_BOARD = -4;
 	public static final int CHECK_WORD_NOT_LEGAL = -5;
+
+
 
 	private static class Multiplier {
 		public final int multiplyWordBy;
@@ -47,6 +52,7 @@ public class Board {
 		this.mat = new Tile[Board.COL_NUM][Board.ROW_NUM];
 		this.isEmpty = true;
 		this.atDictionaryCheck = atDictionaryCheck;
+		this.notLegalWords = new ArrayList<>();
 	}
 
 	public void setDictioaryCheck(Function<String,Boolean> dictFunc) {
@@ -320,8 +326,8 @@ public class Board {
 		}
 		// the first word is the FULL w, check if it (and all of the other words) are legal
 		ArrayList<Word> newWords = this.getWords(filledWord);
-		boolean areAllLegal = newWords.stream().allMatch(w -> dictionaryLegal(w));
-		if (!areAllLegal)
+		this.notLegalWords = newWords.stream().map(w -> w.toString()).filter(w -> !dictionaryLegal(w)).collect(Collectors.toList());
+		if (notLegalWords.size() > 0)
 			return CHECK_WORD_NOT_LEGAL;
 		// calculate scores
 		int[] score = {0};
@@ -356,6 +362,10 @@ public class Board {
 	public static PositionedTile intToPositionedTile(int index, Tile t) {
 		int r = index / Board.ROW_NUM, c = index % Board.ROW_NUM;
 		return new PositionedTile(r, c, t);
+	}
+
+	public List<String> getNotLegalWords() {
+		return this.notLegalWords;
 	}
 }
 

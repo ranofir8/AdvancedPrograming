@@ -36,7 +36,7 @@ public class MyMainScreenModel extends MainScreenModel {
         } catch (Exception e) {
             // display to GUI "unable to establish connection, try again"
             setChanged();
-            notifyObservers(new String[]{"MSG", "Unable to establish connection: " + e.getMessage()});
+            notifyObservers(new String[]{"ERR", "Unable to establish connection: " + e.getMessage()});
         }
     }
 
