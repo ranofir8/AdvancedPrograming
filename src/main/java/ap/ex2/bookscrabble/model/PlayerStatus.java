@@ -1,28 +1,26 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
-import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 
-import javax.crypto.BadPaddingException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This class is used by the model in order to update for each player the data he knows (and present it in his view).
  */
 public class PlayerStatus {
-    public final String nickName;
+    private final ChangeBooleanProperty myTilesChangeEvent;
     public BooleanProperty isMyTurnProperty;
-    private StringProperty turnOfProperty;
-    private List<Tile> handTiles;
-    private HashMap<Integer, Tile> tilesInLimbo; // tiles that are not in the Board and not in Hand
+    private final StringProperty turnOfProperty;
+
+    public final String nickName;
+    private final List<Tile> handTiles;
+    private final HashMap<Integer, Tile> tilesInLimbo; // tiles that are not in the Board and not in Hand
 
     public PlayerStatus(String nickName) {
         this.handTiles = new ArrayList<>();
@@ -36,7 +34,10 @@ public class PlayerStatus {
             if (b1)
                 SoundManager.singleton.playSound(SoundManager.SOUND_YOUR_TURN);
         });
+        this.myTilesChangeEvent = new ChangeBooleanProperty();
     }
+
+
 
     public void updateTurnOf(String nickName) {
         this.turnOfProperty.set(nickName);
@@ -45,18 +46,22 @@ public class PlayerStatus {
     // when the player gets a new tile
     public void addTile(Tile t){
         this.handTiles.add(t);
+        this.myTilesChangeEvent.alertChanged();
     }
 
     // if the tiles are good, remove them from hand
     public void removeTilesInLimbo() {
         this.tilesInLimbo.clear();
+        this.myTilesChangeEvent.alertChanged();
     }
 
     // if the tiles are not good, return them to the hand
     public void putBackTilesFromLimbo() {
         // restore them into hand
         this.tilesInLimbo.forEach((integer, tile) -> this.handTiles.add(tile));
+        // skip SOUND of got tiles b.c a new tile will be added shortly (skipped turn)
         this.tilesInLimbo.clear();
+        this.myTilesChangeEvent.alertChanged();
     }
 
     /**
@@ -67,11 +72,13 @@ public class PlayerStatus {
      */
     public void moveHandToLimbo(int tileIndex, int row, int col) {
         this.tilesInLimbo.put(Board.positionToInt(row, col), this.handTiles.remove(tileIndex));
+        this.myTilesChangeEvent.alertChanged();
     }
 
     // moves tile from Limbo to Hand
     public void moveLimboToHand(int indexFromLimbo) {
         this.handTiles.add(this.tilesInLimbo.remove(indexFromLimbo));
+        this.myTilesChangeEvent.alertChanged();
     }
 
     public Word limboToWord(Tile.Bag bg) {
@@ -93,7 +100,7 @@ public class PlayerStatus {
 
         // check if all tiles form a straight line
         if(columnBin.keySet().size() == 1 && rowBin.keySet().size() == 1) { //only one tile was added
-            isVertical = true;
+            isVertical = true;  // todo
         } else if (columnBin.size() == 1) {
             isVertical = true;
         } else if (rowBin.size() == 1) {
@@ -160,11 +167,17 @@ public class PlayerStatus {
         cbp.changeByProperty(this.turnOfProperty);
     }
 
+    public void bindToTilesChanged(ChangeBooleanProperty cbp) {
+        cbp.changeByProperty(this.myTilesChangeEvent);
+    }
+
     public int getSumOfTiles() {
         return this.handTiles.stream().mapToInt(tile ->tile.score).sum();
     }
 
     public void shuffleTiles() {
         Collections.shuffle(this.handTiles);
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_SHUFFLE, true);
+        this.myTilesChangeEvent.alertChanged();
     }
 }

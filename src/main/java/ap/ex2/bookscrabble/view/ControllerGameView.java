@@ -1,6 +1,6 @@
 package ap.ex2.bookscrabble.view;
 
-import ap.ex2.bookscrabble.Config;
+import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import ap.ex2.bookscrabble.model.GameInstance;
@@ -36,6 +36,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private final BooleanProperty isHostGame;
 
     private final IntegerProperty playersCount;
+    private final ChangeBooleanProperty vBoardTilesChangedEvent;
     private final BooleanProperty isPlayerTurn;
     private final BooleanProperty canSendWord;
 
@@ -53,7 +54,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private static final Color tempTextColor = Color.color(1, 170.0/255, 200.0/255);
 
     // board selections
-    private HashMap<Integer, Tile> tilesPlaced;
+    private HashMap<Integer, Tile> tilesPlacedLimbo;
     private PlayerStatus playerStatus;
     private int selectedBoardRow = -1;
     private int selectedBoardCol = -1;
@@ -70,13 +71,15 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Button startGameButton;
     @FXML
-    private Canvas TilesCanvas;
+    private Canvas tilesCanvas;
     @FXML
     private Canvas boardCanvas;
     @FXML
     Button skipTurnButton;
     @FXML
     Button sendWordButton;
+    @FXML
+    Button shuffleTiles;
     @FXML
     private Slider volumeSlider;
 
@@ -87,6 +90,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.playersCount = new SimpleIntegerProperty();
         this.isPlayerTurn = new SimpleBooleanProperty();
         this.canSendWord = new SimpleBooleanProperty();
+        this.vBoardTilesChangedEvent = new ChangeBooleanProperty();
 
         this.tilesInHand = new ArrayList<>();
 
@@ -94,9 +98,18 @@ public class ControllerGameView extends GameView implements Initializable {
             this.gameBoard = g1.getGameBoard();
             this.playerStatus = g1.getPlayerStatus();
             this.tilesInHand = this.playerStatus.getTilesInHand();
-            this.tilesPlaced = this.playerStatus.getTilesInLimbo();
+            this.tilesPlacedLimbo = this.playerStatus.getTilesInLimbo();
 
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
+        });
+        this.vBoardTilesChangedEvent.addListener((observableValue, aBoolean, t1) -> {
+            Platform.runLater(() -> {
+                this.drawCanvases();
+                this.shuffleTiles.disableProperty().set(this.tilesInHand == null || this.tilesInHand.isEmpty());
+                this.canSendWord.set(this.tilesPlacedLimbo != null && !this.tilesPlacedLimbo.isEmpty());
+            });
+
+            System.out.println("[vBoardTilesChangedEvent]");
         });
     }
 
@@ -121,6 +134,10 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.sendWordButton.disableProperty().bind(this.canSendWord.not());
         this.skipTurnButton.disableProperty().bind(this.isPlayerTurn.not());
+        this.isPlayerTurn.addListener((observableValue, aBoolean, t1) -> {
+            this.resetTileSelection();
+            this.resetBoardSelection();
+        });
 
         SoundManager.singleton.bindMasterVolumeTo(this.volumeSlider.valueProperty());
     }
@@ -139,13 +156,8 @@ public class ControllerGameView extends GameView implements Initializable {
             if (arg instanceof Command) {
                 Command cmd = (Command) arg;
                 switch (cmd) {
-                    case UPDATE_GAME_BOARD:
-                        this.drawGameBoard();
-                        this.drawTiles();
-                        break;
-                    case UPDATE_GAME_TILES:
-                        this.drawTiles();
-                        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
+                    case UPDATE_GAME_CANVASES:
+                        this.vBoardTilesChangedEvent.alertChanged();
                         break;
                     case PLAY_START_GAME_SOUND:
                         SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
@@ -162,11 +174,7 @@ public class ControllerGameView extends GameView implements Initializable {
                     case INVALID_WORD_PLACEMENT:
                         this.displayMSG(new guiMessage("Invalid tile placements", Alert.AlertType.ERROR));
                         break;
-                    case RESET_SELECTIONS:
-                        resetBoardSelection();
-                        resetTileSelection();
 
-                        break;
                     case DISPLAY_CHALLENGE_PROMPT:
                         Platform.runLater(this::displayChallengeAlert);
                         //this.displayChallengeAlert();
@@ -216,9 +224,8 @@ public class ControllerGameView extends GameView implements Initializable {
             // challenge
             this.myViewModel.requestChallenge();
         } else {
-            //cancel option
+            // cancel option
             this.skipTurnAction();
-            // skip turn todo
         }
     }
 
@@ -229,8 +236,8 @@ public class ControllerGameView extends GameView implements Initializable {
 //        this.tilesSP.minViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
 //        this.tilesSP.prefViewportWidthProperty().bind(this.TilesCanvas.widthProperty());
 
-        this.tilesSP.prefViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
-        this.tilesSP.minViewportHeightProperty().bind(this.TilesCanvas.heightProperty());
+        this.tilesSP.prefViewportHeightProperty().bind(this.tilesCanvas.heightProperty());
+        this.tilesSP.minViewportHeightProperty().bind(this.tilesCanvas.heightProperty());
 
         TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
@@ -255,7 +262,7 @@ public class ControllerGameView extends GameView implements Initializable {
         };
         timer.schedule(tt, 100L);
 
-        this.drawGameBoard();
+        //this.drawGameBoard(); todo tetst%
     }
 
     @FXML
@@ -276,11 +283,11 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.boardCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, this.boardCanvas.getWidth(), this.boardCanvas.getHeight());
 
-        Board b;
-        if (this.gameInstanceProperty.get() == null)
-            b = new Board();
-        else
+        Board b = null;
+        if (this.gameInstanceProperty.get() != null)
             b = this.gameInstanceProperty.get().getGameBoard();
+        if (b == null)
+            b = new Board(); // dummy board for drawing
 
         int w = (int) this.boardCanvas.getWidth(), h = (int) this.boardCanvas.getHeight();
         this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
@@ -326,13 +333,13 @@ public class ControllerGameView extends GameView implements Initializable {
                 gc.strokeRect(col * square, row * square, square, square);
 
 
-                if (this.tilesPlaced == null)
+                if (this.tilesPlacedLimbo == null)
                     continue;
                 // drawing text of tile
                 boolean isTempTile = false;
                 Tile t = b.getTileAt(row, col);     // tile on board
                 if (this.isSquareWithPlayerPlacement(row, col)) {
-                    t = this.tilesPlaced.get(Board.positionToInt(row, col));
+                    t = this.tilesPlacedLimbo.get(Board.positionToInt(row, col));
                     isTempTile = true;
                 }
 
@@ -340,7 +347,7 @@ public class ControllerGameView extends GameView implements Initializable {
                     gc.setFill(Color.BLACK); // Set the text color to black
                     if (isTempTile)
                         gc.setFill(tempTextColor);
-                    gc.fillText(String.valueOf(t.letter), (col + letterMargin) * square, (row + 1 - letterMargin) * square);
+                    gc.fillText(String.valueOf(t.letter), (col + letterMargin-0.1) * square, (row + 1 - letterMargin) * square);
                 }
             }
         }
@@ -378,12 +385,12 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     public void drawTiles() {
-        int square = (int) this.TilesCanvas.getHeight();
+        int square = (int) this.tilesCanvas.getHeight();
         this.squareOfTiles = square;
-        this.TilesCanvas.heightProperty().set(square+0.1);
-        GraphicsContext gc = this.TilesCanvas.getGraphicsContext2D();
+        this.tilesCanvas.heightProperty().set(square+0.1);
+        GraphicsContext gc = this.tilesCanvas.getGraphicsContext2D();
 
-        this.TilesCanvas.setWidth(square * (1 + this.tilePadding) * tilesInHand.size() - tilePadding*square*0.5); // adapt canvas width
+        this.tilesCanvas.setWidth(square * (1 + this.tilePadding) * tilesInHand.size() - tilePadding*square*0.5); // adapt canvas width
 
 
         int i = 0;
@@ -423,7 +430,7 @@ public class ControllerGameView extends GameView implements Initializable {
         Canvas clickedCanvas = (Canvas) event.getTarget();
         if (clickedCanvas == this.boardCanvas) {
             square = this.squareOfBoard;
-        } else if (clickedCanvas == this.TilesCanvas) {
+        } else if (clickedCanvas == this.tilesCanvas) {
             square = this.squareOfTiles * (1 + this.tilePadding);
         }
 
@@ -434,19 +441,16 @@ public class ControllerGameView extends GameView implements Initializable {
         if (clickedCanvas == this.boardCanvas) {
             if (this.isValidBoardPosition(row, col))
                 this.clickedOnBoard(row, col);
-        } else if (clickedCanvas == this.TilesCanvas) {
+        } else if (clickedCanvas == this.tilesCanvas) {
             if (this.isValidTilesPosition(row, col))
                 this.clickOnTiles(row, col);
         }
         this.drawCanvases();
-
-        this.canSendWord.set(!this.tilesPlaced.isEmpty());
     }
 
     @FXML
     public void shuffleTilesAction() {
         this.playerStatus.shuffleTiles();
-        drawTiles();
     }
 
     @FXML
@@ -489,7 +493,7 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     private boolean isSquareWithPlayerPlacement(int row, int col) {
-        return tilesPlaced.containsKey(Board.positionToInt(row, col));
+        return tilesPlacedLimbo.containsKey(Board.positionToInt(row, col));
     }
 
     void clickedOnBoard(int row, int col){
@@ -503,7 +507,6 @@ public class ControllerGameView extends GameView implements Initializable {
 
             if (this.isSquareWithPlayerPlacement(row, col)) {
                 this.playerStatus.moveLimboToHand(Board.positionToInt(row, col));
-
                 SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
             }
             resetBoardSelection();
@@ -536,17 +539,12 @@ public class ControllerGameView extends GameView implements Initializable {
         }
 
         SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED, true);
-
-        this.drawCanvases();
     }
 
     @FXML
     void sendWordAction() {
-
-        //validate the choices are construct a word.
-        //send to model. todo
+        // model -> chack logic and known word, update boards , change player turn... continue
         this.myViewModel.sendWord();
-        //model -> chack logic and known word, update boards , change player turn... continue
     }
 
     @FXML

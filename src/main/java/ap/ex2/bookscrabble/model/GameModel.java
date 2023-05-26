@@ -160,8 +160,9 @@ public abstract class GameModel extends Model {
     }
 
     protected void onBoardUpdateByPlayer(String wordPlaced) {
-        notifyViewModel(Command.UPDATE_GAME_BOARD);
+//        notifyViewModel(Command.UPDATE_GAME_BOARD);
         notifyViewModel(Command.SOUND_NEW_WORD);
+        this.getGameInstance().boardTilesChangeEvent.alertChanged();
     }
 
     /**
@@ -170,7 +171,7 @@ public abstract class GameModel extends Model {
     private void onBoardAssignmentAccepted() {
         //remove relevant tiles from hand
         this.getGameInstance().getPlayerStatus().removeTilesInLimbo();
-        this.notifyViewModel(Command.RESET_SELECTIONS);
+        // this.notifyViewModel(Command.RESET_SELECTIONS); // no need b.c turn of is happening next
         //put the tiles on the board - on turn of
     }
 
@@ -179,7 +180,7 @@ public abstract class GameModel extends Model {
             // take from Bag and add to hand, at the end update board in GUI
             this.getGameInstance().getPlayerStatus().addTile(this._onGotNewTilesHelper(tileLetter));
         }
-        notifyViewModel(Command.UPDATE_GAME_TILES);
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
     }
 
     protected abstract Tile _onGotNewTilesHelper(char tileLetter);
@@ -204,14 +205,11 @@ public abstract class GameModel extends Model {
     protected void onStartGame() {
         this.getGameInstance().onStartGame();
         notifyViewModel(Command.PLAY_START_GAME_SOUND);
-        notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
     public void onTurnOf(String turnOfNickname) {
         this.getGameInstance().setTurnOfNickname(turnOfNickname);
         this.getGameInstance().getPlayerStatus().putBackTilesFromLimbo();
-        this.notifyViewModel(Command.RESET_SELECTIONS);
-        this.notifyViewModel(Command.UPDATE_GAME_BOARD);
     }
 
     protected void onEndGameTileSumRequest() {

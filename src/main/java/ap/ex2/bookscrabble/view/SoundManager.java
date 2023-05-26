@@ -15,6 +15,7 @@ import java.util.List;
 public class SoundManager {
     public final static String SOUND_TILE_PRESSED = "tileSnap.wav";
     public final static String SOUND_TILE_ADD = "tileAdded.wav";
+    public final static String SOUND_TILE_SHUFFLE = "shuffleTiles.wav";
     public final static String SOUND_PLAYER_JOINED = "playerJoined.wav";
     public final static String SOUND_STARTING_GAME = "startGame3.wav";
     public final static String SOUND_OF_FAILURE = "soundOfFailure.mp3";
@@ -49,7 +50,7 @@ public class SoundManager {
 
     private Media loadSoundFile(String fileName) throws FileNotFoundException {
         try {
-            return new Media(R.getResource(fileName).toURI().toString());
+            return new Media(R.getResource("sounds/" + fileName).toURI().toString());
         } catch (URISyntaxException e) {
             throw new FileNotFoundException();
         }

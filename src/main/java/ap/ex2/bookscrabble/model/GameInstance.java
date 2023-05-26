@@ -18,13 +18,16 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
-    public ChangeBooleanProperty scoreBoardChangeEvent;
-    public ChangeBooleanProperty gameStatusChangeEvent;
+    public ChangeBooleanProperty scoreBoardChangeEvent;     // get notified when score board changes
+    public ChangeBooleanProperty gameStatusChangeEvent;     // get notified when game/turn status changes
+    public ChangeBooleanProperty boardTilesChangeEvent;     // get notified when tiles/board changes
+
     private final HashMap<String, Integer> scoreBoard;
-    public Board gameBoard;
-    private final PlayerStatus myPlayer;
-    private ObjectProperty<GameState> gameStateProperty;
+    private Board gameBoard;
     private Tile.Bag gameBag;
+
+    private final ObjectProperty<GameState> gameStateProperty;
+    private final PlayerStatus myPlayer;
     private String[] notLegalWords;
 
 
@@ -52,11 +55,14 @@ public class GameInstance {
     public GameInstance(String nickName) {
         this.myPlayer = new PlayerStatus(nickName);
         this.scoreBoard = new HashMap<>();
+        this.gameBoard = new Board();  // game not started yet
         this.scoreBoardChangeEvent = new ChangeBooleanProperty();
         this.gameStatusChangeEvent = new ChangeBooleanProperty();  // update on GameState and Turn change
         this.gameStateProperty = new SimpleObjectProperty<>();
+        this.boardTilesChangeEvent = new ChangeBooleanProperty();
 
         this.gameStatusChangeEvent.changeByProperty(this.gameStateProperty);
+        this.myPlayer.bindToTilesChanged(this.boardTilesChangeEvent);
         this.myPlayer.bindToPlayerTurn(this.gameStatusChangeEvent);
 
         this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS);
@@ -82,15 +88,6 @@ public class GameInstance {
         this.scoreBoard.remove(playerName);
 
         this.scoreBoardChangeEvent.alertChanged();
-    }
-
-    /**
-     *
-     * @param recentPlayerName the player who played last and (maybe) achieved points
-     * @param newWord the word he put
-     */
-    public void updateGameBoard(String recentPlayerName, Word newWord) {
-        this.updateScoreBoard(recentPlayerName, this.getGameBoard().tryPlaceWord(newWord));
     }
 
     public String getNickname() {return this.myPlayer.nickName;}
@@ -126,8 +123,8 @@ public class GameInstance {
         System.out.println("game started");
         this.gameStateProperty.set(GameState.PLAYING);
         this.gameBoard = new Board();
-
         this.gameBag = new Tile.Bag();
+        this.boardTilesChangeEvent.alertChanged();
     }
     public String getWinner() {
         return Collections.max(this.scoreBoard.entrySet(), Map.Entry.comparingByValue()).getKey();

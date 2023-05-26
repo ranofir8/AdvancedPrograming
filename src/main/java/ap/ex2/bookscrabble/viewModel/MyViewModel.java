@@ -6,7 +6,6 @@ import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
 import ap.ex2.bookscrabble.view.PlayerRowView;
-import ap.ex2.bookscrabble.view.SoundManager;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -137,7 +136,12 @@ public class MyViewModel extends ViewModel {
                 .addListener((observableValue, oldVal, newVal) -> {
                     this.updatePlayerListGUI();
                 });
+        gm.getGameInstance().boardTilesChangeEvent.addListener((observableValue, aBoolean, t1) -> {
+            setChanged();
+            notifyObservers(Command.UPDATE_GAME_CANVASES);
+        });
         this.gameInstanceProperty.bind(gm.gameInstanceProperty);
+
 
         if (gm != null)
             gm.addObserver(this);

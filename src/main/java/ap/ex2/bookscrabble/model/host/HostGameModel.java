@@ -349,6 +349,8 @@ public class HostGameModel extends GameModel implements Observer {
             // next turn
             this.nextTurn();
         }
+
+        this.getGameInstance().boardTilesChangeEvent.alertChanged();
     }
 
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
