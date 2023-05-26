@@ -166,4 +166,8 @@ public class PlayerStatus {
     public int getSumOfTiles() {
         return this.handTiles.stream().mapToInt(tile ->tile.score).sum();
     }
+
+    public void shuffleTiles() {
+        Collections.shuffle(this.handTiles);
+    }
 }

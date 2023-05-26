@@ -46,6 +46,8 @@ public abstract class GameModel extends Model {
         this.handleProtocolMsg(sentBy, msgProtocol, msgExtra);
     }
 
+
+
     protected boolean handleProtocolMsg(String msgSentBy, char msgProtocol, String msgExtra) {
         // common stuff for server & guest to do
         switch (msgProtocol) {

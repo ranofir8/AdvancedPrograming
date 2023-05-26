@@ -23,7 +23,7 @@ public class Dictionary {
 	public Dictionary(String...fileNames) {
 		this.existingWords = new CacheManager(400, new LRU());
 		this.nonExistingWords = new CacheManager(100, new LFU());
-		this.bloom = new BloomFilter(256*256, "MD5", "SHA1");
+		this.bloom = new BloomFilter((int) Math.pow(2, 28), "MD5", "SHA1"); // 270,000 = 2^18
 		this.fileNames = fileNames;
 
 		System.out.print("Indexing book(s) " + String.join(", ", fileNames) + "... \t");
@@ -61,9 +61,10 @@ public class Dictionary {
 	}
 
 	public boolean query(String word) {
+		word = word.toLowerCase();
+
 		if (this.existingWords.query(word))
 			return true;
-
 		if (this.nonExistingWords.query(word))
 			return false;
 
@@ -78,6 +79,8 @@ public class Dictionary {
 	}
 
 	public boolean challenge(String word) {
+		word = word.toLowerCase();
+
 		synchronized (this) {
 			this.parIO = new ParIOSearcher();
 		}

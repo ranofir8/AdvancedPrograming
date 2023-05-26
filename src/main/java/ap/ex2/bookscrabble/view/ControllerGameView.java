@@ -286,7 +286,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.squareOfBoard = (int)(Math.min(w, h) / (float)Math.max(Board.ROW_NUM, Board.COL_NUM));
         double square = this.squareOfBoard;
 
-        gc.setFont(Font.font("Arial", FontWeight.BOLD, square * 0.6)); // Adjust the font size as needed
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, square * 0.8)); // Adjust the font size as needed
         for (int row = 0; row < Board.ROW_NUM; row++) {
             for (int col = 0; col < Board.COL_NUM; col++) {
                 int m = b.getMultiplierAtInt(row, col);
@@ -444,7 +444,13 @@ public class ControllerGameView extends GameView implements Initializable {
     }
 
     @FXML
-    void ShowInstructions() {
+    public void shuffleTilesAction() {
+        this.playerStatus.shuffleTiles();
+        drawTiles();
+    }
+
+    @FXML
+    private void ShowInstructions() {
         this.displayMSG(new guiMessage("Welcome again. You're probably familiar with the game rules but here's a" +
                 " quick reminder :)\n\n" +
         "The game is played in rounds of turns. After turn order is determined randomly, the game starts. During his" +
@@ -507,7 +513,7 @@ public class ControllerGameView extends GameView implements Initializable {
                 this.selectedBoardRow = row;
                 this.selectedBoardCol = col;
 
-                SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
+                SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED, true);
                 this.playerStatus.moveHandToLimbo(this.selectedTileIndex, row, col);
 
                 this.resetTileSelection();
@@ -529,7 +535,7 @@ public class ControllerGameView extends GameView implements Initializable {
             this.selectedTileIndex = col;
         }
 
-        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED);
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_PRESSED, true);
 
         this.drawCanvases();
     }

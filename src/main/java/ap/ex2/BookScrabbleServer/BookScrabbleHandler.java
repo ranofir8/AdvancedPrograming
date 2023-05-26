@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class BookScrabbleHandler implements SimpleClientHandler {
-    private static final boolean TESTING = true;
+    private static final boolean TESTING = false;
 
     private PrintWriter out;
     private BufferedReader in;
@@ -50,6 +50,7 @@ public class BookScrabbleHandler implements SimpleClientHandler {
                 answer = "invalid request";
                 break;
         }
+        System.out.println(inputString + "  -->  " + answer);
         this.out.println(answer);
         this.out.flush();
     }

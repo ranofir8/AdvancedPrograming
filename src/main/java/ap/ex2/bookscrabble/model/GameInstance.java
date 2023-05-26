@@ -95,7 +95,6 @@ public class GameInstance {
 
     public String getNickname() {return this.myPlayer.nickName;}
 
-    // todo maybe dont create a new list each time, but update existing one each time this.gameBoard changes?
     public List<PlayerRowView> getPlayerList() {
         return this.scoreBoard.entrySet().stream()
                 .map(stringIntegerEntry -> new PlayerRowView(

@@ -175,9 +175,7 @@ public class Board {
 	}
 
 	private boolean dictionaryLegal(String word) {
-		boolean r = this.atDictionaryCheck.apply(word);
-		System.out.println("got from server: " + r);
-		return r;
+		return this.atDictionaryCheck.apply(word);
 	}
 
 	// gets a word and returns all of the new words created on the board if that word will be placed

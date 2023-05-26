@@ -25,6 +25,7 @@ public class BloomFilter {
 	}
 	
 	public void add(String word) {
+		word = word.toLowerCase();
 		this.getSetBitsStream(word).forEach(bitIndex -> bitSet.set(bitIndex));
 	}
 	
@@ -53,5 +54,9 @@ public class BloomFilter {
 	@Override
 	public String toString() {
 		return IntStream.range(0, this.bitSet.length()).mapToObj(x -> bitSet.get(x)).map(b -> b ? "1" : "0").collect(Collectors.joining());
+	}
+
+	public int sum() {
+		return IntStream.range(0, this.bitSet.length()).mapToObj(x -> bitSet.get(x)).mapToInt(b -> b ? 1 : 0).sum();
 	}
 }

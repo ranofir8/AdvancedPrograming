@@ -17,6 +17,8 @@ public class IOSearcher implements FileSearcher {
 
 	@Override
 	public boolean search(String word, String... fileNames) {
+		word = word.toLowerCase();
+
 		for (String fileName : fileNames) {
 			FileReader fr = null;
 			BufferedReader br = null;
@@ -27,7 +29,7 @@ public class IOSearcher implements FileSearcher {
 				String line = null;
 				while ((line = br.readLine()) != null && !this.stop) {
 					// from: https://stackoverflow.com/questions/1128723
-					if (Arrays.stream(line.trim().split(" ")).anyMatch(word::equals))
+					if (Arrays.stream(line.trim().split(" ")).map(String::toLowerCase).anyMatch(word::equals))
 						return true; // the word was found
 					
 				}

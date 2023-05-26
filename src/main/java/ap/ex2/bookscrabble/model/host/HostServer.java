@@ -77,7 +77,7 @@ public class HostServer extends Observable implements Observer {
                 try {
                     Socket client = server.accept();
 
-                    MyClientHandler clientHandler = new MyClientHandler(client);  // todo on a new thread?
+                    MyClientHandler clientHandler = new MyClientHandler(client);
                     clientHandler.addObserver(this);  // listen to notifications from this client
                     clientHandler.startHandlingClient();
 

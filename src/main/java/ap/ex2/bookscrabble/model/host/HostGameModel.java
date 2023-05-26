@@ -162,7 +162,6 @@ public class HostGameModel extends GameModel implements Observer {
      * @return a string of the tiles
      */
     private String dealNTiles(int n) {
-        // todo what to do if the bank is empty? - end of game!
         return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand()).filter(Objects::nonNull)
                 .map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
     }
@@ -284,7 +283,7 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     private void onEndGameTileSumResponse(String player, int points) {
-        // update scoreboard todo
+        // update scoreboard
         if (points < 0) {
             // cheater!!! sum can't be negative
             points = Integer.MAX_VALUE;

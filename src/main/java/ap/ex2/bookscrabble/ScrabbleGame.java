@@ -1,6 +1,5 @@
 package ap.ex2.bookscrabble;
 
-import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.Model;
 import ap.ex2.bookscrabble.model.MyMainScreenModel;
@@ -13,16 +12,13 @@ import ap.ex2.bookscrabble.viewModel.ViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Optional;
 
 
-public class HelloApplication extends Application {
+public class ScrabbleGame extends Application {
     private View vH;
     private View vG;
     private ViewModel vm;
@@ -35,7 +31,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoaderH = new FXMLLoader(R.getResource(GameView.SCENE_HELLO_FXML));
         FXMLLoader fxmlLoaderG = new FXMLLoader(R.getResource(GameView.SCENE_GAME_FXML));
 
-        stage.getIcons().add(new Image(HelloApplication.class.getResourceAsStream("icon.png")));
+        stage.getIcons().add(new Image(ScrabbleGame.class.getResourceAsStream("icon.png")));
 
         Scene sceneH = new Scene(fxmlLoaderH.load(), 1200, 800);
         Scene sceneG = new Scene(fxmlLoaderG.load(), 1200, 800);

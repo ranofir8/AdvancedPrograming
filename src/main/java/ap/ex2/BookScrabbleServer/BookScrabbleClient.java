@@ -58,26 +58,4 @@ public class BookScrabbleClient {
             return false;
         }
     }
-
-
-    public static void main(String[] args) throws IOException {
-        int port = 6000;
-        BookScrabbleClient bsc = new BookScrabbleClient("127.0.0.1", port);
-
-//        boolean res = bsc.runClient("Q,magic254573");
-        boolean res = bsc.queryWord("magic");
-        System.out.println("server returned [q]: " + res);
-
-        boolean res2 = bsc.challengeWord("magic");
-        System.out.println("server returned [c]: " + res2);
-
-        boolean res3 = bsc.pingServer();
-        System.out.println("server returned [p]: " + res3);
-
-
-//      *     ******   *****   ***   *****
-//      *     *    *       *    *    *   *
-//           ***   *       *    *    *   *
-
-    }
 }
