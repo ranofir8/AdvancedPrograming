@@ -307,7 +307,7 @@ public class HostGameModel extends GameModel implements Observer {
 
         int scoreOfWord = this.getGameInstance().getGameBoard().tryPlaceWord(gottenWord);
         this.ignoreDictionary = false;
-        System.out.println("Score from host: "+ scoreOfWord);
+
         char protocolToSend = ' ';
         String extra = "";
         if (scoreOfWord < 0) {

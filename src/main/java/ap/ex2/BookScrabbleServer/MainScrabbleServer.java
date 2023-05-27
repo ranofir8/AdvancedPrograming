@@ -1,12 +1,14 @@
 package ap.ex2.BookScrabbleServer;
 
+import ap.ex2.bookscrabble.Config;
+
 import java.util.Scanner;
 
 import static ap.ex2.BookScrabbleServer.MainTrain.runClient;
 
 public class MainScrabbleServer {
     public static void main(String[] args) {
-        int port = 6000;
+        int port = Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY));
 
         GenericServer s = new GenericServer(port, new BookScrabbleHandler(), 1);
         System.out.println("Running BookScabbleServer on port " + port);

@@ -33,8 +33,8 @@ public class ScrabbleGame extends Application {
 
         stage.getIcons().add(new Image(ScrabbleGame.class.getResourceAsStream("icon.png")));
 
-        Scene sceneH = new Scene(fxmlLoaderH.load(), 1200, 800);
-        Scene sceneG = new Scene(fxmlLoaderG.load(), 1200, 800);
+        Scene sceneH = new Scene(fxmlLoaderH.load(), 900, 800);
+        Scene sceneG = new Scene(fxmlLoaderG.load(), 800, 800);
 
 
         // first screen: choose which type of game

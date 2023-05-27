@@ -108,8 +108,6 @@ public class ControllerGameView extends GameView implements Initializable {
                 this.shuffleTiles.disableProperty().set(this.tilesInHand == null || this.tilesInHand.isEmpty());
                 this.canSendWord.set(this.tilesPlacedLimbo != null && !this.tilesPlacedLimbo.isEmpty());
             });
-
-            System.out.println("[vBoardTilesChangedEvent]");
         });
     }
 
@@ -168,8 +166,7 @@ public class ControllerGameView extends GameView implements Initializable {
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED, true);
                         break;
                     case SOUND_NEW_WORD:
-                        if (!this.isPlayerTurn.get())
-                            SoundManager.singleton.playSound(SoundManager.SOUND_NEW_WORD);
+                        SoundManager.singleton.playSound(SoundManager.SOUND_NEW_WORD);
                         break;
                     case UPDATE_SCORE_BOARD:
                         break;
@@ -393,6 +390,7 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.tilesCanvas.getGraphicsContext2D();
 
         this.tilesCanvas.setWidth(square * (1 + this.tilePadding) * tilesInHand.size() - tilePadding*square*0.5); // adapt canvas width
+        System.out.println(this.tilesSP.getWidth() > tilesCanvas.getWidth());
 
 
         int i = 0;
