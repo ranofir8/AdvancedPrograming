@@ -328,6 +328,7 @@ public class HostGameModel extends GameModel implements Observer {
                     protocolToSend = Protocol.ERROR_WORD_NOT_LEGAL;
                     List<String> illegals = this.getGameInstance().getGameBoard().getNotLegalWords();
                     extra = String.join(",", illegals);
+                    this.gameInstanceProperty.get().setNotLegalWords(illegals.toArray(new String[]{}));
                     break;
             }
             this.hostServer.sendMsgToPlayer(player, protocolToSend + extra);

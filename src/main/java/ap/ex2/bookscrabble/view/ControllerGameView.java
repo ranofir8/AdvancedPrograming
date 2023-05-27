@@ -389,8 +389,6 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.tilesCanvas.getGraphicsContext2D();
 
         this.tilesCanvas.setWidth(square * (1 + this.tilePadding) * tilesInHand.size() - tilePadding*square*0.5); // adapt canvas width
-        System.out.println(this.tilesSP.getWidth() > tilesCanvas.getWidth());
-
 
         int i = 0;
         for (Tile t : this.tilesInHand) {
