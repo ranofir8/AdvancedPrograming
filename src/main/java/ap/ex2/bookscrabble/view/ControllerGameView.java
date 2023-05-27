@@ -451,6 +451,7 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     public void shuffleTilesAction() {
         this.playerStatus.shuffleTiles();
+        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_SHUFFLE, true);
     }
 
     @FXML

@@ -186,9 +186,8 @@ public class Board {
 
 		// put FULL current word, if it is one letter, stop and return empty list
 		Word fullWord = this.getFullWord(w);
-		if (fullWord.getTiles().length < 2)
-			return l;
-		l.add(fullWord);
+		if (fullWord.getTiles().length >= 2)
+			l.add(fullWord);
 
 		// go over letters in word and put the new words
 		WordIterator it = w.getInnerWordIterator();

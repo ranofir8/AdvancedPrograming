@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class PlayerRowView {
+public class PlayerTableRow {
     public StringProperty nickname;
 
-    public PlayerRowView(String nickname, int score) {
+    public PlayerTableRow(String nickname, int score) {
         this.setNickname(nickname);
         this.setScore(score);
     }
