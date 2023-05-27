@@ -339,8 +339,10 @@ public class HostGameModel extends GameModel implements Observer {
             int tileAmount = gottenWord.tileAmount();
             this.tilesOfPlayer.computeIfPresent(player, (s, integer) -> integer - tileAmount);
 
-            if (this.tilesOfPlayer.get(player) < GameModel.DRAW_START_AMOUNT) {
-                this.sendXTiles(player, tileAmount);
+            int tilesOfPlayer = this.tilesOfPlayer.get(player);
+            int tilesToGive = GameModel.DRAW_START_AMOUNT - tilesOfPlayer;
+            if (tilesToGive > 0) {
+                this.sendXTiles(player, tilesToGive);
             }
 
             // update scores

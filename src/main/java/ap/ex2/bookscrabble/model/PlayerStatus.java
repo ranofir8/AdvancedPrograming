@@ -30,10 +30,6 @@ public class PlayerStatus {
         this.turnOfProperty = new SimpleStringProperty();
         this.isMyTurnProperty = new SimpleBooleanProperty();
         this.turnOfProperty.addListener((observableValue, s0, s1) -> this.isMyTurnProperty.set(s1.equals(this.nickName)));
-        this.isMyTurnProperty.addListener((observableValue, b0, b1) -> {
-            if (b1)
-                SoundManager.singleton.playSound(SoundManager.SOUND_YOUR_TURN);
-        });
         this.myTilesChangeEvent = new ChangeBooleanProperty();
     }
 
@@ -177,7 +173,6 @@ public class PlayerStatus {
 
     public void shuffleTiles() {
         Collections.shuffle(this.handTiles);
-        SoundManager.singleton.playSound(SoundManager.SOUND_TILE_SHUFFLE, true);
         this.myTilesChangeEvent.alertChanged();
     }
 }

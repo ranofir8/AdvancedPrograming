@@ -1,8 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
 import ap.ex2.bookscrabble.common.ChangeBooleanProperty;
-import ap.ex2.bookscrabble.view.GameView;
-import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
@@ -92,9 +91,9 @@ public class GameInstance {
 
     public String getNickname() {return this.myPlayer.nickName;}
 
-    public List<PlayerRowView> getPlayerList() {
+    public List<PlayerTableRow> getPlayerList() {
         return this.scoreBoard.entrySet().stream()
-                .map(stringIntegerEntry -> new PlayerRowView(
+                .map(stringIntegerEntry -> new PlayerTableRow(
                         stringIntegerEntry.getKey() + (stringIntegerEntry.getKey().equals(myPlayer.nickName) ? " (You)" : ""),
                         stringIntegerEntry.getValue()))
                 .collect(Collectors.toList());

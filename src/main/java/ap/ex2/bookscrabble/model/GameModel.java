@@ -3,7 +3,7 @@ package ap.ex2.bookscrabble.model;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
-import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.bookscrabble.view.SoundManager;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
@@ -188,7 +188,7 @@ public abstract class GameModel extends Model {
 
 
 
-    public List<PlayerRowView> getPlayerList() {
+    public List<PlayerTableRow> getPlayerList() {
         return this.getGameInstance().getPlayerList();
     }
 

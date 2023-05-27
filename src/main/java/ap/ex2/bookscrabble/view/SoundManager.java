@@ -111,7 +111,4 @@ public class SoundManager {
         this.masterVolume.bind(dp);
     }
 
-    public static void main(String[] args) {
-
-    }
 }

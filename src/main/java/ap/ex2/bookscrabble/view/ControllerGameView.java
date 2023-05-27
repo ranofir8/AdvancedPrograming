@@ -65,7 +65,7 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Label gameStatusLabel;
     @FXML
-    private TableView<PlayerRowView> scoreBoard;
+    private TableView<PlayerTableRow> scoreBoard;
     @FXML
     private ScrollPane tilesSP;
     @FXML
@@ -134,9 +134,11 @@ public class ControllerGameView extends GameView implements Initializable {
 
         this.sendWordButton.disableProperty().bind(this.canSendWord.not());
         this.skipTurnButton.disableProperty().bind(this.isPlayerTurn.not());
-        this.isPlayerTurn.addListener((observableValue, aBoolean, t1) -> {
+        this.isPlayerTurn.addListener((observableValue, b0, b1) -> {
             this.resetTileSelection();
             this.resetBoardSelection();
+            if (b1)
+                SoundManager.singleton.playSound(SoundManager.SOUND_YOUR_TURN);
         });
 
         SoundManager.singleton.bindMasterVolumeTo(this.volumeSlider.valueProperty());
@@ -239,9 +241,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.tilesSP.prefViewportHeightProperty().bind(this.tilesCanvas.heightProperty());
         this.tilesSP.minViewportHeightProperty().bind(this.tilesCanvas.heightProperty());
 
-        TableColumn<PlayerRowView, String> nicknameCol = new TableColumn<PlayerRowView,String>("Nickname");
+        TableColumn<PlayerTableRow, String> nicknameCol = new TableColumn<PlayerTableRow,String>("Nickname");
         nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
-        TableColumn<PlayerRowView, String> scoreCol = new TableColumn<PlayerRowView,String>("Score");
+        TableColumn<PlayerTableRow, String> scoreCol = new TableColumn<PlayerTableRow,String>("Score");
         scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
 
         nicknameCol.editableProperty().set(false);

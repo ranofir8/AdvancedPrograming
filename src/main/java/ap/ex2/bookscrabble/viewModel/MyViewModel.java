@@ -5,7 +5,7 @@ import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MainScreenModel;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
-import ap.ex2.bookscrabble.view.PlayerRowView;
+import ap.ex2.bookscrabble.view.PlayerTableRow;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -29,7 +29,7 @@ public class MyViewModel extends ViewModel {
     public StringProperty gameStatusStringProperty;
 
     public StringProperty resultHostPort;
-    public ObjectProperty<ObservableList<PlayerRowView>> playerScoreboard;
+    public ObjectProperty<ObservableList<PlayerTableRow>> playerScoreboard;
 
     public MyViewModel(MainScreenModel myModel) {
         this.myModel = myModel;
@@ -87,7 +87,7 @@ public class MyViewModel extends ViewModel {
 
     private void updatePlayerListGUI() {
         Platform.runLater(() -> {
-            List<PlayerRowView> l = myModel.getGameModel().getPlayerList();
+            List<PlayerTableRow> l = myModel.getGameModel().getPlayerList();
             this.playerScoreboard.get().setAll(l);
             this.countPlayers.set(l.size());
         });
