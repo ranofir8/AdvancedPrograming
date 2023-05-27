@@ -317,11 +317,10 @@ public class Board {
 		Word filledWord = this.fillEmptyWordPlaces(word);
 		// if the word is not board legal, return 0
 		int tryPlaceErr = this.boardLegalInt(filledWord);
-		System.out.println("trying to place " + word);
 		if (tryPlaceErr != 0) {
 			return tryPlaceErr;
 		}
-		// the first word is the FULL w, check if it (and all of the other words) are legal
+		// the first word is the FULL w, check if it (and all the other words) are legal
 		ArrayList<Word> newWords = this.getWords(filledWord);
 		this.notLegalWords = newWords.stream().map(w -> w.toString()).filter(w -> !dictionaryLegal(w)).collect(Collectors.toList());
 		if (notLegalWords.size() > 0)

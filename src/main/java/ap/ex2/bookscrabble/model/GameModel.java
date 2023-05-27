@@ -199,7 +199,6 @@ public abstract class GameModel extends Model {
 
     protected void onUpdatePlayerScore(int score, String player) {
         this.getGameInstance().updateScoreBoard(player, score);
-        System.out.println("updated score of " + player + " by " + score);
     }
 
     protected void onStartGame() {

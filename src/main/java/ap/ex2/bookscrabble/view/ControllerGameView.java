@@ -128,7 +128,6 @@ public class ControllerGameView extends GameView implements Initializable {
         this.playersCount.addListener((observableValue, n0, n1) -> this.startGameButton.setDisable(n1.intValue()< GameModel.MIN_PLAYERS));
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
-        this.myViewModel.gameInstanceProperty.addListener((observableValue, board, t1) -> System.out.println("gameInstance (Board) in V updated"));
 
         this.sendWordButton.disableProperty().bind(this.canSendWord.not());
         this.skipTurnButton.disableProperty().bind(this.isPlayerTurn.not());

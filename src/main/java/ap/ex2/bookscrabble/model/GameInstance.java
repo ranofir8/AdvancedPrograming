@@ -119,7 +119,6 @@ public class GameInstance {
     }
 
     public void onStartGame() {
-        System.out.println("game started");
         this.gameStateProperty.set(GameState.PLAYING);
         this.gameBoard = new Board();
         this.gameBag = new Tile.Bag();
