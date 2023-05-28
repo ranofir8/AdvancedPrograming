@@ -24,13 +24,15 @@ The Matrix
 Open JDK
 JavaFX JDK
 
-Follow the steps below to build the project:
+## Follow the steps below to build the project:
 
 Open your preferred IDE (Eclipse, IntelliJ, Visual Studio Code, etc.).
 Go to Files -> New -> Import Project.
 Import the project from this repository.
-To start the server, run src\main\java\ap\ex2\BookScrabbleServer\MainScrabbleServer.java.
-To start or join a game, run src\main\java\ap\ex2\bookscrabble\ScrabbleGame.java.
+To start the server, run 
+    src\main\java\ap\ex2\BookScrabbleServer\MainScrabbleServer.java.
+To start or join a game, run 
+    src\main\java\ap\ex2\bookscrabble\ScrabbleGame.java.
 
 # Watch the Demo:
 
