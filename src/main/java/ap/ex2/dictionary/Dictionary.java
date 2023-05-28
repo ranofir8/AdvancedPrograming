@@ -14,11 +14,11 @@ import java.net.URL;
 import java.util.Arrays;
 
 public class Dictionary {
-	private CacheManager existingWords;
-	private CacheManager nonExistingWords;
-	private BloomFilter bloom;
+	private final CacheManager existingWords;
+	private final CacheManager nonExistingWords;
+	private final BloomFilter bloom;
 	private volatile ParIOSearcher parIO;
-	private String[] fileNames;
+	private final String[] fileNames;
 
 	public Dictionary(String...fileNames) {
 		this.existingWords = new CacheManager(400, new LRU());

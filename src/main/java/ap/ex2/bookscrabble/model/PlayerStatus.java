@@ -96,7 +96,7 @@ public class PlayerStatus {
 
         // check if all tiles form a straight line
         if(columnBin.keySet().size() == 1 && rowBin.keySet().size() == 1) { //only one tile was added
-            isVertical = true;  // todo
+            isVertical = true;
         } else if (columnBin.size() == 1) {
             isVertical = true;
         } else if (rowBin.size() == 1) {
@@ -133,9 +133,7 @@ public class PlayerStatus {
         Tile[] ts = bg.getTileArray(wordString, false); //false = do not remove the tile
         int minRow = Collections.min(rowBin.keySet());
         int minCol = Collections.min(columnBin.keySet());
-        Word newWord = new Word(ts, minRow, minCol, isVertical);
-
-        return newWord;
+        return new Word(ts, minRow, minCol, isVertical);
     }
 
 

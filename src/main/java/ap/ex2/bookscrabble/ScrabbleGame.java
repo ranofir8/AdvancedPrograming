@@ -67,10 +67,6 @@ public class ScrabbleGame extends Application {
         stage.show();
     }
 
-    private void sendEndSignal() {
-        //TODO: send END signal to guests and end the game.
-    }
-
     public static void main(String[] args) {
         launch();
     }

@@ -5,7 +5,7 @@ import java.util.Queue;
 //213630171
 public class LRU implements CacheReplacementPolicy {
 	
-	private Queue<String> q;
+	private final Queue<String> q;
 	
 	public LRU() {
 		this.q = new LinkedList<>();

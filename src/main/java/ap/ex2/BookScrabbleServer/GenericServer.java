@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 public class GenericServer {
     private final int port;
     private final SimpleClientHandler ch;
-    private int threadsLimit;
+    private final int threadsLimit;
     private boolean stop;
     private int threadsAmount;
 

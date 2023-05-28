@@ -26,7 +26,7 @@ public class HostServer extends Observable implements Observer {
     private final int threadsLimit;
     private boolean stop;
 
-    private Thread.UncaughtExceptionHandler exceptionHandler;
+    private final Thread.UncaughtExceptionHandler exceptionHandler;
 
     public Set<String> getOnlinePlayers() {return this.playersSockets.keySet();}
 
@@ -152,7 +152,7 @@ public class HostServer extends Observable implements Observer {
 
                 // add new player to host's screen (locally)
                 setChanged();
-                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname}); // todo update when a player leaves!
+                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname});
 
                 // send new player's name to the other players
                 this.sendMsgToAll(Protocol.PLAYER_UPLOAD + chosenNickname);

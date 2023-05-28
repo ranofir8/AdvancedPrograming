@@ -58,9 +58,7 @@ public class Word {
 			return false;
 		if (!Arrays.equals(tiles, other.tiles))
 			return false;
-		if (vertical != other.vertical)
-			return false;
-		return true;
+		return vertical == other.vertical;
 	}
 
 	public String toNetworkString() {
@@ -117,7 +115,7 @@ public class Word {
 	}
 
 	public static abstract class WordIterator implements Iterator {
-		private Word word;
+		private final Word word;
 		protected int offsetX, offsetY;
 		protected int height, width;
 		protected boolean isDone;

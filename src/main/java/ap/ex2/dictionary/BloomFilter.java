@@ -10,9 +10,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BloomFilter {
-	private int setSize;
-	private BitSet bitSet;
-	private ArrayList<MessageDigest> hashDigests;
+	private final int setSize;
+	private final BitSet bitSet;
+	private final ArrayList<MessageDigest> hashDigests;
 	
 	public BloomFilter(int size, String...algs) {
 		this.setSize = size;

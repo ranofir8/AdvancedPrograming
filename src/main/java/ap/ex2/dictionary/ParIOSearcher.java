@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParIOSearcher implements FileSearcher {
-	private ExecutorService es;
-	private List<IOSearcher> searchers;
+	private final ExecutorService es;
+	private final List<IOSearcher> searchers;
 	
 	public ParIOSearcher() {
 		this.searchers = new LinkedList<IOSearcher>();

@@ -1,6 +1,6 @@
 package ap.ex2.dictionary;
 
 public interface FileSearcher {
-	public boolean search(String word, String...fileNames);	
-	public void stop();
+	boolean search(String word, String...fileNames);
+	void stop();
 }

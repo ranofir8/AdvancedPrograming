@@ -17,7 +17,7 @@ public abstract class GameModel extends Model {
     public static final int DRAW_START_AMOUNT = 7;
     public static final int MISS_CHALLENGE_PENALTY = -5;
     public static final int HIT_CHALLENGE_BONUS = 5;
-    public ObjectProperty<GameInstance> gameInstanceProperty;
+    public final ObjectProperty<GameInstance> gameInstanceProperty;
 
     public GameModel(String nickname) {
         this.gameInstanceProperty = new SimpleObjectProperty<>();
@@ -233,7 +233,4 @@ public abstract class GameModel extends Model {
         sendMsgToHost(String.valueOf(Protocol.SKIP_TURN_REQUEST));
     }
 
-//    public void stopGameOnCloseWindow() { // todo
-//        this.sendMsgToHost(Protocol.END_GAME + "");
-//    }
 }

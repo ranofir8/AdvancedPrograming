@@ -32,7 +32,7 @@ public class SoundManager {
 
     private final HashMap<String, MediaPlayer> loadedSounds;
     private final DoubleProperty masterVolume;
-    private List<MediaPlayer> playQueue;
+    private final List<MediaPlayer> playQueue;
 
     private boolean isQueuePlaying = false;
 

@@ -41,9 +41,9 @@ public class Board {
 
 	// multipliers[col][row], \/	->
 	private static final Multiplier[][] multipliers = Board.generateMultipliers();
-	private static Multiplier defaultMultiplier = new Multiplier();
+	private static final Multiplier defaultMultiplier = new Multiplier();
 
-	private Tile[][] mat;    // mat[col][row], \/	->
+	private final Tile[][] mat;    // mat[col][row], \/	->
 	private boolean isEmpty;
 	private Function<String, Boolean> atDictionaryCheck;
 	private List<String> notLegalWords;
@@ -83,7 +83,7 @@ public class Board {
 	}
 
 	public int getMultiplierAtInt(int row, int col) {
-		Multiplier mult = this.getMultiplierAt(row, col);
+		Multiplier mult = getMultiplierAt(row, col);
 		return mult.multiplyLetterBy + mult.multiplyWordBy * 10;
 	}
 

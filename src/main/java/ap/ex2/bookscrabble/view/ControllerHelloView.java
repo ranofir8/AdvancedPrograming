@@ -23,7 +23,7 @@ public class ControllerHelloView extends GameView implements Initializable {
 
 
     public BorderPane helloBG;
-    protected SimpleBooleanProperty isHostHello;
+    protected final SimpleBooleanProperty isHostHello;
 
     @FXML
     private TextField joinGamePortTF;
@@ -74,7 +74,7 @@ public class ControllerHelloView extends GameView implements Initializable {
             throw new RuntimeException(e);
         }*/
         try {
-            this.helloBG.setStyle("-fx-background-image: url("+R.getResource("bg.png").toURI().toString()+");" +
+            this.helloBG.setStyle("-fx-background-image: url("+ R.getResource("bg.png").toURI() +");" +
                     "-fx-background-size: cover;");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

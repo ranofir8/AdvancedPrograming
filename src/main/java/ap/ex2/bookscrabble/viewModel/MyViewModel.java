@@ -157,7 +157,6 @@ public class MyViewModel extends ViewModel {
 
     @Override
     public void sendWord() {
-        // todo - move limboTiles list to view, send it here
         this.myModel.getGameModel().requestSendWord();
     }
 

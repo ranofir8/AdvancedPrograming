@@ -7,7 +7,7 @@ public class CacheManager {
 	private final CacheReplacementPolicy crp;
 	private final int size;
 	
-	private HashSet<String> hashSet;
+	private final HashSet<String> hashSet;
 	
 	public CacheManager(int size, CacheReplacementPolicy crp) {
 		this.size = size;

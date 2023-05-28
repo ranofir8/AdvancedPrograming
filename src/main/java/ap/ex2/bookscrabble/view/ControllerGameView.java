@@ -254,9 +254,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.tilesSP.minViewportHeightProperty().bind(this.tilesCanvas.heightProperty());
 
         TableColumn<PlayerTableRow, String> nicknameCol = new TableColumn<PlayerTableRow,String>("Nickname");
-        nicknameCol.setCellValueFactory(new PropertyValueFactory("Nickname"));
+        nicknameCol.setCellValueFactory(new PropertyValueFactory<>("Nickname"));
         TableColumn<PlayerTableRow, String> scoreCol = new TableColumn<PlayerTableRow,String>("Score");
-        scoreCol.setCellValueFactory(new PropertyValueFactory("Score"));
+        scoreCol.setCellValueFactory(new PropertyValueFactory<>("Score"));
 
         nicknameCol.editableProperty().set(false);
         nicknameCol.setSortable(false);
@@ -275,8 +275,6 @@ public class ControllerGameView extends GameView implements Initializable {
             }
         };
         timer.schedule(tt, 100L);
-
-        //this.drawGameBoard(); todo tetst%
     }
 
     @FXML
@@ -498,12 +496,6 @@ public class ControllerGameView extends GameView implements Initializable {
     boolean isValidBoardChoice(int row, int col) {
         Tile t = this.gameInstanceProperty.get().getGameBoard().getTileAt(row, col);
         return t == null && !this.isSquareWithPlayerPlacement(row, col);
-
-        //move to view model class ?
-        //not hereeeee!!!!
-        // todo
-        //check if the position in legal from the board point of view
-        //check if this choice consists with the last ones.
     }
 
     private boolean isSquareWithPlayerPlacement(int row, int col) {

@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 // ************************
 public class DictionaryManager {
-    private static DictionaryManager staticDict = new DictionaryManager();
+    private static final DictionaryManager staticDict = new DictionaryManager();
     private static final String[] allFiles = "alice_in_wonderland.txt,Frank Herbert - Dune.txt,mobydick.txt,shakespeare.txt,The Matrix.txt,scrubble-sowpods.txt".split(","); // ,bible.txt
-    private HashMap<String, Dictionary> dictMap; //map between name of .txt file and a dictionary
+    private final HashMap<String, Dictionary> dictMap; //map between name of .txt file and a dictionary
 
     private DictionaryManager() {
         this.dictMap = new HashMap<>();

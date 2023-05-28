@@ -22,8 +22,8 @@ public class LFU implements CacheReplacementPolicy {
 		}
 	}
 	
-	private PriorityQueue<ItemLFU<String>> q;
-	private HashMap<String, ItemLFU<String>> map;
+	private final PriorityQueue<ItemLFU<String>> q;
+	private final HashMap<String, ItemLFU<String>> map;
 	
 	public LFU() {
 		this.q = new PriorityQueue<>((ItemLFU<String> arg0, ItemLFU<String> arg1) -> arg0.getPriority() - arg1.getPriority());

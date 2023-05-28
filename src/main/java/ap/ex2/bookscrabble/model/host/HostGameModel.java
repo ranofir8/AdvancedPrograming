@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class HostGameModel extends GameModel implements Observer {
-    private BookScrabbleClient myBookScrabbleClient; //for Client
-    private int hostPort;
+    private final BookScrabbleClient myBookScrabbleClient; //for Client
+    private final int hostPort;
     private HostServer hostServer;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
     private volatile boolean ignoreDictionary;
-    private HashMap<String, Integer> tilesOfPlayer;
+    private final HashMap<String, Integer> tilesOfPlayer;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order

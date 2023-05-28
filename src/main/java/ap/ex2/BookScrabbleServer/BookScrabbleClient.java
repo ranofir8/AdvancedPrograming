@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class BookScrabbleClient {
-    private String ip;
-    private int port;
+    private final String ip;
+    private final int port;
     private BufferedReader inFromClient;
     private PrintWriter outToClient;
     private Socket mySocket;

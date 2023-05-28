@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.util.Observable;
 
 public class MyClientHandler extends Observable implements SocketClientHandler {
-    private Socket mySocket;
+    private final Socket mySocket;
     private BufferedReader inFromClient;
     private PrintWriter outToClient;
     private volatile boolean isStop;
@@ -35,7 +35,6 @@ public class MyClientHandler extends Observable implements SocketClientHandler {
             while (!isStop) {
                 try {
                     String msgFromClient = inFromClient.readLine();
-                    // todo what if client disconnects?
                     setChanged();
                     notifyObservers(msgFromClient);
 

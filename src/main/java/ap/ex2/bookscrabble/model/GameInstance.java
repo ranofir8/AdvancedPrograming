@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 All things related to the current running game
  */
 public class GameInstance {
-    public ChangeBooleanProperty scoreBoardChangeEvent;     // get notified when score board changes
-    public ChangeBooleanProperty gameStatusChangeEvent;     // get notified when game/turn status changes
-    public ChangeBooleanProperty boardTilesChangeEvent;     // get notified when tiles/board changes
+    public final ChangeBooleanProperty scoreBoardChangeEvent;     // get notified when score board changes
+    public final ChangeBooleanProperty gameStatusChangeEvent;     // get notified when game/turn status changes
+    public final ChangeBooleanProperty boardTilesChangeEvent;     // get notified when tiles/board changes
 
     private final HashMap<String, Integer> scoreBoard;
     private Board gameBoard;
