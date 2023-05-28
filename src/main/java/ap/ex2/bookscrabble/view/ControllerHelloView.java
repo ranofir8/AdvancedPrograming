@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.view;
 
 import ap.ex2.bookscrabble.Config;
+import ap.ex2.bookscrabble.R;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.guiMessage;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -8,8 +9,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -17,6 +22,7 @@ import java.util.ResourceBundle;
 public class ControllerHelloView extends GameView implements Initializable {
 
 
+    public BorderPane helloBG;
     protected SimpleBooleanProperty isHostHello;
 
     @FXML
@@ -34,7 +40,9 @@ public class ControllerHelloView extends GameView implements Initializable {
     private Button hostGameButton;
 
     public ControllerHelloView() {
+
         this.isHostHello = new SimpleBooleanProperty();
+
     }
 
     public void initSceneBind() {
@@ -60,6 +68,18 @@ public class ControllerHelloView extends GameView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+       /*try {
+            this.helloBG.setCenter(new ImageView(new Image(R.getResource("bg.png").toURI().toString())));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }*/
+        try {
+            this.helloBG.setStyle("-fx-background-image: url("+R.getResource("bg.png").toURI().toString()+");" +
+                    "-fx-background-size: cover;");
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
         String defaultGuestIP = Config.getInstance().get(Config.DEFAULT_GUEST_IP_KEY);
         String defaultGuestPort = Config.getInstance().get(Config.DEFAULT_GUEST_PORT_KEY);
 

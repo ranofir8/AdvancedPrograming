@@ -10,23 +10,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
+<BorderPane fx:id="helloBG" prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
     <top>
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
     <center>
         <VBox alignment="CENTER" prefHeight="792.0" prefWidth="898.0" BorderPane.alignment="CENTER">
             <children>
-                <Label alignment="CENTER" text="Welcome to Book Scrabble!! " textAlignment="CENTER" textFill="#4eb9c3">
+                <Label alignment="CENTER" style="-fx-background-color: #ffffff80;" text="Welcome to Book Scrabble!! " textAlignment="CENTER" textFill="#4eb9c3">
                     <font>
                         <Font size="50.0" />
                     </font></Label>
-                <Label alignment="CENTER" prefHeight="69.0" prefWidth="497.0" text="Have Fun :)" textAlignment="CENTER" textFill="#314294">
+                <Label alignment="CENTER" style="-fx-background-color: #ffffff80;" text="Have Fun :)" textAlignment="CENTER" textFill="#314294">
                     <font>
                         <Font size="44.0" />
                     </font>
                 </Label>
-                <Label prefHeight="36.0" prefWidth="292.0" text="Ofir Yehezkel, Moriya Weisman, Gilad Savoray, Ran Ofir" />
+                <Label style="-fx-background-color: #ffffff80;" text="Ofir Yehezkel, Moriya Weisman, Gilad Savoray, Ran Ofir" />
             <HBox alignment="CENTER" prefHeight="71.0" prefWidth="910.0">
                <children>
                   <TextField fx:id="nicknameTF" prefHeight="25.0" prefWidth="155.0" promptText="Nickname">
