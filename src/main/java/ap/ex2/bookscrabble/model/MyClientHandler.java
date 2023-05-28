@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Observable;
 
 public class MyClientHandler extends Observable implements SocketClientHandler {
@@ -12,6 +13,8 @@ public class MyClientHandler extends Observable implements SocketClientHandler {
     private BufferedReader inFromClient;
     private PrintWriter outToClient;
     private volatile boolean isStop;
+
+    public static final int CLIENT_CONNECTION_CLOSED = 10;
 
     public MyClientHandler(Socket clientSocket) {
         this.mySocket = clientSocket;
@@ -36,6 +39,11 @@ public class MyClientHandler extends Observable implements SocketClientHandler {
                     setChanged();
                     notifyObservers(msgFromClient);
 
+                } catch (SocketException e) {
+                    setChanged();
+                    notifyObservers(CLIENT_CONNECTION_CLOSED);
+                    System.out.println("client has left! closing this connection...");
+                    close();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -53,7 +61,7 @@ public class MyClientHandler extends Observable implements SocketClientHandler {
 
     @Override
     public void close() {
-        System.out.println("closed client handler");
+        System.out.println("Closed client handler");
         this.isStop = true;
         this.outToClient.close();
         try {

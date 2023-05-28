@@ -60,7 +60,7 @@ public abstract class GameModel extends Model {
                 break;
 
             case Protocol.GAME_CRASH_ERROR:
-                this.onGameCrash();
+                this.onGameCrash(msgExtra);
                 break;
 
             case Protocol.SEND_NEW_TILES:
@@ -126,8 +126,10 @@ public abstract class GameModel extends Model {
         return true;
     }
 
-    private void onGameCrash() {
-        //todo
+    protected void onGameCrash(String player) {
+        notifyViewModel(new String[]{"CRASH", "The game was ended because " + player + " left the game unexpectedly."});
+        System.out.println("Crash error! closing connection...");
+        this.closeConnection();
     }
 
     private void onGameWinner() {

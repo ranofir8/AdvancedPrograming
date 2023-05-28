@@ -183,8 +183,24 @@ public class ControllerGameView extends GameView implements Initializable {
                         Platform.runLater(this::displayWinner);
                         break;
                 }
+            } else if (arg instanceof String[]) {
+                String[] args = (String[]) arg;
+                if (args[0].equals("CRASH"))
+                    this.displayCrash(args[1]);
             }
         }
+    }
+
+    private void displayCrash(String msg) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            SoundManager.singleton.playSound(SoundManager.SOUND_OF_FAILURE);
+            alert.setTitle("Game crash");
+            alert.setHeaderText("Oops!");
+            alert.setContentText(msg);
+            alert.showAndWait();
+            exit(1);
+        });
     }
 
     private void displayWinner() {

@@ -190,18 +190,30 @@ public class HostGameModel extends GameModel implements Observer {
                 case HostServer.SOCKET_MSG_NOTIFICATION:
                     this.onRecvMessage(args[1], args[2]);
                     break;
+
+                case HostServer.CLIENT_SOCKET_ERROR_NOTIFICATION:
+                    this.onClientClosedConnection(args[1]);
+                    break;
+
                 case HostServer.HOST_LOOPBACK_MSG_NOTIFICATION:
                     this.onRecvMessage(null, args[1]);
                     break;
+
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
                     //controllerGameView?
                     this.onNewPlayer(args[1]);
                     break;
+
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
                     this.getGameInstance().removeScoreBoardPlayer(args[1]);
                     break;
             }
         }
+    }
+
+    private void onClientClosedConnection(String playerName) {
+        this.hostServer.sendMsgToAll(Protocol.GAME_CRASH_ERROR + playerName);
+        this.closeConnection();
     }
 
     @Override
