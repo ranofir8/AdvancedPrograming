@@ -16,19 +16,21 @@ A desktop game application with two modes:
     Guest mode: Enables users to join an existing game using the host's properties (IP and port).
 
 
-The Books the server uses as dictionart:
+The Books the server uses as a dictionary:
 
 Alice in wonderland | Frank Herbert - Dune | Harry Potter
 
 mobydick | scrubble-sowpods | shakespeare | The Matrix
 
+
 # How To Build:
 
 ## Prerequisites:
 
-Open JDK
+Open JDK - version 11+
 
-JavaFX JDK
+JavaFX JDK - javafx.fxml, javafx.controls, javafx.media
+
 
 ## Follow the steps below to build the project:
 
