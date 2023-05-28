@@ -18,13 +18,9 @@ A desktop game application with two modes:
 
 The Books the server uses as dictionart:
 
-A lice in wonderland
-Frank Herbert - Dune
-Harry Potter
-mobydick
-scrubble-sowpods
-shakespeare
-The Matrix
+Alice in wonderland | Frank Herbert - Dune | Harry Potter
+
+mobydick | scrubble-sowpods | shakespeare | The Matrix
 
 # How To Build:
 
