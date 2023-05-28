@@ -1,7 +1,11 @@
 # Advanced Programing
 Bar-Ilan 83-677 Course, 2023
 
-This project is a full Book Scrabble game in a desktop application. The application is a JavaFX project and includes the following components:
+
+
+This project is a full Book Scrabble game in a desktop application. 
+
+The application is a JavaFX project and includes the following components:
 
 A server for Book queries.
 
@@ -48,6 +52,10 @@ To start or join a game, run
     
 
 # Watch the Demo:
+
+    https://www.youtube.com/watch?v=N-JbX_DCnog
+![image](https://github.com/ranofir8/AdvancedPrograming/assets/105561820/f314248e-49d7-4f0e-a151-1f793a1eb352)
+
 
 # The Team:
 
