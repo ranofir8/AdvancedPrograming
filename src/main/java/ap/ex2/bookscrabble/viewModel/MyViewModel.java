@@ -54,12 +54,20 @@ public class MyViewModel extends ViewModel {
         if (o == this.myModel || o == this.myModel.getGameModel()) {
             if (arg instanceof String[]) {  // short messages that are sent to the View
                 String[] args = (String[]) arg;
-                if (args[0].equals("MSG")) {
-                    setChanged();
-                    notifyObservers(new guiMessage(args[1], Alert.AlertType.INFORMATION));
-                } else if (args[0].equals("ERR")) {
-                    setChanged();
-                    notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
+
+                setChanged();
+                switch (args[0]) {
+                    case "MSG":
+                        notifyObservers(new guiMessage(args[1], Alert.AlertType.INFORMATION));
+                        break;
+
+                    case "ERR":
+                        notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
+                        break;
+
+                    case "CRASH":
+                        notifyObservers(args);
+                        break;
                 }
             } else if (arg instanceof Command) { // Command are directed to the view layer
                 setChanged();

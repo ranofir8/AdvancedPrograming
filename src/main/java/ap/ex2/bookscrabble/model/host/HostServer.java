@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 
 public class HostServer extends Observable implements Observer {
     public static final String SOCKET_MSG_NOTIFICATION = "socketMsg";  // used when a guest sends a message to itself
+    public static final String CLIENT_SOCKET_ERROR_NOTIFICATION = "clientClosedSocket";
     public static final String HOST_LOOPBACK_MSG_NOTIFICATION = "hostMsg";  // used when the host sends a message to itself
     public static final String PLAYER_JOINED_NOTIFICATION = "playerJoin";
     public static final String PLAYER_EXITED_NOTIFICATION = "playerExit";
@@ -29,7 +30,7 @@ public class HostServer extends Observable implements Observer {
 
     public Set<String> getOnlinePlayers() {return this.playersSockets.keySet();}
 
-    private HashMap<String, SocketClientHandler> playersSockets;
+    private final HashMap<String, SocketClientHandler> playersSockets;
 
     private ExecutorService es;
 
@@ -105,14 +106,26 @@ public class HostServer extends Observable implements Observer {
         if (nickname[0] != null) {
             // client socket is already recognized, just forward this message to the Host model
             setChanged();
-            notifyObservers(new String[]{HostServer.SOCKET_MSG_NOTIFICATION, nickname[0], (String) arg});
+            if (arg instanceof String) {
+                notifyObservers(new String[]{HostServer.SOCKET_MSG_NOTIFICATION, nickname[0], (String) arg});
+            } else if (arg instanceof Integer) {
+                int exitCode = (int) arg;
+                if (exitCode == MyClientHandler.CLIENT_CONNECTION_CLOSED) {
+                    synchronized (this.playersSockets) {
+                        this.playersSockets.remove(nickname[0]);
+                    }
+                    notifyObservers(new String[]{HostServer.CLIENT_SOCKET_ERROR_NOTIFICATION, nickname[0]});
+                    System.out.println("host server got client closed");
+                }
+            }
+
         } else {
             // client socket is new!
 
             String sentMsg = (String) arg;
 
             char msgProtocol = sentMsg.charAt(0);
-            String msgExtra = sentMsg.substring(1, sentMsg.length());
+            String msgExtra = sentMsg.substring(1);
 
             if (msgProtocol != Protocol.GUEST_LOGIN_REQUEST) {
                 // reject socket because he is not playing by the protocol
@@ -121,7 +134,12 @@ public class HostServer extends Observable implements Observer {
 
             String chosenNickname = msgExtra;
 
-            if(this.playersSockets.size() >= GameModel.MAX_PLAYERS) {
+            int currentPlayerAmount;
+            synchronized (this.playersSockets) {
+                currentPlayerAmount = this.playersSockets.size();
+            }
+
+            if (currentPlayerAmount >= GameModel.MAX_PLAYERS) {
                 client.sendMsg(Protocol.HOST_LOGIN_REJECT_FULL + "");
                 client.close();
             } else if (this.hasPlayerNamed(chosenNickname)) {
@@ -139,9 +157,13 @@ public class HostServer extends Observable implements Observer {
                 // send new player's name to the other players
                 this.sendMsgToAll(Protocol.PLAYER_UPLOAD + chosenNickname);
 
-                // add new player to the server
-                Set<String> oldPlayers = this.playersSockets.keySet();
-                this.playersSockets.put(chosenNickname, client);
+                Set<String> oldPlayers;
+                synchronized (this.playersSockets) {
+                    // add new player to the server
+                    oldPlayers = this.playersSockets.keySet();
+                    this.playersSockets.put(chosenNickname, client);
+                }
+
 
                 // pass on the old players and send their names to the new player (for updating his scoreboard)
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");

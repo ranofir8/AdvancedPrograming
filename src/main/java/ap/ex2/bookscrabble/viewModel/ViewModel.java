@@ -34,9 +34,8 @@ public abstract class ViewModel extends Observable implements Observer {
 
         this.stage.setOnCloseRequest(event -> {
             event.consume();
-
+            exit(0);
         });
-
     }
 
     public void showHelloScene() {

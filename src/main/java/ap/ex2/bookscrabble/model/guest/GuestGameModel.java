@@ -6,6 +6,7 @@ import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.bookscrabble.model.MyClientHandler;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
+import ap.ex2.bookscrabble.model.host.HostServer;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 
@@ -56,10 +57,22 @@ public class GuestGameModel extends GameModel implements Observer {
     @Override
     public void update(Observable o, Object arg) { //updates from myHandler, about incoming events from host
         if (o == this.myHandler) {
-            String sentMsg = (String) arg;
-            // nickname will always be null, because only the host can send message to guests
-            this.onRecvMessage(null, sentMsg);
+            if (arg instanceof String) {
+                String sentMsg = (String) arg;
+                // nickname will always be null, because only the host can send message to guests
+                this.onRecvMessage(null, sentMsg);
+            } else if (arg instanceof Integer) {
+                int exitCode = (int) arg;
+                if (exitCode == MyClientHandler.CLIENT_CONNECTION_CLOSED) {
+                    this.onHostCrash();
+                    System.out.println("Host closed connection.");
+                }
+            }
         }
+    }
+
+    private void onHostCrash() {
+        super.onGameCrash("the host");
     }
 
     @Override
