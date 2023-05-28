@@ -17,9 +17,9 @@ scrubble-sowpods
 shakespeare
 The Matrix
 
-## How To Build:
+# How To Build:
 
-# Prerequisites:
+## Prerequisites:
 
 Open JDK
 JavaFX JDK
