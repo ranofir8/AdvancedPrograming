@@ -1,9 +1,9 @@
 package ap.ex2.bookscrabble;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
+
+import static java.lang.System.exit;
 
 public class Config {
     static final String configsFilename = "configs.txt";
@@ -16,8 +16,10 @@ public class Config {
     public static final String DEFAULT_GUEST_IP_KEY = "default_guest_ip";
     public static final String DEFAULT_GUEST_PORT_KEY = "default_guest_port";
 
+    private static final String[] myKeys = {BOOK_SCRABBLE_IP_KEY, BOOK_SCRABBLE_PORT_KEY, HOST_PORT_KEY, DEFAULT_GUEST_IP_KEY, DEFAULT_GUEST_PORT_KEY};
+
     private Config() {
-        this.configs = new HashMap<String, String>();
+        this.configs = new HashMap<>();
 
         try {
             BufferedReader bf = new BufferedReader(new FileReader(Config.configsFilename));
@@ -26,6 +28,27 @@ public class Config {
 
             bf.close();
         } catch (IOException e) {
+            System.out.println("no config.txt file was found. An empty one is created. edit it to your liking.");
+            createConfigFile();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void createConfigFile() {
+        File configNew = new File(Config.configsFilename);
+        try {
+            if (configNew.createNewFile()) {
+                PrintWriter pw = new PrintWriter(configNew);
+                for (String key : Config.myKeys)
+                    pw.println(key + "," + "replace-me");
+                pw.close();
+                System.out.println("Created config file. edit it and open the game again.");
+                exit(0);
+            } else {
+                System.out.println("config file already exists.");
+            }
+        } catch (IOException e) {
+            System.err.println("can't create config file");
             throw new RuntimeException(e);
         }
     }
