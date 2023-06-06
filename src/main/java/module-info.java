@@ -1,7 +1,10 @@
 module ap.ex2.bookscrabble {
+    requires java.naming;
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
+    requires org.hibernate.orm.core;
+
             
                             
     opens ap.ex2.bookscrabble to javafx.fxml;
