@@ -5,10 +5,12 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.bookscrabble.view.SoundManager;
+import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+
 import java.util.List;
 
 public abstract class GameModel extends Model {
@@ -190,8 +192,8 @@ public abstract class GameModel extends Model {
 
 
 
-    public List<PlayerTableRow> getPlayerList() {
-        return this.getGameInstance().getPlayerList();
+    public List<PlayerTableRow> getPlayerScoreList() {
+        return this.getGameInstance().getPlayerScoreList();
     }
 
     protected void onNewPlayer(String newPlayerName) {

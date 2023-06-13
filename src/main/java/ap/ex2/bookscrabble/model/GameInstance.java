@@ -91,7 +91,7 @@ public class GameInstance {
 
     public String getNickname() {return this.myPlayer.nickName;}
 
-    public List<PlayerTableRow> getPlayerList() {
+    public List<PlayerTableRow> getPlayerScoreList() {
         return this.scoreBoard.entrySet().stream()
                 .map(stringIntegerEntry -> new PlayerTableRow(
                         stringIntegerEntry.getKey() + (stringIntegerEntry.getKey().equals(myPlayer.nickName) ? " (You)" : ""),

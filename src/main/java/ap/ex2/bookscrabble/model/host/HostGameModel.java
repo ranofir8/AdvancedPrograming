@@ -3,6 +3,8 @@ package ap.ex2.bookscrabble.model.host;
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.HttpClientManager;
+import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
@@ -12,6 +14,8 @@ import java.net.ConnectException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import com.google.gson.Gson;
+
 
 public class HostGameModel extends GameModel implements Observer {
     private final BookScrabbleClient myBookScrabbleClient; //for Client
@@ -20,6 +24,8 @@ public class HostGameModel extends GameModel implements Observer {
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
     private volatile boolean ignoreDictionary;
     private final HashMap<String, Integer> tilesOfPlayer;
+
+    private HttpClientManager http_client;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -38,6 +44,9 @@ public class HostGameModel extends GameModel implements Observer {
         this.tilesOfPlayer = new HashMap<>();
     }
 
+    public List<String> getPlayersTurn() {
+        return playersTurn;
+    }
 
     private void tryPingingBookServer() throws ConnectException {
         if (!this.myBookScrabbleClient.pingServer()) {
@@ -376,5 +385,61 @@ public class HostGameModel extends GameModel implements Observer {
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
+    }
+
+    public final void SaveGame() {
+
+        //check legality of the request???
+
+
+        // what we want to save:
+        // 1. game id
+        // 2. board
+        // 3. player list (in order)
+        // 4. score table
+
+        int game_id = 1;
+        Board board = this.getGameInstance().getGameBoard();
+        List<PlayerTableRow> scores = this.getPlayerScoreList();
+        List<String> players = this.getPlayersTurn();
+
+        //get scores from tha table in the same order of Players list
+        List<Integer> score_list = new ArrayList<>();
+        for (int i = 0 ; i < players.size() ; i++){
+            String name = players.get(i);
+            int score = -1000;
+            for(int j = 0 ; j < scores.size();j++) {
+                if (scores.get(j).nickname.equals(name)) {
+                    score = scores.get(j).getScore();
+                    break;
+                }//assuming PlayerScoreList and getPlayersTurn have the same names (not in order).
+            }
+            score_list.add(score);
+        }
+
+
+//      create json:
+        Gson gson = new Gson();
+        String jsonID = gson.toJson(game_id);
+        String jsonBoard = gson.toJson(board);
+        String jsonPlayers = gson.toJson(players);
+        String jsonScore = gson.toJson(score_list);
+
+        String combinedJson = "[" + jsonID + ", " + jsonBoard + ", " + jsonPlayers + ", " + jsonScore + "]";
+
+        boolean ret = http_client.sendGame(combinedJson);
+
+        if (ret == false)
+            System.out.println("error sending http req"); // handle error.
+
+        //else: succesfully saved. sendMsg?
+
+//            notifyViewModel(Command.INVALID_WORD_PLACEMENT);
+//        else
+//            sendMsgToHost(Protocol.BOARD_ASSIGNMENT_REQUEST + w.toNetworkString());
+    }
+
+    public final void RestoreGame() {
+
     }
 }

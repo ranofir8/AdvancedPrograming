@@ -95,7 +95,7 @@ public class MyViewModel extends ViewModel {
 
     private void updatePlayerListGUI() {
         Platform.runLater(() -> {
-            List<PlayerTableRow> l = myModel.getGameModel().getPlayerList();
+            List<PlayerTableRow> l = myModel.getGameModel().getPlayerScoreList();
             this.playerScoreboard.get().setAll(l);
             this.countPlayers.set(l.size());
         });
