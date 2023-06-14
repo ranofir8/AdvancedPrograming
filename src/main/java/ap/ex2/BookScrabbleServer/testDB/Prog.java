@@ -9,7 +9,7 @@ public class Prog {
         Session sesh = sF.openSession();
         UserMapper map = new UserMapper(sesh);
 
-        map.addUser(new User("Kermit", 20));
+        //map.addUser(new User("Kermit", 20));
         sesh.flush();
     }
 }

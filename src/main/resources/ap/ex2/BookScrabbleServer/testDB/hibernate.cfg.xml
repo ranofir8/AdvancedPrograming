@@ -25,6 +25,6 @@
                 org.hibernate.dialect.MySQLDialect
             </property>
             <!-- Mapping files -->
-            <mapping resource="User.hbm.xml" />
+            <mapping resource="ap/ex2/BookScrabbleServer/testDB/User.hbm.xml" />
         </session-factory>
     </hibernate-configuration>
