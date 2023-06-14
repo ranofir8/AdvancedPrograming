@@ -8,6 +8,7 @@ public class Prog {
         try {
             SessionFactory sF = new Configuration().configure().buildSessionFactory();
             Session sesh = sF.openSession();
+
             UserMapper map = new UserMapper(sesh);
 
             User k = new User();
