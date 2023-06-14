@@ -4,6 +4,7 @@ module ap.ex2.bookscrabble {
     requires javafx.fxml;
     requires javafx.media;
     requires org.hibernate.orm.core;
+    requires java.sql;
 
             
                             
