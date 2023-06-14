@@ -12,5 +12,5 @@ module ap.ex2.bookscrabble {
     opens ap.ex2.bookscrabble.view to javafx.fxml;
     exports ap.ex2.bookscrabble.common;
     opens ap.ex2.bookscrabble.common to javafx.fxml;
-    exports ap.ex2.BookScrabbleServer.testDB;
+    exports ap.ex2.bookscrabble.model.host;
 }

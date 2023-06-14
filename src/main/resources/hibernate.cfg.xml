@@ -22,6 +22,7 @@
                 org.hibernate.dialect.MySQLDialect
             </property>
             <!-- Mapping files -->
-            <mapping resource="User.hbm.xml" />
+            <mapping resource="GameSave.hbm.xml" />
+            <mapping resource="PlayerSave.hbm.xml" />
         </session-factory>
     </hibernate-configuration>
