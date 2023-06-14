@@ -32,10 +32,11 @@ public class GameSave {
         return listOfPlayers;
     }
 
-    public GameSave(int gameID, String hostName, Board gameBoard, List<PlayerSave> listOfPlayers) {
+//    public GameSave(int gameID, String hostName, Board gameBoard, List<PlayerSave> listOfPlayers) {
+    public GameSave(int gameID, String hostName, List<PlayerSave> listOfPlayers) {
         this.gameID = gameID;
         this.hostName = hostName;
-        this.gameBoard = gameBoard;
+//        this.gameBoard = gameBoard;
         this.listOfPlayers = listOfPlayers;
     }
 
