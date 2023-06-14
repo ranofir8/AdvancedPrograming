@@ -3,7 +3,6 @@ module ap.ex2.bookscrabble {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
-    requires org.hibernate.orm.core;
 
             
                             
