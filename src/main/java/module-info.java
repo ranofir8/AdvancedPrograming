@@ -5,8 +5,6 @@ module ap.ex2.bookscrabble {
     requires javafx.media;
     requires org.hibernate.orm.core;
     requires java.sql;
-
-            
                             
     opens ap.ex2.bookscrabble to javafx.fxml;
     exports ap.ex2.bookscrabble;
@@ -14,4 +12,5 @@ module ap.ex2.bookscrabble {
     opens ap.ex2.bookscrabble.view to javafx.fxml;
     exports ap.ex2.bookscrabble.common;
     opens ap.ex2.bookscrabble.common to javafx.fxml;
+    exports ap.ex2.BookScrabbleServer.testDB;
 }

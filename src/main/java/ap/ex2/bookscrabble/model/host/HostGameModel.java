@@ -21,6 +21,8 @@ public class HostGameModel extends GameModel implements Observer {
     private volatile boolean ignoreDictionary;
     private final HashMap<String, Integer> tilesOfPlayer;
 
+    private GameSave myGameSave;  // puts here data of the game
+
     /**
      *  puts in 'playersTurn' the names of the players in turn order
      */
@@ -181,6 +183,19 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.close();
     }
 
+    private void createGameSave() {
+        // todo - puts all things about the game in a new GameSave object
+
+    }
+
+    // sends data to all players about the new game, and continues the game
+    private void loadGameFromSave() {
+        // todo
+    }
+
+    // *****************************
+    //      Protocol handling
+    // *****************************
 
     @Override
     public void update(Observable o, Object arg) { //updates from hostServer, about incoming events from other clients
@@ -371,7 +386,6 @@ public class HostGameModel extends GameModel implements Observer {
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
     }
-
 
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
