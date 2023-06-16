@@ -1,9 +1,7 @@
 package ap.ex2.GameScrabbleServer;
 
-import ap.ex2.BookScrabbleServer.testDB.User;
 import ap.ex2.bookscrabble.model.host.GameSave;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 public class GameSaveMapper {
     private final Session sesh;

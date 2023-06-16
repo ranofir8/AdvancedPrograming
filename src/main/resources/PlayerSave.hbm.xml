@@ -4,11 +4,11 @@
         "http://hibernate.sourceforge.net/dtd/hibernate-mapping-3.0.dtd" >
 <hibernate-mapping>
     <class name="ap.ex2.bookscrabble.model.host.PlayerSave" table="PLAYERS">
-        <id name="playerId" type="java.lang.Long" column="PLAYER_id" >
+        <id name="playerId" type="java.lang.Long" column="player_id" >
             <generator class="increment" />
         </id>
-        <property name="playerName" type="java.lang.String" column="player_name" length="40" />
-        <property name="playerScore" type="java.lang.Integer" column="player_score" length="-1" />
-        <property name="playerTiles" type="java.lang.String" column="player_tiles" length="40" />
+        <property name="playerName" type="java.lang.String" column="name"/>
+        <property name="playerScore" type="java.lang.Integer" column="score" length="-1" />
+        <property name="playerTiles" type="java.lang.String" column="tiles"/>
     </class>
 </hibernate-mapping>
