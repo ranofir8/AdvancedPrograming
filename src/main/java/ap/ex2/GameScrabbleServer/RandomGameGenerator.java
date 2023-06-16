@@ -21,7 +21,7 @@ public class RandomGameGenerator implements org.hibernate.id.IdentifierGenerator
             int result;
             do {
                 randID = this.rand.nextInt(10000);
-                Query q = sesh.createQuery("FROM ap.ex2.GameScrabbleServer.Saves.GameSave E WHERE E.gameID = :randID");
+                @SuppressWarnings("JpaQlInspection") Query q = sesh.createQuery("FROM ap.ex2.GameScrabbleServer.Saves.GameSave E WHERE E.gameID = :randID");
                 q.setParameter("randID", randID);
 
                 result = q.list().size();
