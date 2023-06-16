@@ -1,6 +1,6 @@
 package ap.ex2.GameScrabbleServer;
 
-import ap.ex2.bookscrabble.model.host.GameSave;
+import ap.ex2.GameScrabbleServer.Saves.GameSave;
 
 public interface GameServer {
     // returns game ID after being saved

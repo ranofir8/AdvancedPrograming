@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/dtd/hibernate-mapping-3.0.dtd" >
 <hibernate-mapping>
-    <class name="ap.ex2.bookscrabble.model.host.PlayerSave" table="PLAYERS">
+    <class name="ap.ex2.GameScrabbleServer.Saves.PlayerSave" table="PLAYERS">
         <id name="playerId" type="java.lang.Long" column="player_id" >
             <generator class="increment" />
         </id>

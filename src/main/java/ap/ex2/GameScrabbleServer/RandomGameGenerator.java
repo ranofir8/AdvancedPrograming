@@ -1,13 +1,11 @@
 package ap.ex2.GameScrabbleServer;
 
-import ap.ex2.bookscrabble.model.host.GameSave;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 
 import java.io.Serializable;
 import java.util.Random;
-import java.util.List;
 
 public class RandomGameGenerator implements org.hibernate.id.IdentifierGenerator {
     private final Random rand;
@@ -23,7 +21,7 @@ public class RandomGameGenerator implements org.hibernate.id.IdentifierGenerator
             int result;
             do {
                 randID = this.rand.nextInt(10000);
-                Query q = sesh.createQuery("FROM ap.ex2.bookscrabble.model.host.GameSave E WHERE E.gameID = :randID");
+                Query q = sesh.createQuery("FROM ap.ex2.GameScrabbleServer.Saves.GameSave E WHERE E.gameID = :randID");
                 q.setParameter("randID", randID);
 
                 result = q.list().size();

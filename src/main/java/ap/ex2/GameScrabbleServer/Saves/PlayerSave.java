@@ -1,4 +1,4 @@
-package ap.ex2.bookscrabble.model.host;
+package ap.ex2.GameScrabbleServer.Saves;
 
 import ap.ex2.scrabble.Tile;
 

@@ -1,13 +1,10 @@
 package ap.ex2.GameScrabbleServer;
 
-import ap.ex2.bookscrabble.model.host.GameSave;
-import ap.ex2.bookscrabble.model.host.PlayerSave;
+import ap.ex2.GameScrabbleServer.Saves.GameSave;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScrabbleGameServer implements GameServer {
     private HTTPServerManager httpServerManager; // the server of the http. we get from it actions
@@ -19,10 +16,6 @@ public class ScrabbleGameServer implements GameServer {
         try {
             this.sesh = sF.openSession();
             this.map = new GameSaveMapper(sesh);
-
-
-
-
         } catch (org.hibernate.service.spi.ServiceException  e) {
             System.out.println("SQL server is not running.");
             e.printStackTrace();
@@ -31,23 +24,24 @@ public class ScrabbleGameServer implements GameServer {
 
     @Override
     public int saveNewGame(GameSave gs) {
-
         this.map.saveGame(gs);
 
-
-//            GameSave gs2 = map.getGameSave(1);
-//            PlayerSave emp = (PlayerSave) sesh.get(PlayerSave.class, new Long(2));
-
-
-        this.sesh.flush();
         return gs.getGameID();
     }
 
     // when a save HTTP request is coming, this method will be called
     @Override
     public GameSave loadExistingGame(int gameID, String hostName) throws GameNotFoundException, InvalidHostException {
-        // todo
-        return null;
+        GameSave gs = this.map.getGameSave(gameID);
+        if (gs == null)
+            throw new GameNotFoundException();
+        if (gs.getHostName().equals(hostName)) {
+            // remove game from tables
+            this.map.deleteGame(gs);
+            return gs;
+        } else {
+            throw new InvalidHostException();
+        }
     }
 
     public void finalize() {

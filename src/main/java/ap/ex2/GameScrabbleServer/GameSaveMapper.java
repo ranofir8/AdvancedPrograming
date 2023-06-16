@@ -1,7 +1,9 @@
 package ap.ex2.GameScrabbleServer;
 
-import ap.ex2.bookscrabble.model.host.GameSave;
+import ap.ex2.GameScrabbleServer.Saves.GameSave;
 import org.hibernate.Session;
+
+import java.util.ArrayList;
 
 public class GameSaveMapper {
     private final Session sesh;
@@ -21,10 +23,10 @@ public class GameSaveMapper {
 
     public void saveGame(GameSave gameSave){
         this.sesh.save(gameSave);
+        this.sesh.flush();
     }
-    public void deleteGame(int gameID) {
-//        Query q = this.sesh.createQuery("delete from game_save where id = :gameID");
-//        q.executeUpdate();
-        // todo
+    public void deleteGame(GameSave gameSave) {
+        this.sesh.delete(gameSave);
+        this.sesh.flush();
     }
 }
