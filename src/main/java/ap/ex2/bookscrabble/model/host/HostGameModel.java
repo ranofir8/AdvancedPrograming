@@ -54,9 +54,7 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     @Override
-    public void establishConnection() throws IOException {
-        System.out.println("HOST STARTED SERVER");
-
+    protected void establishConnection() throws Exception {
         this.tryPingingBookServer();
 
         // bind to host port
@@ -68,6 +66,7 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.setMyNickname(this.getGameInstance().getNickname());
 
         this.hostServer.start();
+        System.out.println("HOST STARTED SERVER");
     }
 
     @Override

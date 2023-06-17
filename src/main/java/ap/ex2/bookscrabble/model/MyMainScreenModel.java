@@ -6,11 +6,6 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.model.guest.GuestGameModel;
 import ap.ex2.bookscrabble.model.host.HostGameModel;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
 public class MyMainScreenModel extends MainScreenModel {
     @Override
     public void startHostGameModel(String nickname) {
@@ -18,13 +13,11 @@ public class MyMainScreenModel extends MainScreenModel {
                 Integer.parseInt(Config.getInstance().get(Config.HOST_PORT_KEY)),
                 Config.getInstance().get(Config.BOOK_SCRABBLE_IP_KEY),
                 Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY)));
-        this.afterStartingModel();
+        this.gameModel.establishConnectionWithCallbackWrapper(this::startingModelCallback);
     }
 
-    private void afterStartingModel() {
-        try {
-            this.gameModel.establishConnection();
-
+    private void startingModelCallback(Exception e) {
+        if (e == null) {
             if (this.gameModel instanceof HostGameModel) {
 
                 setChanged();
@@ -32,8 +25,9 @@ public class MyMainScreenModel extends MainScreenModel {
                 setChanged();
                 notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
             }
-
-        } catch (Exception e) {
+            System.out.println("NO callback error");
+        } else {
+            System.out.println("YES callback error");
             // display to GUI "unable to establish connection, try again"
             setChanged();
             notifyObservers(new String[]{"ERR", "Unable to establish connection: " + e.getMessage()});
@@ -43,7 +37,7 @@ public class MyMainScreenModel extends MainScreenModel {
     @Override
     public void startGuestGameModel(String nickname, String hostIPinput, int hostPortInput) {
         this.gameModel = new GuestGameModel(nickname, hostIPinput, hostPortInput);
-        this.afterStartingModel();
+        this.gameModel.establishConnectionWithCallbackWrapper(this::startingModelCallback);
     }
 
     public String getGameStatusText() {
