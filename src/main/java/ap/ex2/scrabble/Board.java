@@ -363,5 +363,19 @@ public class Board {
 	public List<String> getNotLegalWords() {
 		return this.notLegalWords;
 	}
+
+	public String summeryString() {
+		StringBuilder sb = new StringBuilder();
+		for (int row = 0; row < Board.ROW_NUM; row++) {
+			for (int col = 0; col < Board.COL_NUM; col++) {
+				Tile t = this.getTileAt(row, col);
+				if (t == null)
+					sb.append(' ');
+				else
+					sb.append(t.letter);
+			}
+		}
+		return sb.toString();
+	}
 }
 

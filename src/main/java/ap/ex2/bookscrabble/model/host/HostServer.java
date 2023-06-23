@@ -59,21 +59,22 @@ public class HostServer extends Observable implements Observer {
             sendMsgToPlayer(n, msgToSend);
     }
 
-    public void start() {
+    public void start() throws Exception {
         if (this.stop) {
             this.stop = false;
-            Thread t = new Thread(this::startServer);
+
+            ServerSocket server = new ServerSocket(this.hostPort);
+            server.setSoTimeout(1000); //1s
+
+            Thread t = new Thread(() -> startServer(server));
             t.setUncaughtExceptionHandler(this.exceptionHandler);
             t.start();
             this.es = Executors.newFixedThreadPool(this.threadsLimit);  // create new thread pool
         }
     }
 
-    private void startServer() {
+    private void startServer(ServerSocket server) {
         try {
-            ServerSocket server = new ServerSocket(this.hostPort);
-            server.setSoTimeout(1000); //1s
-
             while (!this.stop) {
                 try {
                     Socket client = server.accept();
@@ -86,7 +87,7 @@ public class HostServer extends Observable implements Observer {
             }
             server.close();  // closing server socket
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // pass on
         } finally {
             this.es.shutdown(); // close ThreadPool
         }

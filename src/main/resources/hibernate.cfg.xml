@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+    <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD
+3.0//EN" "http://hibernate.sourceforge.net/dtd/hibernate-configuration-3.0.dtd">
+
+    <hibernate-configuration>
+        <session-factory>
+            <property name="hibernate.connection.url">
+                jdbc:mysql://localhost:3306/scrabble_mysql
+            </property>
+            <property name="hibernate.connection.driver_class">
+                com.mysql.jdbc.Driver
+            </property>
+            <property name="hibernate.connection.username">javaUser</property>
+            <property name="hibernate.connection.password">eli</property>
+            <!-- Set AutoCommit to true -->
+            <property name="hibernate.connection.autocommit">
+                true
+            </property>
+            <property name="hibernate.allow_update_outside_transaction">true</property>
+            <!-- SQL Dialect to use. Dialects are database specific -->
+            <property name="hibernate.dialect">
+                org.hibernate.dialect.MySQLDialect
+            </property>
+            <!-- Mapping files -->
+            <mapping resource="GameSave.hbm.xml" />
+            <mapping resource="PlayerSave.hbm.xml" />
+        </session-factory>
+    </hibernate-configuration>

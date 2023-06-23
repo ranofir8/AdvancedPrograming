@@ -1,6 +1,7 @@
 package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
+import ap.ex2.GameScrabbleServer.Saves.GameSave;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
@@ -20,6 +21,8 @@ public class HostGameModel extends GameModel implements Observer {
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
     private volatile boolean ignoreDictionary;
     private final HashMap<String, Integer> tilesOfPlayer;
+
+    private GameSave myGameSave;  // puts here data of the game
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -51,9 +54,7 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     @Override
-    public void establishConnection() throws IOException {
-        System.out.println("HOST STARTED SERVER");
-
+    protected void establishConnection() throws Exception {
         this.tryPingingBookServer();
 
         // bind to host port
@@ -65,6 +66,7 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.setMyNickname(this.getGameInstance().getNickname());
 
         this.hostServer.start();
+        System.out.println("HOST STARTED SERVER");
     }
 
     @Override
@@ -181,6 +183,19 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.close();
     }
 
+    private void createGameSave() {
+        // todo - puts all things about the game in a new GameSave object
+
+    }
+
+    // sends data to all players about the new game, and continues the game
+    private void loadGameFromSave() {
+        // todo
+    }
+
+    // *****************************
+    //      Protocol handling
+    // *****************************
 
     @Override
     public void update(Observable o, Object arg) { //updates from hostServer, about incoming events from other clients
@@ -371,7 +386,6 @@ public class HostGameModel extends GameModel implements Observer {
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
     }
-
 
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {

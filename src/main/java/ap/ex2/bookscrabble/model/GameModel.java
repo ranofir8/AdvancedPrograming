@@ -9,7 +9,9 @@ import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class GameModel extends Model {
     public static final int MIN_PLAYERS = 2;
@@ -32,7 +34,15 @@ public abstract class GameModel extends Model {
 
     public abstract int getDisplayPort();
 
-    public abstract void establishConnection() throws Exception;
+    public void establishConnectionWithCallbackWrapper(Consumer<Exception> callback) {
+        try {
+            this.establishConnection();
+            callback.accept(null);  // connection was okay
+        } catch (Exception e) {
+            callback.accept(e);
+        }
+    }
+    protected abstract void establishConnection() throws Exception;
 
     protected abstract void closeConnection();
 
