@@ -16,7 +16,7 @@
 
 <!--Oh no :(-->
 
-<BorderPane prefHeight="661.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
+<BorderPane prefHeight="661.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerGameView">
     <top>
         <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" style="-fx-background-color: #ff93a0;" BorderPane.alignment="CENTER">
             <children>
@@ -43,6 +43,7 @@
                                 <Insets left="50.0" />
                             </HBox.margin>
                         </Button>
+                  <Button fx:id="saveGameButton" mnemonicParsing="false" onAction="#saveGameButtonAction" text="Save Game" />
                     </children>
                 </HBox>
             </children>

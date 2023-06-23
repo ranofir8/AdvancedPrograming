@@ -1,5 +1,6 @@
-book_scrabble_ip,replace-me
-book_scrabble_port,replace-me
-host_port,replace-me
-default_guest_ip,replace-me
-default_guest_port,replace-me
+book_scrabble_ip,127.0.0.1
+book_scrabble_port,6000
+host_port,18020
+default_guest_ip2,home.savoray.com
+default_guest_ip,localhost
+default_guest_port,18020
