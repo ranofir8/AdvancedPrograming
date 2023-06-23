@@ -14,7 +14,7 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
-    <center>
+   <bottom>
         <VBox alignment="CENTER" prefHeight="792.0" prefWidth="898.0" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" style="-fx-background-color: #ffffff80;" text="Welcome to Book Scrabble!! " textAlignment="CENTER" textFill="#4eb9c3">
@@ -75,6 +75,9 @@
                             </HBox.margin>
                         </VBox>
                      </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
                   </VBox>
                         <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0">
                             <children>
@@ -115,5 +118,5 @@
                 </HBox>
             </children>
         </VBox>
-    </center>
+   </bottom>
 </BorderPane>
