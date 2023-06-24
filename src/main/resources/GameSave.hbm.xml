@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/dtd/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+    <class name="ap.ex2.GameScrabbleServer.Saves.GameSave" table="GAMES" >
+        <id name="gameID" type="java.lang.Integer" column="game_ID" >
+            <generator class="ap.ex2.GameScrabbleServer.RandomGameGenerator" />
+        </id>
+        <property name="hostName" type="java.lang.String" column="host_name" length="-1" />
+        <property name="gameBoard" type="java.lang.String" column="game_board" length="-1" />
+        <list name="listOfPlayers" inverse="false" cascade="all">
+            <key column="foreign_game_id"/>
+            <list-index column="order_in_list"/>
+            <one-to-many class="ap.ex2.GameScrabbleServer.Saves.PlayerSave" />
+        </list>
+
+    </class>
+</hibernate-mapping>
