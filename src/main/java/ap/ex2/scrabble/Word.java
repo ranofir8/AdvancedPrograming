@@ -2,6 +2,10 @@ package ap.ex2.scrabble;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Word {
 	private final Tile[] tiles;
@@ -22,8 +26,8 @@ public class Word {
 		return tmp;
 	}
 
-	public int tileAmount() {
-		return (int) Arrays.stream(this.tiles).filter(t -> t != null).count();
+	public List<Tile> tilesInWord() {
+		return Arrays.stream(this.tiles).filter(Objects::nonNull).collect(Collectors.toList());
 
 	}
 
