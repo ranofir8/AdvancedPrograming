@@ -28,6 +28,7 @@ public class Protocol {
     public static final char BOARD_UPDATED_BY_ANOTHER_PLAYER = 'C';
     public static final char UPDATED_PLAYER_SCORE = 'M';
     public static final char SEND_NEW_TILES = 'D';
+    public static final char SEND_BOARD = 'O';
 
 
     public static final char ERROR_OUTSIDE_BOARD_LIMITS = 'F';              //-1

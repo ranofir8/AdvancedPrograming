@@ -13,6 +13,7 @@ import java.net.ConnectException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class HostGameModel extends GameModel implements Observer {
     private final BookScrabbleClient myBookScrabbleClient; //for Client
@@ -20,7 +21,7 @@ public class HostGameModel extends GameModel implements Observer {
     private HostServer hostServer;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
     private volatile boolean ignoreDictionary;
-    private final HashMap<String, Integer> tilesOfPlayer;
+    private final HashMap<String, List<Tile>> tilesOfPlayer;
 
     private GameSave myGameSave;  // puts here data of the game
 
@@ -133,11 +134,13 @@ public class HostGameModel extends GameModel implements Observer {
      * @param countOfTiles - number of tiles to send
      */
     private void sendXTiles(String player, int countOfTiles) {
-        String tilesToDeal = this.dealNTiles(countOfTiles);
-        this.tilesOfPlayer.computeIfAbsent(player, s -> 0);
-        this.tilesOfPlayer.computeIfPresent(player, (s, tiles) -> tiles + tilesToDeal.length());
-        if (tilesToDeal.length() != 0) { // there are no tiles left
-            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToDeal);
+        List<Tile> tilesToDeal = this.dealNTiles(countOfTiles);
+        String tilesToDealStr = tilesToDeal.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+        this.tilesOfPlayer.computeIfAbsent(player, s->new ArrayList<>());
+
+        this.tilesOfPlayer.get(player).addAll(tilesToDeal);
+        if (tilesToDeal.size() != 0) { // there are no tiles left
+            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToDealStr);
         } else {
             this.startEndingTheGame();
         }
@@ -163,9 +166,8 @@ public class HostGameModel extends GameModel implements Observer {
      * @param n - number of tiles
      * @return a string of the tiles
      */
-    private String dealNTiles(int n) {
-        return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand()).filter(Objects::nonNull)
-                .map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+    private List<Tile> dealNTiles(int n) {
+        return IntStream.range(0, n).mapToObj(i -> this.getGameInstance().getGameBag().getRand()).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**
@@ -315,13 +317,12 @@ public class HostGameModel extends GameModel implements Observer {
             // cheater!!! sum can't be negative
             points = Integer.MAX_VALUE;
         }
-
+        System.out.println("Assert check: " + this.tilesOfPlayer.get(player).stream().mapToInt(t -> t.score).sum() + " == " + points);
         sendUpdateScoreToAll(player, -1 * points);
         this.tilesOfPlayer.remove(player);
         // if the last player sent, announce winner!
         if (this.tilesOfPlayer.isEmpty())
             this.announceGameEndWinner();
-
     }
 
     /**
@@ -364,10 +365,10 @@ public class HostGameModel extends GameModel implements Observer {
             this.hostServer.sendMsgToAll(Protocol.BOARD_UPDATED_BY_ANOTHER_PLAYER + gottenWord.toNetworkString());
 
             // send player new tiles
-            int tileAmount = gottenWord.tileAmount();
-            this.tilesOfPlayer.computeIfPresent(player, (s, integer) -> integer - tileAmount);
+            List<Tile> tiles = gottenWord.tilesInWord();
+            this.tilesOfPlayer.get(player).removeAll(tiles);
 
-            int tilesOfPlayer = this.tilesOfPlayer.get(player);
+            int tilesOfPlayer = this.tilesOfPlayer.get(player).size();
             int tilesToGive = GameModel.DRAW_START_AMOUNT - tilesOfPlayer;
             if (tilesToGive > 0) {
                 this.sendXTiles(player, tilesToGive);
