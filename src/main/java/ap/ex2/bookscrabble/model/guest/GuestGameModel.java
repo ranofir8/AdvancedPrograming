@@ -91,6 +91,11 @@ public class GuestGameModel extends GameModel implements Observer {
                 this.closeConnection();
                 break;
 
+            case Protocol.HOST_LOGIN_REJECT_NOT_ALLOWED:
+                this.notifyViewModel(new String[]{"MSG", "You were not in this game before, therefore you cannot join it now."});
+                this.closeConnection();
+                break;
+
             case Protocol.HOST_LOGIN_ACCEPT:
                 notifyViewModel(new Command2VM(Command.GO_TO_GAME_SCENE));
                 notifyViewModel(new Command2VM(Command.DISPLAY_PORT, this.getDisplayPort()));

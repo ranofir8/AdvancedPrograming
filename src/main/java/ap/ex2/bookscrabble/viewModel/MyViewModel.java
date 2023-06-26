@@ -21,6 +21,7 @@ public class MyViewModel extends ViewModel {
 
 
     public IntegerProperty countPlayers;
+    public BooleanProperty canStartGame; // n1.intValue()< GameModel.MIN_PLAYERS todo
 
 
     public BooleanProperty isHost; // is creating/joining game
@@ -47,6 +48,7 @@ public class MyViewModel extends ViewModel {
         this.playerScoreboard = new SimpleObjectProperty<>();
         this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.countPlayers = new SimpleIntegerProperty();
+        this.canStartGame = new SimpleBooleanProperty();
     }
 
 
@@ -151,6 +153,7 @@ public class MyViewModel extends ViewModel {
             notifyObservers(Command.UPDATE_GAME_CANVASES);
         });
         this.gameInstanceProperty.bind(gm.gameInstanceProperty);
+        this.canStartGame.bind(gm.getGameInstance().canStartGameProperty);
 
 
         if (gm != null)

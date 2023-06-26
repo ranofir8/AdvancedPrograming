@@ -2,7 +2,9 @@ package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.GameScrabbleServer.Saves.GameSave;
+import ap.ex2.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
@@ -34,12 +36,28 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
+        this(nickname, hostPort, bookScrabbleSeverIP, bookScrabbleServerPort, null);
+    }
+
+    public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort, GameSave gameSave) {
         super(nickname); // String name
 
         this.ignoreDictionary = false;
         this.hostPort = hostPort;
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
+
         this.tilesOfPlayer = new HashMap<>();
+        this.myGameSave = gameSave;
+        this.initFromGameSave();
+    }
+
+    // loads selection list
+    // the action of loading the board and scoreboard is done in "startGameFromSave" and will be called when "startGame" is pressed
+    private void initFromGameSave() {
+        if (this.myGameSave == null)
+            return;
+        this.getGameInstance().thisIsAsavedGame();
+        this.getGameInstance().setSelectionMap(this.myGameSave.getSelectionSet());
     }
 
 
@@ -58,8 +76,14 @@ public class HostGameModel extends GameModel implements Observer {
     protected void establishConnection() throws Exception {
         this.tryPingingBookServer();
 
+        Set<String> sele = null;
+        if (this.myGameSave != null) {
+            sele =  this.myGameSave.getSelectionSet();
+        }
+
+
         // bind to host port
-        this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, (Thread t, Throwable e) -> {
+        this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, sele, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
         });
         this.hostServer.addObserver(this);
@@ -115,6 +139,13 @@ public class HostGameModel extends GameModel implements Observer {
                 throw new RuntimeException(e);
             }
         });
+        this.startGameFromSave();
+    }
+
+    // automates reading of GameSave and sends all the guests the relevent data
+    private void startGameFromSave() {
+        this.myGameSave.getListOfPlayers().forEach(pState -> sendUpdateScoreToAll(pState.getPlayerName(), pState.getPlayerScore()));
+        this.sendNewBoardToAll(this.myGameSave.getGameBoard());
     }
 
     // send all players which turn it is, and go to the next turn
@@ -386,6 +417,10 @@ public class HostGameModel extends GameModel implements Observer {
 
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
+    }
+
+    private void sendNewBoardToAll(String reprOfBoard) {
+        this.hostServer.sendMsgToAll(Protocol.SEND_BOARD + "" + reprOfBoard);
     }
 
     @Override

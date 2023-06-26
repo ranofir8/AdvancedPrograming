@@ -4,6 +4,8 @@ import ap.ex2.scrabble.Board;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class GameSave {
@@ -62,5 +64,10 @@ public class GameSave {
 
     public void setGameBoard(Board gameBoard) {
         this.gameBoardString = gameBoard.summeryString();
+    }
+
+    // returns player in this game as a set of strings
+    public Set<String> getSelectionSet() {
+        return this.getListOfPlayers().stream().map(PlayerSave::getPlayerName).collect(Collectors.toSet());
     }
 }

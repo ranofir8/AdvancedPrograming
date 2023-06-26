@@ -24,6 +24,7 @@ public class HostServer extends Observable implements Observer {
 
     private final int hostPort;
     private final int threadsLimit;
+    private final Set<String> selectionList;
     private boolean stop;
 
     private final Thread.UncaughtExceptionHandler exceptionHandler;
@@ -34,12 +35,13 @@ public class HostServer extends Observable implements Observer {
 
     private ExecutorService es;
 
-    public HostServer(int port, int threadsLimit, Thread.UncaughtExceptionHandler exceptionHandler) {
+    public HostServer(int port, int threadsLimit, Set<String> selectionList, Thread.UncaughtExceptionHandler exceptionHandler) {
         this.hostPort = port;
         this.threadsLimit = threadsLimit;
         this.stop = true;
         this.exceptionHandler = exceptionHandler;
         this.playersSockets = new HashMap<>();
+        this.selectionList = selectionList;
     }
 
     // send a message to a specific guest
@@ -141,13 +143,17 @@ public class HostServer extends Observable implements Observer {
             }
 
             if (currentPlayerAmount >= GameModel.MAX_PLAYERS) {
+                // kick this player - game full
                 client.sendMsg(Protocol.HOST_LOGIN_REJECT_FULL + "");
                 client.close();
             } else if (this.hasPlayerNamed(chosenNickname)) {
-                // kick this player
+                // kick this player - duplicate name
                 client.sendMsg(Protocol.HOST_LOGIN_REJECT_NICKNAME + "");
                 client.close();
-
+            } else if (this.selectionList != null && !this.selectionList.contains(chosenNickname)) {
+                // kick this player - not in selection list
+                client.sendMsg(Protocol.HOST_LOGIN_REJECT_NOT_ALLOWED + "");
+                client.close();
             } else {
                 // welcome him to the game
 

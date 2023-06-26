@@ -18,9 +18,22 @@ public class Board {
 	public static final int CHECK_NOT_MATCH_BOARD = -4;
 	public static final int CHECK_WORD_NOT_LEGAL = -5;
 
+    public static Board createFromString(String boardGotten, Tile.Bag bagSource) {
+		Board b = new Board();
+		char[] chars = boardGotten.toUpperCase().toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			int r = i / Board.COL_NUM;
+			int c = i % Board.COL_NUM;
+
+			Tile t = bagSource.getTileNoRemove(chars[i]);
+			if (t != null)
+				b.setTileAt(r, c, t);
+		}
+		return b;
+    }
 
 
-	private static class Multiplier {
+    private static class Multiplier {
 		public final int multiplyWordBy;
 		public final int multiplyLetterBy;
 
