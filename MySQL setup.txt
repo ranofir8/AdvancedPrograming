@@ -1,0 +1,30 @@
+=== Create DB schema
+create schema scrabble_mysql;
+use scrabble_mysql;
+grant delete, insert, select,update on scrabble_mysql.* to javaUser;
+
+==== Create tables
+create table games
+(
+    game_id    int      not null
+        primary key,
+    host_name  tinytext not null,
+    game_board tinytext null
+);
+
+create table players
+(
+    player_id       decimal       not null
+        primary key,
+    name            tinytext      not null,
+    score           int           not null,
+    tiles           tinytext      null,
+    order_in_list   int default 0 not null,
+    foreign_game_id int           null,
+    constraint players_games_game_id_fk
+        foreign key (foreign_game_id) references games (game_id)
+            on update cascade on delete cascade
+);
+
+=== Quick SQL command to erase all table contents
+delete from players;delete from games;
