@@ -6,9 +6,11 @@ import ap.ex2.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
+import javafx.collections.ObservableMap;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -26,6 +28,7 @@ public class HostGameModel extends GameModel implements Observer {
     private final HashMap<String, List<Tile>> tilesOfPlayer;
 
     private GameSave myGameSave;  // puts here data of the game
+    private ObservableMap<String, Boolean> selectionMapObs;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -54,10 +57,23 @@ public class HostGameModel extends GameModel implements Observer {
     // loads selection list
     // the action of loading the board and scoreboard is done in "startGameFromSave" and will be called when "startGame" is pressed
     private void initFromGameSave() {
-        if (this.myGameSave == null)
+        if (isNewGame())
             return;
         this.getGameInstance().thisIsAsavedGame();
-        this.getGameInstance().setSelectionMap(this.myGameSave.getSelectionSet());
+        this.setSelectionMap(this.myGameSave.getSelectionSet());
+    }
+
+    private void setSelectionMap(Set<String> selectionSet) {
+        selectionSet.forEach(name -> this.selectionMapObs.put(name, false));
+        this.getGameInstance().getObservableSelectionMapObs().addListener(change -> {
+            change.
+        });
+    }
+
+    // when a player in the selection list has joined the game
+    private void onPlayerHasJoinedSelection(String playerName) {
+        this.selectionMapObs.put(playerName, true);
+        /todo
     }
 
 
@@ -77,7 +93,7 @@ public class HostGameModel extends GameModel implements Observer {
         this.tryPingingBookServer();
 
         Set<String> sele = null;
-        if (this.myGameSave != null) {
+        if (!isNewGame()) {
             sele =  this.myGameSave.getSelectionSet();
         }
 
@@ -104,26 +120,56 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.sendMsgToPlayer(null, msg);
     }
 
+    private boolean isNewGame() {
+        return this.myGameSave == null;
+    }
+
 
     /**
      * [step 1] the host tells everybody the game starts
      */
     public void hostStartGame() { //This happens when the host starts a game
         this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
-
-        // decide on turns randomly
-        this.selectTurnOrder();
-
-        // draw tiles for players
+        if (this.isNewGame()) {
 
 
-        //outter loop of player amount
-        //inner loop of tiles to player - 7
-        //create a list of 7 random tiles
-        this.sendStartingTiles();
+            // decide on turns randomly
+            this.selectTurnOrder();
 
-        this.nextTurn();
+            // draw tiles for players
+            //outter loop of player amount
+            //inner loop of tiles to player - 7
+            //create a list of 7 random tiles
+            this.sendStartingTiles();
+
+            this.nextTurn();
+        } else {
+            // don't start a game normally
+            this.continueGameFromSave();
+        }
+
     }
+
+
+    // automates reading of GameSave and sends all the guests the relevant data
+    // send existing tiles & scores
+    // set player turns
+    private void continueGameFromSave() {
+        // send current game board
+        this.sendNewBoardToAll(this.myGameSave.getGameBoard());
+
+        this.playersTurn = new ArrayList<String>();
+
+        for (PlayerSave pSave : this.myGameSave.getListOfPlayers()) {
+            // send score of player to all
+            sendUpdateScoreToAll(pSave.getPlayerName(), pSave.getPlayerScore());
+            // send the player his tiles
+            this.sendTileList(pSave.getPlayerName(), this.getGameInstance().getTileList(pSave.getPlayerTiles()));
+            // add player to turn circle
+            this.playersTurn.add(pSave.getPlayerName());
+        }
+    }
+
 
     /**
      * [step 2] The host actually creates the game board
@@ -139,13 +185,6 @@ public class HostGameModel extends GameModel implements Observer {
                 throw new RuntimeException(e);
             }
         });
-        this.startGameFromSave();
-    }
-
-    // automates reading of GameSave and sends all the guests the relevent data
-    private void startGameFromSave() {
-        this.myGameSave.getListOfPlayers().forEach(pState -> sendUpdateScoreToAll(pState.getPlayerName(), pState.getPlayerScore()));
-        this.sendNewBoardToAll(this.myGameSave.getGameBoard());
     }
 
     // send all players which turn it is, and go to the next turn
@@ -166,15 +205,19 @@ public class HostGameModel extends GameModel implements Observer {
      */
     private void sendXTiles(String player, int countOfTiles) {
         List<Tile> tilesToDeal = this.dealNTiles(countOfTiles);
-        String tilesToDealStr = tilesToDeal.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
-        this.tilesOfPlayer.computeIfAbsent(player, s->new ArrayList<>());
-
-        this.tilesOfPlayer.get(player).addAll(tilesToDeal);
-        if (tilesToDeal.size() != 0) { // there are no tiles left
-            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToDealStr);
-        } else {
+        this.sendTileList(player, tilesToDeal);
+        if (tilesToDeal.size() == 0) { // there are no tiles left
             this.startEndingTheGame();
         }
+    }
+
+    private void sendTileList(String player, List<Tile> tilesToSend) {
+        String tilesToSendStr = tilesToSend.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+        this.tilesOfPlayer.computeIfAbsent(player, s->new ArrayList<>());
+
+        this.tilesOfPlayer.get(player).addAll(tilesToSend);
+
+        this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToSendStr);
     }
 
     /**

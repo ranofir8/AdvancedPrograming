@@ -7,6 +7,7 @@ import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableMap;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class GameInstance {
     private final PlayerStatus myPlayer;
     private String[] notLegalWords;
 
-    private Map<String, Boolean> selectionMap; // True means the player has joined, False means the player has yet joined
+    private ObservableMap<String, Boolean> selectionMapObs; // True means the player has joined, False means the player has yet joined
 
     public Word limboToWord() {
         return this.getPlayerStatus().limboToWord(this.gameBag);
@@ -41,6 +42,14 @@ public class GameInstance {
 
     public void thisIsAsavedGame() {
         this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS_GAME_SAVE);
+    }
+
+    public List<Tile> getTileList(String playerTiles) {
+        List<Tile> tiles = new ArrayList<>();
+        for (char t : playerTiles.toCharArray()) {
+            tiles.add(this.getGameBag().getTileNoRemove(t));
+        }
+        return tiles;
     }
 
     enum GameState {
@@ -117,7 +126,7 @@ public class GameInstance {
                 return "Waiting for players to join";
             case WAITING_FOR_PLAYERS_GAME_SAVE:
                 Set<String> waitingFor = new HashSet<>();
-                this.selectionMap.forEach((name, val) -> {
+                this.selectionMapObs.forEach((name, val) -> {
                     if (!val)
                         waitingFor.add(name);
                 });
@@ -133,6 +142,10 @@ public class GameInstance {
                 return "Game ended";
         }
         return "Unknown game state";
+    }
+
+    public ObservableMap<String, Boolean> getObservableSelectionMapObs() {
+        return selectionMapObs;
     }
 
     public boolean isMyTurn() {
@@ -173,15 +186,5 @@ public class GameInstance {
 
     public String[] getNotLegalWords() {
         return notLegalWords;
-    }
-
-    public void setSelectionMap(Set<String> selectionSet) {
-        selectionSet.forEach(name -> this.selectionMap.put(name, false));
-    }
-
-    public void playerHasJoined(String playerName) {
-        this.selectionMap.put(playerName, true);
-        this.playerListChangeEvent.alertChanged();
-        // todo update property
     }
 }
