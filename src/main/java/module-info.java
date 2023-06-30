@@ -6,6 +6,7 @@ module ap.ex2.bookscrabble {
     requires httpclient;
     requires com.google.gson;
     requires httpcore;
+    requires java.ws.rs;
 //    requires org.hibernate.orm.core;
 
             

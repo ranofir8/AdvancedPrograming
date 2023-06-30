@@ -1,5 +1,23 @@
 package ap.ex2.bookscrabble.model.host;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.ConnectException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import ap.ex2.bookscrabble.model.GameData;
+import com.google.gson.Gson;
+
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.model.GameModel;
@@ -8,13 +26,6 @@ import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
-
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import com.google.gson.Gson;
 
 
 public class HostGameModel extends GameModel implements Observer {
@@ -387,59 +398,38 @@ public class HostGameModel extends GameModel implements Observer {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
     }
 
-    public final void SaveGame() {
-
-        //check legality of the request???
+    public final void SaveGame() throws IOException, URISyntaxException {
 
 
-        // what we want to save:
-        // 1. game id
-        // 2. board
-        // 3. player list (in order)
-        // 4. score table
-
-        int game_id = 1;
-        Board board = this.getGameInstance().getGameBoard();
-        List<PlayerTableRow> scores = this.getPlayerScoreList();
-        List<String> players = this.getPlayersTurn();
-
-        //get scores from tha table in the same order of Players list
-        List<Integer> score_list = new ArrayList<>();
-        for (int i = 0 ; i < players.size() ; i++){
-            String name = players.get(i);
-            int score = -1000;
-            for(int j = 0 ; j < scores.size();j++) {
-                if (scores.get(j).nickname.equals(name)) {
-                    score = scores.get(j).getScore();
-                    break;
-                }//assuming PlayerScoreList and getPlayersTurn have the same names (not in order).
-            }
-            score_list.add(score);
-        }
+        GameData current_game_data = new GameData(this);
 
 
 //      create json:
         Gson gson = new Gson();
-        String jsonID = gson.toJson(game_id);
-        String jsonBoard = gson.toJson(board);
-        String jsonPlayers = gson.toJson(players);
-        String jsonScore = gson.toJson(score_list);
+        String jsonGame = gson.toJson(current_game_data);
+        String server_url = "server_url"; //TODO: change/ read from config file
 
-        String combinedJson = "[" + jsonID + ", " + jsonBoard + ", " + jsonPlayers + ", " + jsonScore + "]";
+        String ret = http_client.httpPost(server_url, jsonGame);
+//        if (ret == false)
+//            System.out.println("error sending http req"); // handle error.
 
-        boolean ret = http_client.sendGame(combinedJson);
-
-        if (ret == false)
-            System.out.println("error sending http req"); // handle error.
-
-        //else: succesfully saved. sendMsg?
-
-//            notifyViewModel(Command.INVALID_WORD_PLACEMENT);
-//        else
-//            sendMsgToHost(Protocol.BOARD_ASSIGNMENT_REQUEST + w.toNetworkString());
+        //else: successfully saved. sendMsg?
     }
 
-    public final void RestoreGame() {
+    public final GameData RestoreGame(double id) throws IOException, URISyntaxException {
+
+        //send request
+        Gson gson = new Gson();
+        String server_url = "server_url"; //TODO: change/ read from config file
+        String gson_game = http_client.httpGet(server_url, Double.toString(id));
+        if (gson_game == null){
+            System.out.println("invalid ID");
+            return null;
+        }
+
+        return gson.fromJson(gson_game, GameData.class);
 
     }
 }
+
+
