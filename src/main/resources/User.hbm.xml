@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/dtd/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+    <class name="ap.ex2.BookScrabbleServer.testDB.User" table="USERS" >
+        <id name="userId" type="java.lang.Long" column="user_id" >
+            <generator class="increment" />
+        </id>
+        <property name="firstName" type="java.lang.String" column="first_name" length="20" />
+        <property name="lastName" type="java.lang.String" column="last_name" length="20" />
+        <property name="age" type="java.lang.Integer" column="age" length="-1" />
+        <property name="email" type="java.lang.String" column="email" length="40" />
+    </class>
+</hibernate-mapping>

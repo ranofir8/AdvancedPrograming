@@ -29,7 +29,6 @@ public class GameInstance {
     private final PlayerStatus myPlayer;
     private String[] notLegalWords;
 
-
     public Word limboToWord() {
         return this.getPlayerStatus().limboToWord(this.gameBag);
     }

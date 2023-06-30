@@ -14,6 +14,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -71,6 +72,8 @@ public class ControllerGameView extends GameView implements Initializable {
     @FXML
     private Button startGameButton;
     @FXML
+    private Button saveGameButton;
+    @FXML
     private Canvas tilesCanvas;
     @FXML
     private Canvas boardCanvas;
@@ -119,6 +122,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
         //at start there are no client so disable start game button:
         this.startGameButton.setDisable(true);
+        this.saveGameButton.visibleProperty().bind(this.isHostGame); //save game button is available only to the host
+        //at start there are no client so disable save game button:
+        this.saveGameButton.setDisable(true);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.gameStatusLabel.textProperty().bind(this.myViewModel.gameStatusStringProperty);
@@ -282,6 +288,9 @@ public class ControllerGameView extends GameView implements Initializable {
         // unbind visibility
         this.startGameButton.visibleProperty().unbind();
         this.startGameButton.visibleProperty().set(false); //bye button
+//        this.saveGameButton.visibleProperty().unbind();
+        this.saveGameButton.setDisable(false);
+//        this.saveGameButton.visibleProperty().set(true);   //hello save button
 
         this.myViewModel.startGame();
     }
@@ -579,5 +588,11 @@ public class ControllerGameView extends GameView implements Initializable {
 
     private boolean isBoardSelected() {
         return this.isValidBoardPosition(this.selectedBoardRow, this.selectedBoardCol);
+    }
+
+    @FXML
+    public void saveGameButtonAction() {
+        // todo: check the visibility of the button
+        // todo: save game
     }
 }

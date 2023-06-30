@@ -38,6 +38,8 @@ public class ControllerHelloView extends GameView implements Initializable {
     private Button joinGameButton;
     @FXML
     private Button hostGameButton;
+    @FXML
+    private Button hostSavedGameButton;
 
     public ControllerHelloView() {
 
@@ -89,10 +91,11 @@ public class ControllerHelloView extends GameView implements Initializable {
             this.joinGamePortTF.setText(defaultGuestPort);
 
         this.joinGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
+        this.hostSavedGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
 
         this.nicknameTF.textProperty().addListener((observableValue, oldNickname, newNickname) ->
-                this.hostGameButton.setDisable(newNickname.length() == 0));
-        
+            this.hostGameButton.setDisable(newNickname.length() == 0));
+
         this.hostGameButton.disableProperty().set(true);
     }
 
@@ -100,6 +103,11 @@ public class ControllerHelloView extends GameView implements Initializable {
     protected void hostNewGameClick() {
         this.isHostHello.set(true);
         this.myViewModel.startGameModel();
+    }
+
+    @FXML
+    protected void hostSavedGameClick() {
+        // todo: implement
     }
 
     /**

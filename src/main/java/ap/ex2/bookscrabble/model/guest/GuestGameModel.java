@@ -34,9 +34,9 @@ public class GuestGameModel extends GameModel implements Observer {
     }
 
     @Override
-    public void establishConnection() throws Exception {
-        System.out.println("GUEST SOCKET CREATED");
+    protected void establishConnection() throws Exception {
         Socket mySocket = new Socket(this.hostIP, this.hostPort);
+        System.out.println("GUEST SOCKET CREATED");
         this.myHandler = new MyClientHandler(mySocket);
         this.myHandler.addObserver(this);
         this.myHandler.startHandlingClient();

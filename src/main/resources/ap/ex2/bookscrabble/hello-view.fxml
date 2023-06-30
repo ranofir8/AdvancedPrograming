@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="helloBG" prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
+<BorderPane fx:id="helloBG" prefHeight="792.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.bookscrabble.view.ControllerHelloView">
     <top>
         <MenuBar BorderPane.alignment="CENTER" />
     </top>
-    <center>
+   <bottom>
         <VBox alignment="CENTER" prefHeight="792.0" prefWidth="898.0" BorderPane.alignment="CENTER">
             <children>
                 <Label alignment="CENTER" style="-fx-background-color: #ffffff80;" text="Welcome to Book Scrabble!! " textAlignment="CENTER" textFill="#4eb9c3">
@@ -36,16 +36,49 @@
                   </TextField>
                </children>
             </HBox>
-                <HBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="910.0">
+                <HBox alignment="TOP_CENTER" prefHeight="361.0" prefWidth="910.0">
                     <children>
-                        <Button fx:id="hostGameButton" mnemonicParsing="false" onAction="#hostNewGameClick" text="Host a new Game">
+                  <VBox prefHeight="361.0" prefWidth="393.0">
+                     <children>
+                              <Button fx:id="hostGameButton" mnemonicParsing="false" onAction="#hostNewGameClick" prefHeight="77.0" prefWidth="354.0" text="Host a new Game">
+                                  <font>
+                                      <Font size="36.0" />
+                                  </font>
+                           <VBox.margin>
+                              <Insets top="50.0" />
+                           </VBox.margin>
+                              </Button>
+                        <VBox fillWidth="false" prefHeight="172.0" prefWidth="297.0">
+                           <children>
+                              <Button fx:id="hostSavedGameButton" mnemonicParsing="false" onAction="#hostSavedGameClick" prefHeight="20.0" prefWidth="355.0" text="Host a saved Game" textOverrun="CLIP">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="50.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <TextField fx:id="joinGameIPTF1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="144.0" promptText="game id">
+                                  <HBox.margin>
+                                      <Insets left="20.0" />
+                                  </HBox.margin>
+                                  <font>
+                                      <Font size="18.0" />
+                                  </font>
+                                 <VBox.margin>
+                                    <Insets left="100.0" top="5.0" />
+                                 </VBox.margin>
+                              </TextField>
+                           </children>
                             <HBox.margin>
                                 <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                             </HBox.margin>
-                            <font>
-                                <Font size="36.0" />
-                            </font>
-                        </Button>
+                        </VBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </VBox>
                         <VBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="130.0">
                             <children>
                                 <Button fx:id="joinGameButton" mnemonicParsing="false" onAction="#joinExistingGameClick" text="Join Game as Guest ">
@@ -85,5 +118,5 @@
                 </HBox>
             </children>
         </VBox>
-    </center>
+   </bottom>
 </BorderPane>
