@@ -1,6 +1,7 @@
 package ap.ex2.GameScrabbleServer.Saves;
 
 import ap.ex2.scrabble.Board;
+import ap.ex2.scrabble.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,9 @@ public class test_GameSave {
         List<PlayerSave> players = new ArrayList<>();
         players.add(p1);
         players.add(p2);
+        Tile.Bag b = new Tile.Bag();
 
-        return new GameSave(123, "hostGilad", new Board(), players);
+        return new GameSave(123, "hostGilad", Board.createFromString("ALOF     SADE", b), players);
     }
 
 }

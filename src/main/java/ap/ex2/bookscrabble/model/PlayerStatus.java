@@ -35,9 +35,6 @@ public class PlayerStatus {
 
 
 
-    public void updateTurnOf(String nickName) {
-        this.turnOfProperty.set(nickName);
-    }
 
     // when the player gets a new tile
     public void addTile(Tile t){

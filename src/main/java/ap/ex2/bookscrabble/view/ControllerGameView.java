@@ -124,8 +124,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.canStartGame.bind(this.myViewModel.canStartGame);
 
         // todo - if the game continues, make sure every body joined
-        if (this.isHostGame.get())
-            this.startGameButton.disableProperty().bind(this.canStartGame);
+        this.startGameButton.disableProperty().bind(this.canStartGame.not());
 
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);

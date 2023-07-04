@@ -105,6 +105,7 @@ public class GuestGameModel extends GameModel implements Observer {
                 // add player to local list
                 String newUsername = msgExtra;
                 this.onNewPlayer(newUsername);
+                notifyViewModel(Command.SOUND_NEW_PLAYER_JOINED);
                 break;
 
             default:
