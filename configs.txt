@@ -1,0 +1,5 @@
+book_scrabble_ip,replace-me
+book_scrabble_port,replace-me
+host_port,replace-me
+default_guest_ip,replace-me
+default_guest_port,replace-me
