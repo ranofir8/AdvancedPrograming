@@ -44,7 +44,9 @@ public class MyMainScreenModel extends MainScreenModel {
         if (this.getGameModel() == null)
             return "No game model.";
         GameInstance gi = this.getGameModel().getGameInstance();
-        String currentGameStatus = gi.getCurrentGameStatus();
+        String currentGameStatus = this.getGameModel().getCurrentGameStatus();
+        if (currentGameStatus == null)
+            currentGameStatus = "Unknown game state";
         return "Your nickname: " + gi.getNickname() + " ; " + currentGameStatus; //+ " hello";
     }
 }

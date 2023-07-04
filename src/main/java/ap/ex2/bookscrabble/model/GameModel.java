@@ -5,6 +5,7 @@ import ap.ex2.bookscrabble.common.Command2VM;
 import ap.ex2.bookscrabble.common.Protocol;
 import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.bookscrabble.view.SoundManager;
+import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.ObjectProperty;
@@ -75,6 +76,10 @@ public abstract class GameModel extends Model {
 
             case Protocol.SEND_NEW_TILES:
                 this.onGotNewTiles(msgExtra); //msgExtra contains the tiles
+                break;
+
+            case Protocol.SEND_BOARD:
+                this.onGotNewBoard(msgExtra); //msgExtra contains the tiles
                 break;
 
             case Protocol.ERROR_OUTSIDE_BOARD_LIMITS:
@@ -195,6 +200,11 @@ public abstract class GameModel extends Model {
         SoundManager.singleton.playSound(SoundManager.SOUND_TILE_ADD);
     }
 
+    private void onGotNewBoard(String boardGotten) {
+        Board b = Board.createFromString(boardGotten, this.getGameInstance().getGameBag());
+        this.getGameInstance().setGameBoard(b);
+    }
+
     protected abstract Tile _onGotNewTilesHelper(char tileLetter);
 
 
@@ -243,4 +253,18 @@ public abstract class GameModel extends Model {
         sendMsgToHost(String.valueOf(Protocol.SKIP_TURN_REQUEST));
     }
 
+    public String getCurrentGameStatus() {
+        switch (this.getGameInstance().getCurrentState()) {
+            case WAITING_FOR_PLAYERS:
+                return "Waiting for players to join";
+            case PLAYING:
+                if (this.getGameInstance().isMyTurn())
+                    return "It's your turn!";
+                else
+                    return  this.getGameInstance().getPlayerStatus().getTurnOfWho() + " is playing right now...";
+            case GAME_ENDED:
+                return "Game ended";
+        }
+        return null;
+    }
 }

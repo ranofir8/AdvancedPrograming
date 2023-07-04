@@ -6,11 +6,10 @@ import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableMap;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -19,7 +18,8 @@ All things related to the current running game
 public class GameInstance {
     public final ChangeBooleanProperty scoreBoardChangeEvent;     // get notified when score board changes
     public final ChangeBooleanProperty gameStatusChangeEvent;     // get notified when game/turn status changes
-    public final ChangeBooleanProperty boardTilesChangeEvent;     // get notified when tiles/board changes
+    public final ChangeBooleanProperty boardTilesChangeEvent;     // get notified when tiles/board/joined players changes
+    private final ChangeBooleanProperty playerListChangeEvent;
 
     private final HashMap<String, Integer> scoreBoard;
     private Board gameBoard;
@@ -37,8 +37,24 @@ public class GameInstance {
         return (player == null && this.isMyTurn()) || (this.myPlayer.getTurnOfWho().equals(player));
     }
 
-    enum GameState {
-        WAITING_FOR_PLAYERS, PLAYING, GAME_ENDED
+    public void thisIsAsavedGame() {
+        this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS_GAME_SAVE);
+    }
+
+    public List<Tile> getTileList(String playerTiles) {
+        List<Tile> tiles = new ArrayList<>();
+        for (char t : playerTiles.toCharArray()) {
+            tiles.add(this.getGameBag().getTileNoRemove(t));
+        }
+        return tiles;
+    }
+
+    public GameState getCurrentState() {
+        return this.gameStateProperty.get();
+    }
+
+    public enum GameState {
+        WAITING_FOR_PLAYERS, WAITING_FOR_PLAYERS_GAME_SAVE, PLAYING, GAME_ENDED
     }
 
     public void setTurnOfNickname(String turnOfNickname) {
@@ -58,6 +74,7 @@ public class GameInstance {
         this.gameStatusChangeEvent = new ChangeBooleanProperty();  // update on GameState and Turn change
         this.gameStateProperty = new SimpleObjectProperty<>();
         this.boardTilesChangeEvent = new ChangeBooleanProperty();
+        this.playerListChangeEvent = new ChangeBooleanProperty();
 
         this.gameStatusChangeEvent.changeByProperty(this.gameStateProperty);
         this.myPlayer.bindToTilesChanged(this.boardTilesChangeEvent);
@@ -65,8 +82,14 @@ public class GameInstance {
 
         this.gameStateProperty.set(GameState.WAITING_FOR_PLAYERS);
         this.notLegalWords = null;
+        this.playerListChangeEvent.addListener((observableValue, aBoolean, t1) -> {
+            gameStatusChangeEvent.alertChanged();
+            // todo update CHECK NUM OF PLAYERS < 4 AND IF WAITING FOR SELECTION LIST OR NOT
+        });
 
         updateScoreBoard(nickName, 0);
+
+
     }
 
     /**
@@ -98,21 +121,6 @@ public class GameInstance {
                 .collect(Collectors.toList());
     }
 
-    public String getCurrentGameStatus() {
-        switch (this.gameStateProperty.get()) {
-            case WAITING_FOR_PLAYERS:
-                return "Waiting for players to join";
-            case PLAYING:
-                if (this.isMyTurn())
-                    return "It's your turn!";
-                else
-                    return  this.getPlayerStatus().getTurnOfWho() + " is playing right now...";
-            case GAME_ENDED:
-                return "Game ended";
-        }
-        return "Unknown game state";
-    }
-
     public boolean isMyTurn() {
         return this.myPlayer.getIsMyTurn();
     }
@@ -123,6 +131,12 @@ public class GameInstance {
         this.gameBag = new Tile.Bag();
         this.boardTilesChangeEvent.alertChanged();
     }
+
+    public void setGameBoard(Board b) {
+        this.gameBoard = b;
+        this.boardTilesChangeEvent.alertChanged();
+    }
+
     public String getWinner() {
         return Collections.max(this.scoreBoard.entrySet(), Map.Entry.comparingByValue()).getKey();
     }

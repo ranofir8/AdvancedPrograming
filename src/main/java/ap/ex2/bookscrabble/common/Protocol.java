@@ -16,6 +16,7 @@ public class Protocol {
     public static final char HOST_LOGIN_ACCEPT = '1';
     public static final char HOST_LOGIN_REJECT_FULL = '2';
     public static final char HOST_LOGIN_REJECT_NICKNAME = '3';
+    public static final char HOST_LOGIN_REJECT_NOT_ALLOWED = '*';  // user is not in selection list
     public static final char PLAYER_UPLOAD = '4';
     public static final char START_GAME = '5';
     public static final char END_GAME_TILE_SUM_REQUEST = '6';

@@ -2,18 +2,21 @@ package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.GameScrabbleServer.Saves.GameSave;
+import ap.ex2.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.bookscrabble.common.Protocol;
+import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
+import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
+import javafx.beans.property.BooleanProperty;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class HostGameModel extends GameModel implements Observer {
     private final BookScrabbleClient myBookScrabbleClient; //for Client
@@ -24,6 +27,8 @@ public class HostGameModel extends GameModel implements Observer {
     private final HashMap<String, List<Tile>> tilesOfPlayer;
 
     private GameSave myGameSave;  // puts here data of the game
+    private Map<String, Boolean> selectionMap;  // players in a saved game, and did they join already or not
+    public BooleanProperty canTheGameStartProperty;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -34,14 +39,53 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort) {
+        this(nickname, hostPort, bookScrabbleSeverIP, bookScrabbleServerPort, null);
+    }
+
+    public HostGameModel(String nickname, int hostPort, String bookScrabbleSeverIP, int bookScrabbleServerPort, GameSave gameSave) {
         super(nickname); // String name
 
         this.ignoreDictionary = false;
         this.hostPort = hostPort;
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
+
         this.tilesOfPlayer = new HashMap<>();
+        this.myGameSave = gameSave;
+        this.initFromGameSave();
     }
 
+    // loads selection list
+    // the action of loading the board and scoreboard is done in "startGameFromSave" and will be called when "startGame" is pressed
+    private void initFromGameSave() {
+        if (isNewGame())
+            return;
+        this.getGameInstance().thisIsAsavedGame();
+        this.setSelectionMap(this.myGameSave.getSelectionSet());
+    }
+
+    private void setSelectionMap(Set<String> selectionSet) {
+        this.selectionMap = new HashMap<>();
+        // non of the players joined
+        selectionSet.forEach(name -> this.selectionMap.put(name, false));
+    }
+
+    @Override
+    public String getCurrentGameStatus() {
+        String superStatus =  super.getCurrentGameStatus();
+        if (superStatus == null) {
+            switch (this.getGameInstance().getCurrentState()) {
+                case WAITING_FOR_PLAYERS_GAME_SAVE:
+                    Set<String> waitingFor = new HashSet<>();
+                    this.selectionMap.forEach((name, val) -> {
+                        if (!val)
+                            waitingFor.add(name);
+                    });
+                    // test this todo
+                    return "Waiting for: " + waitingFor.stream().collect(Collectors.joining(", ")) + " to join..."; // todo
+            }
+        }
+        return superStatus;
+    }
 
     private void tryPingingBookServer() throws ConnectException {
         if (!this.myBookScrabbleClient.pingServer()) {
@@ -58,8 +102,14 @@ public class HostGameModel extends GameModel implements Observer {
     protected void establishConnection() throws Exception {
         this.tryPingingBookServer();
 
+        Set<String> sele = null;
+        if (!isNewGame()) {
+            sele =  this.myGameSave.getSelectionSet();
+        }
+
+
         // bind to host port
-        this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, (Thread t, Throwable e) -> {
+        this.hostServer = new HostServer(this.hostPort, GameModel.MAX_PLAYERS+1, sele, (Thread t, Throwable e) -> {
             System.out.println("Exception in thread: " + t.getName() + "\n"+ e.getMessage());
         });
         this.hostServer.addObserver(this);
@@ -80,26 +130,56 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.sendMsgToPlayer(null, msg);
     }
 
+    private boolean isNewGame() {
+        return this.myGameSave == null;
+    }
+
 
     /**
      * [step 1] the host tells everybody the game starts
      */
     public void hostStartGame() { //This happens when the host starts a game
         this.hostServer.sendMsgToAll(Protocol.START_GAME + "");
-
-        // decide on turns randomly
-        this.selectTurnOrder();
-
-        // draw tiles for players
+        if (this.isNewGame()) {
 
 
-        //outter loop of player amount
-        //inner loop of tiles to player - 7
-        //create a list of 7 random tiles
-        this.sendStartingTiles();
+            // decide on turns randomly
+            this.selectTurnOrder();
 
-        this.nextTurn();
+            // draw tiles for players
+            //outter loop of player amount
+            //inner loop of tiles to player - 7
+            //create a list of 7 random tiles
+            this.sendStartingTiles();
+
+            this.nextTurn();
+        } else {
+            // don't start a game normally
+            this.continueGameFromSave();
+        }
+
     }
+
+
+    // automates reading of GameSave and sends all the guests the relevant data
+    // send existing tiles & scores
+    // set player turns
+    private void continueGameFromSave() {
+        // send current game board
+        this.sendNewBoardToAll(this.myGameSave.getGameBoard());
+
+        this.playersTurn = new ArrayList<String>();
+
+        for (PlayerSave pSave : this.myGameSave.getListOfPlayers()) {
+            // send score of player to all
+            sendUpdateScoreToAll(pSave.getPlayerName(), pSave.getPlayerScore());
+            // send the player his tiles
+            this.sendTileList(pSave.getPlayerName(), this.getGameInstance().getTileList(pSave.getPlayerTiles()));
+            // add player to turn circle
+            this.playersTurn.add(pSave.getPlayerName());
+        }
+    }
+
 
     /**
      * [step 2] The host actually creates the game board
@@ -135,15 +215,19 @@ public class HostGameModel extends GameModel implements Observer {
      */
     private void sendXTiles(String player, int countOfTiles) {
         List<Tile> tilesToDeal = this.dealNTiles(countOfTiles);
-        String tilesToDealStr = tilesToDeal.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
-        this.tilesOfPlayer.computeIfAbsent(player, s->new ArrayList<>());
-
-        this.tilesOfPlayer.get(player).addAll(tilesToDeal);
-        if (tilesToDeal.size() != 0) { // there are no tiles left
-            this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToDealStr);
-        } else {
+        this.sendTileList(player, tilesToDeal);
+        if (tilesToDeal.size() == 0) { // there are no tiles left
             this.startEndingTheGame();
         }
+    }
+
+    private void sendTileList(String player, List<Tile> tilesToSend) {
+        String tilesToSendStr = tilesToSend.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+        this.tilesOfPlayer.computeIfAbsent(player, s->new ArrayList<>());
+
+        this.tilesOfPlayer.get(player).addAll(tilesToSend);
+
+        this.hostServer.sendMsgToPlayer(player, Protocol.SEND_NEW_TILES + tilesToSendStr);
     }
 
     /**
@@ -226,6 +310,35 @@ public class HostGameModel extends GameModel implements Observer {
                     break;
             }
         }
+    }
+
+    // new player joined the game
+    // check it for the selection list
+    @Override
+    protected void onNewPlayer(String newPlayerName) {
+        super.onNewPlayer(newPlayerName);
+        if (!this.isNewGame()) {
+            setPlayerHasJoinedSavedGame(newPlayerName);
+        }
+        this.testIfGameCanStart();
+    }
+
+    // when a player in the selection list has joined the game
+    private void setPlayerHasJoinedSavedGame(String player) {
+        this.selectionMap.put(player, true);
+    }
+
+    private void testIfGameCanStart() {
+        boolean canTheGameStart = false;
+        int playerAmount = this.hostServer.getOnlinePlayers().size();
+
+        if (this.isNewGame()) {
+            canTheGameStart = GameModel.MIN_PLAYERS <= playerAmount && playerAmount <= GameModel.MAX_PLAYERS;
+        } else {
+            canTheGameStart = !this.selectionMap.containsValue(false);
+        }
+        this.canTheGameStartProperty.set(canTheGameStart);
+        // todo listen to this property
     }
 
     private void onClientClosedConnection(String playerName) {
@@ -386,6 +499,10 @@ public class HostGameModel extends GameModel implements Observer {
 
     private void sendUpdateScoreToAll(String player, int scoreIncrament) {
         this.hostServer.sendMsgToAll(Protocol.UPDATED_PLAYER_SCORE + "" + scoreIncrament + "," + player);
+    }
+
+    private void sendNewBoardToAll(String reprOfBoard) {
+        this.hostServer.sendMsgToAll(Protocol.SEND_BOARD + "" + reprOfBoard);
     }
 
     @Override

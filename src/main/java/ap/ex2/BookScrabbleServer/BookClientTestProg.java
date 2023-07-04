@@ -10,7 +10,7 @@ public class BookClientTestProg {
         BookScrabbleClient bsc = new BookScrabbleClient("127.0.0.1", port);
 
 //        boolean res = bsc.runClient("Q,magic254573");
-        String testWord = "gr";
+        String testWord = "endurer";
 
         System.out.println("=== Testing word: " + testWord + " ===");
 

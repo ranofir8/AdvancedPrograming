@@ -32,6 +32,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private final BooleanProperty isHostGame;
 
     private final IntegerProperty playersCount;
+    private final BooleanProperty canStartGame;
     private final ChangeBooleanProperty vBoardTilesChangedEvent;
     private final BooleanProperty isPlayerTurn;
     private final BooleanProperty canSendWord;
@@ -84,6 +85,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.isHostGame = new SimpleBooleanProperty();
         this.gameInstanceProperty = new SimpleObjectProperty<>();
         this.playersCount = new SimpleIntegerProperty();
+        this.canStartGame = new SimpleBooleanProperty();
         this.isPlayerTurn = new SimpleBooleanProperty();
         this.canSendWord = new SimpleBooleanProperty();
         this.vBoardTilesChangedEvent = new ChangeBooleanProperty();
@@ -113,15 +115,18 @@ public class ControllerGameView extends GameView implements Initializable {
         this.isHostGame.bind(this.myViewModel.isHost);
 
         this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
-        //at start there are no client so disable start game button:
-        this.startGameButton.setDisable(true);
+        //at start there are no client so disable start game button
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.gameStatusLabel.textProperty().bind(this.myViewModel.gameStatusStringProperty);
         this.myViewModel.playerScoreboard.bind(this.scoreBoard.itemsProperty());
         this.playersCount.bind(this.myViewModel.countPlayers);
+        this.canStartGame.bind(this.myViewModel.canStartGame);
 
-        this.playersCount.addListener((observableValue, n0, n1) -> this.startGameButton.setDisable(n1.intValue()< GameModel.MIN_PLAYERS));
+        // todo - if the game continues, make sure every body joined
+        if (this.isHostGame.get())
+            this.startGameButton.disableProperty().bind(this.canStartGame);
+
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
 

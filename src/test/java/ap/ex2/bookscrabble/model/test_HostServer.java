@@ -10,7 +10,7 @@ public class test_HostServer {
 
     @Test
     public void testGetOnlinePlayers() {
-        HostServer hostServer = new HostServer(1234, 5, null);
+        HostServer hostServer = new HostServer(1234, 5, null, null);
         hostServer.setMyNickname("Player1");
         hostServer.setMyNickname("Player2");
 
@@ -23,7 +23,7 @@ public class test_HostServer {
 
     @Test
     public void testHasPlayerNamed() {
-        HostServer hostServer = new HostServer(1234, 5, null);
+        HostServer hostServer = new HostServer(1234, 5, null, null);
         hostServer.setMyNickname("Player1");
         hostServer.setMyNickname("Player2");
 
