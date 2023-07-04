@@ -39,12 +39,11 @@ public class GameData {
     public List<Integer> prepareScores(List<PlayerTableRow> scores){
         //get scores from tha table in the same order of Players list
         List<Integer> score_list = new ArrayList<>();
-        for (int i = 0; i < players.size(); i++) {
-            String name = players.get(i);
+        for (String name : players) {
             int score = -1000;
-            for (int j = 0; j < scores.size(); j++) {
-                if (scores.get(j).nickname.equals(name)) {
-                    score = scores.get(j).getScore();
+            for (PlayerTableRow playerTableRow : scores) {
+                if (playerTableRow.nickname.get().equals(name)) {
+                    score = playerTableRow.getScore();
                     break;
                 }//assuming PlayerScoreList and getPlayersTurn have the same names (not in order).
             }

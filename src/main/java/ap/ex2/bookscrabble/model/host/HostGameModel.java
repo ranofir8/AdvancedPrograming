@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ap.ex2.bookscrabble.model.GameData;
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.GameScrabbleServer.Saves.GameSave;
@@ -27,6 +27,7 @@ import ap.ex2.bookscrabble.view.PlayerTableRow;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
+import com.google.gson.Gson;
 
 
 public class HostGameModel extends GameModel implements Observer {

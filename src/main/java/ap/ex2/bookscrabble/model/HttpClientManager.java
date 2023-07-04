@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import org.apache.http.HttpRequest.*;
+import org.apache.http.impl.client.HttpClientBuilder;
 //import java.net.HttpRequest;
 
 
@@ -31,19 +32,19 @@ public class HttpClientManager {
     public static String httpGet(String server_url , String param) throws IOException, URISyntaxException {
 
         String req_url = server_url + "/" + param;
-        HttpClient client = new DefaultHttpClient();
-        String encodedUrl = URLEncoder.encode(req_url, StandardCharsets.UTF_8.toString());
+        HttpClient client = HttpClientBuilder.create().build();
+        String encodedUrl = URLEncoder.encode(req_url, StandardCharsets.UTF_8);
         HttpGet request = new HttpGet(new URI(encodedUrl));
         HttpResponse response = client.execute(request);
 
         // Get the response
         Scanner sc = new Scanner(response.getEntity().getContent());
 
-        String res = "";
+        StringBuilder res = new StringBuilder();
         while (sc.hasNext()) {
-            res += sc.nextLine();
+            res.append(sc.nextLine());
         }
-        return res;
+        return res.toString();
 
     }
 
@@ -51,19 +52,19 @@ public class HttpClientManager {
 
 
         String req_url = server_url + "/" + param;
-        HttpClient client = new DefaultHttpClient();
-        String encodedUrl = URLEncoder.encode(server_url, StandardCharsets.UTF_8.toString());
+        HttpClient client = HttpClientBuilder.create().build();
+        String encodedUrl = URLEncoder.encode(server_url, StandardCharsets.UTF_8);
         HttpPost request = new HttpPost(new URI(encodedUrl));
         HttpResponse response = client.execute(request);
 
         // Get the response
         Scanner sc = new Scanner(response.getEntity().getContent());
 
-        String res = "";
+        StringBuilder res = new StringBuilder();
         while (sc.hasNext()) {
-            res += sc.nextLine();
+            res.append(sc.nextLine());
         }
-        return res;
+        return res.toString();
 
     }
 }

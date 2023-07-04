@@ -4,13 +4,15 @@ module ap.ex2.bookscrabble {
     requires javafx.fxml;
     requires javafx.media;
 
-    requires httpclient;
-    requires com.google.gson;
-    requires httpcore;
+    //requires httpclient; ?
+    //requires httpcore; ?
     requires java.ws.rs;
     requires org.hibernate.orm.core;
     requires java.sql;
-                            
+    requires org.apache.httpcomponents.httpclient;
+    requires org.apache.httpcomponents.httpcore;
+    requires com.google.gson;
+
     opens ap.ex2.bookscrabble to javafx.fxml;
     exports ap.ex2.bookscrabble;
     exports ap.ex2.bookscrabble.view;
