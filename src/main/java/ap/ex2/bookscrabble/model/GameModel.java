@@ -253,4 +253,18 @@ public abstract class GameModel extends Model {
         sendMsgToHost(String.valueOf(Protocol.SKIP_TURN_REQUEST));
     }
 
+    public String getCurrentGameStatus() {
+        switch (this.getGameInstance().getCurrentState()) {
+            case WAITING_FOR_PLAYERS:
+                return "Waiting for players to join";
+            case PLAYING:
+                if (this.getGameInstance().isMyTurn())
+                    return "It's your turn!";
+                else
+                    return  this.getGameInstance().getPlayerStatus().getTurnOfWho() + " is playing right now...";
+            case GAME_ENDED:
+                return "Game ended";
+        }
+        return null;
+    }
 }

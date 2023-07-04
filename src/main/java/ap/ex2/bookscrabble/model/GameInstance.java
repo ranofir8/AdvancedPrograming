@@ -22,15 +22,12 @@ public class GameInstance {
     private final ChangeBooleanProperty playerListChangeEvent;
 
     private final HashMap<String, Integer> scoreBoard;
-    public BooleanProperty canStartGameProperty;
     private Board gameBoard;
     private Tile.Bag gameBag;
 
     private final ObjectProperty<GameState> gameStateProperty;
     private final PlayerStatus myPlayer;
     private String[] notLegalWords;
-
-    private ObservableMap<String, Boolean> selectionMapObs; // True means the player has joined, False means the player has yet joined
 
     public Word limboToWord() {
         return this.getPlayerStatus().limboToWord(this.gameBag);
@@ -52,7 +49,11 @@ public class GameInstance {
         return tiles;
     }
 
-    enum GameState {
+    public GameState getCurrentState() {
+        return this.gameStateProperty.get();
+    }
+
+    public enum GameState {
         WAITING_FOR_PLAYERS, WAITING_FOR_PLAYERS_GAME_SAVE, PLAYING, GAME_ENDED
     }
 
@@ -118,34 +119,6 @@ public class GameInstance {
                         stringIntegerEntry.getKey() + (stringIntegerEntry.getKey().equals(myPlayer.nickName) ? " (You)" : ""),
                         stringIntegerEntry.getValue()))
                 .collect(Collectors.toList());
-    }
-
-    public String getCurrentGameStatus() {
-        switch (this.gameStateProperty.get()) {
-            case WAITING_FOR_PLAYERS:
-                return "Waiting for players to join";
-            case WAITING_FOR_PLAYERS_GAME_SAVE:
-                Set<String> waitingFor = new HashSet<>();
-                this.selectionMapObs.forEach((name, val) -> {
-                    if (!val)
-                        waitingFor.add(name);
-                });
-                // test this todo
-                return "Waiting for: " + waitingFor.stream().collect(Collectors.joining(", ")) + " to join..."; // todo
-
-            case PLAYING:
-                if (this.isMyTurn())
-                    return "It's your turn!";
-                else
-                    return  this.getPlayerStatus().getTurnOfWho() + " is playing right now...";
-            case GAME_ENDED:
-                return "Game ended";
-        }
-        return "Unknown game state";
-    }
-
-    public ObservableMap<String, Boolean> getObservableSelectionMapObs() {
-        return selectionMapObs;
     }
 
     public boolean isMyTurn() {

@@ -115,8 +115,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.isHostGame.bind(this.myViewModel.isHost);
 
         this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
-        //at start there are no client so disable start game button:
-        this.startGameButton.setDisable(true);
+        //at start there are no client so disable start game button
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.gameStatusLabel.textProperty().bind(this.myViewModel.gameStatusStringProperty);
@@ -125,7 +124,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.canStartGame.bind(this.myViewModel.canStartGame);
 
         // todo - if the game continues, make sure every body joined
-        this.startGameButton.disableProperty().bind(this.canStartGame);
+        if (this.isHostGame.get())
+            this.startGameButton.disableProperty().bind(this.canStartGame);
+
 
         this.gameInstanceProperty.bind(this.myViewModel.gameInstanceProperty);
 

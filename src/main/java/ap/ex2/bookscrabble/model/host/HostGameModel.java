@@ -10,14 +10,13 @@ import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
-import javafx.collections.ObservableMap;
+import javafx.beans.property.BooleanProperty;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class HostGameModel extends GameModel implements Observer {
     private final BookScrabbleClient myBookScrabbleClient; //for Client
@@ -28,7 +27,8 @@ public class HostGameModel extends GameModel implements Observer {
     private final HashMap<String, List<Tile>> tilesOfPlayer;
 
     private GameSave myGameSave;  // puts here data of the game
-    private ObservableMap<String, Boolean> selectionMapObs;
+    private Map<String, Boolean> selectionMap;  // players in a saved game, and did they join already or not
+    public BooleanProperty canTheGameStartProperty;
 
     /**
      *  puts in 'playersTurn' the names of the players in turn order
@@ -64,18 +64,28 @@ public class HostGameModel extends GameModel implements Observer {
     }
 
     private void setSelectionMap(Set<String> selectionSet) {
-        selectionSet.forEach(name -> this.selectionMapObs.put(name, false));
-        this.getGameInstance().getObservableSelectionMapObs().addListener(change -> {
-            change.
-        });
+        this.selectionMap = new HashMap<>();
+        // non of the players joined
+        selectionSet.forEach(name -> this.selectionMap.put(name, false));
     }
 
-    // when a player in the selection list has joined the game
-    private void onPlayerHasJoinedSelection(String playerName) {
-        this.selectionMapObs.put(playerName, true);
-        /todo
+    @Override
+    public String getCurrentGameStatus() {
+        String superStatus =  super.getCurrentGameStatus();
+        if (superStatus == null) {
+            switch (this.getGameInstance().getCurrentState()) {
+                case WAITING_FOR_PLAYERS_GAME_SAVE:
+                    Set<String> waitingFor = new HashSet<>();
+                    this.selectionMap.forEach((name, val) -> {
+                        if (!val)
+                            waitingFor.add(name);
+                    });
+                    // test this todo
+                    return "Waiting for: " + waitingFor.stream().collect(Collectors.joining(", ")) + " to join..."; // todo
+            }
+        }
+        return superStatus;
     }
-
 
     private void tryPingingBookServer() throws ConnectException {
         if (!this.myBookScrabbleClient.pingServer()) {
@@ -300,6 +310,35 @@ public class HostGameModel extends GameModel implements Observer {
                     break;
             }
         }
+    }
+
+    // new player joined the game
+    // check it for the selection list
+    @Override
+    protected void onNewPlayer(String newPlayerName) {
+        super.onNewPlayer(newPlayerName);
+        if (!this.isNewGame()) {
+            setPlayerHasJoinedSavedGame(newPlayerName);
+        }
+        this.testIfGameCanStart();
+    }
+
+    // when a player in the selection list has joined the game
+    private void setPlayerHasJoinedSavedGame(String player) {
+        this.selectionMap.put(player, true);
+    }
+
+    private void testIfGameCanStart() {
+        boolean canTheGameStart = false;
+        int playerAmount = this.hostServer.getOnlinePlayers().size();
+
+        if (this.isNewGame()) {
+            canTheGameStart = GameModel.MIN_PLAYERS <= playerAmount && playerAmount <= GameModel.MAX_PLAYERS;
+        } else {
+            canTheGameStart = !this.selectionMap.containsValue(false);
+        }
+        this.canTheGameStartProperty.set(canTheGameStart);
+        // todo listen to this property
     }
 
     private void onClientClosedConnection(String playerName) {
