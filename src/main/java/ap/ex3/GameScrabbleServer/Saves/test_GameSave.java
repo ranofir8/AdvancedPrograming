@@ -1,4 +1,4 @@
-package ap.ex2.GameScrabbleServer.Saves;
+package ap.ex3.GameScrabbleServer.Saves;
 
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;

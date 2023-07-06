@@ -1,4 +1,4 @@
-package ap.ex2.GameScrabbleServer;
+package ap.ex3.GameScrabbleServer;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
