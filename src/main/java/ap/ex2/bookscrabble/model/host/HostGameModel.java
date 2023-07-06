@@ -11,6 +11,7 @@ import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -34,7 +35,7 @@ public class HostGameModel extends GameModel implements Observer {
      *  puts in 'playersTurn' the names of the players in turn order
      */
     private void selectTurnOrder() {
-        this.playersTurn = new ArrayList<String>(this.hostServer.getOnlinePlayers());
+        this.playersTurn = new ArrayList<>(this.hostServer.getOnlinePlayers());
         Collections.shuffle(this.playersTurn);
     }
 
@@ -51,6 +52,7 @@ public class HostGameModel extends GameModel implements Observer {
 
         this.tilesOfPlayer = new HashMap<>();
         this.myGameSave = gameSave;
+        this.canTheGameStartProperty = new SimpleBooleanProperty();
         this.initFromGameSave();
     }
 
@@ -118,6 +120,9 @@ public class HostGameModel extends GameModel implements Observer {
 
         this.hostServer.start();
         System.out.println("HOST STARTED SERVER");
+
+        // add current player to scoreboard and such
+        this.onNewPlayer(this.getGameInstance().getNickname());
     }
 
     @Override
@@ -178,6 +183,11 @@ public class HostGameModel extends GameModel implements Observer {
             // add player to turn circle
             this.playersTurn.add(pSave.getPlayerName());
         }
+
+        // move the current player back to the start of the turns list
+        this.playersTurn.add(0, this.playersTurn.remove(this.playersTurn.size()-1));
+        // announce the current turn
+        this.nextTurn();
     }
 
 
@@ -197,7 +207,9 @@ public class HostGameModel extends GameModel implements Observer {
         });
     }
 
-    // send all players which turn it is, and go to the next turn
+    /*
+    send all players which turn it is, and go to the next turn
+     */
     private void nextTurn() {
         this.hostServer.sendMsgToAll(Protocol.TURN_OF + this.getCurrentTurnAndCycle());
     }
@@ -479,7 +491,11 @@ public class HostGameModel extends GameModel implements Observer {
 
             // send player new tiles
             List<Tile> tiles = gottenWord.tilesInWord();
-            this.tilesOfPlayer.get(player).removeAll(tiles);
+            // remove tiles from Word in player's tiles
+            tiles.forEach(tile -> {
+                int indx = this.tilesOfPlayer.get(player).lastIndexOf(tile);
+                this.tilesOfPlayer.get(player).remove(indx);
+            });
 
             int tilesOfPlayer = this.tilesOfPlayer.get(player).size();
             int tilesToGive = GameModel.DRAW_START_AMOUNT - tilesOfPlayer;

@@ -216,7 +216,6 @@ public abstract class GameModel extends Model {
 
     protected void onNewPlayer(String newPlayerName) {
         this.onUpdatePlayerScore(0, newPlayerName);
-        notifyViewModel(Command.SOUND_NEW_PLAYER_JOINED);
     }
 
     protected void onUpdatePlayerScore(int score, String player) {

@@ -1,5 +1,7 @@
 package ap.ex2.bookscrabble.model;
 
+import ap.ex2.GameScrabbleServer.Saves.GameSave;
+import ap.ex2.GameScrabbleServer.Saves.test_GameSave;
 import ap.ex2.bookscrabble.Config;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;
@@ -12,7 +14,9 @@ public class MyMainScreenModel extends MainScreenModel {
         this.gameModel = new HostGameModel(nickname,
                 Integer.parseInt(Config.getInstance().get(Config.HOST_PORT_KEY)),
                 Config.getInstance().get(Config.BOOK_SCRABBLE_IP_KEY),
-                Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY)));
+                Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY)),
+                test_GameSave.createDummyObject() // todo replace with a REST request and such
+                );
         this.gameModel.establishConnectionWithCallbackWrapper(this::startingModelCallback);
     }
 
@@ -25,9 +29,7 @@ public class MyMainScreenModel extends MainScreenModel {
                 setChanged();
                 notifyObservers(new Command2VM(Command.DISPLAY_PORT, this.gameModel.getDisplayPort()));
             }
-            System.out.println("NO callback error");
         } else {
-            System.out.println("YES callback error");
             // display to GUI "unable to establish connection, try again"
             setChanged();
             notifyObservers(new String[]{"ERR", "Unable to establish connection: " + e.getMessage()});

@@ -18,7 +18,7 @@ class test_PlayerStatus {
         PlayerStatus playerStatus = new PlayerStatus("John");
 
         // Call the updateTurnOf method
-        playerStatus.updateTurnOf("Alice");
+        playerStatus.setTurnOf("Alice");
 
         // Assert that the turnOfProperty has been updated correctly
         assertEquals("Alice", playerStatus.getTurnOfWho());

@@ -86,10 +86,6 @@ public class GameInstance {
             gameStatusChangeEvent.alertChanged();
             // todo update CHECK NUM OF PLAYERS < 4 AND IF WAITING FOR SELECTION LIST OR NOT
         });
-
-        updateScoreBoard(nickName, 0);
-
-
     }
 
     /**
@@ -133,6 +129,7 @@ public class GameInstance {
     }
 
     public void setGameBoard(Board b) {
+        b.setDictioaryCheck(this.gameBoard.getDictionaryCheck());
         this.gameBoard = b;
         this.boardTilesChangeEvent.alertChanged();
     }
