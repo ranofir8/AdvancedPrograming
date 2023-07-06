@@ -1,7 +1,7 @@
-package ap.ex2.GameScrabbleServer;
+package ap.ex3.GameScrabbleServer;
 
-import ap.ex2.GameScrabbleServer.Saves.GameSave;
-import ap.ex2.GameScrabbleServer.Saves.test_GameSave;
+import ap.ex3.GameScrabbleServer.Saves.GameSave;
+import ap.ex3.GameScrabbleServer.Saves.test_GameSave;
 import org.junit.jupiter.api.Test;
 
 class ScrabbleGameServerTest {

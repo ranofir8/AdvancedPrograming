@@ -1,7 +1,6 @@
 package ap.ex2.bookscrabble.model;
 
-import ap.ex2.GameScrabbleServer.Saves.GameSave;
-import ap.ex2.GameScrabbleServer.Saves.test_GameSave;
+import ap.ex3.GameScrabbleServer.Saves.test_GameSave;
 import ap.ex2.bookscrabble.Config;
 import ap.ex2.bookscrabble.common.Command;
 import ap.ex2.bookscrabble.common.Command2VM;

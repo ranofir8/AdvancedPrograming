@@ -1,12 +1,10 @@
 package ap.ex2.bookscrabble.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
-import ap.ex2.GameScrabbleServer.Saves.GameSave;
-import ap.ex2.GameScrabbleServer.Saves.PlayerSave;
+import ap.ex3.GameScrabbleServer.Saves.GameSave;
+import ap.ex3.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.bookscrabble.common.Protocol;
-import ap.ex2.bookscrabble.model.GameInstance;
 import ap.ex2.bookscrabble.model.GameModel;
-import ap.ex2.bookscrabble.model.PlayerStatus;
 import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import ap.ex2.scrabble.Word;

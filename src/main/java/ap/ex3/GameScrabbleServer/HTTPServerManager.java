@@ -1,4 +1,4 @@
-package ap.ex2.GameScrabbleServer;
+package ap.ex3.GameScrabbleServer;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

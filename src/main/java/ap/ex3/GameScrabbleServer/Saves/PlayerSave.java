@@ -1,4 +1,4 @@
-package ap.ex2.GameScrabbleServer.Saves;
+package ap.ex3.GameScrabbleServer.Saves;
 
 public class PlayerSave {  // saved player status: name, score, tiles in hand
     private String playerName;
