@@ -491,7 +491,11 @@ public class HostGameModel extends GameModel implements Observer {
 
             // send player new tiles
             List<Tile> tiles = gottenWord.tilesInWord();
-            this.tilesOfPlayer.get(player).removeAll(tiles);
+            // remove tiles from Word in player's tiles
+            tiles.forEach(tile -> {
+                int indx = this.tilesOfPlayer.get(player).lastIndexOf(tile);
+                this.tilesOfPlayer.get(player).remove(indx);
+            });
 
             int tilesOfPlayer = this.tilesOfPlayer.get(player).size();
             int tilesToGive = GameModel.DRAW_START_AMOUNT - tilesOfPlayer;

@@ -129,6 +129,7 @@ public class GameInstance {
     }
 
     public void setGameBoard(Board b) {
+        b.setDictioaryCheck(this.gameBoard.getDictionaryCheck());
         this.gameBoard = b;
         this.boardTilesChangeEvent.alertChanged();
     }

@@ -32,8 +32,12 @@ public class Board {
 		return b;
     }
 
+	public Function<String, Boolean> getDictionaryCheck() {
+		return this.atDictionaryCheck;
+	}
 
-    private static class Multiplier {
+
+	private static class Multiplier {
 		public final int multiplyWordBy;
 		public final int multiplyLetterBy;
 
