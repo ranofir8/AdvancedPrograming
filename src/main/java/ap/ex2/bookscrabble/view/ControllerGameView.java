@@ -10,6 +10,7 @@ import ap.ex2.scrabble.Board;
 import ap.ex2.scrabble.Tile;
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -36,6 +37,7 @@ public class ControllerGameView extends GameView implements Initializable {
     private final ChangeBooleanProperty vBoardTilesChangedEvent;
     private final BooleanProperty isPlayerTurn;
     private final BooleanProperty canSendWord;
+
 
     // board & tiles
     private List<Tile> tilesInHand;
@@ -67,6 +69,8 @@ public class ControllerGameView extends GameView implements Initializable {
     private ScrollPane tilesSP;
     @FXML
     private Button startGameButton;
+    @FXML
+    private Button saveGameButton;
     @FXML
     private Canvas tilesCanvas;
     @FXML
@@ -579,5 +583,8 @@ public class ControllerGameView extends GameView implements Initializable {
 
     private boolean isBoardSelected() {
         return this.isValidBoardPosition(this.selectedBoardRow, this.selectedBoardCol);
+    }
+
+    public void saveGameButtonAction(ActionEvent actionEvent) {
     }
 }
