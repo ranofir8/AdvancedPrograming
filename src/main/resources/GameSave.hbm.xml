@@ -5,7 +5,7 @@
 <hibernate-mapping>
     <class name="ap.ex3.GameScrabbleServer.Saves.GameSave" table="GAMES" >
         <id name="gameID" type="java.lang.Integer" column="game_ID" >
-            <generator class="ap.ex3.GameScrabbleServer.RandomGameGenerator" />
+            <generator class="ap.ex3.GameScrabbleServer.db.RandomGameGenerator" />
         </id>
         <property name="hostName" type="java.lang.String" column="host_name" length="-1" />
         <property name="gameBoard" type="java.lang.String" column="game_board" length="-1" />

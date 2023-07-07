@@ -1,9 +1,9 @@
-package ap.ex3.scrabblebasicb;
+package ap.ex3.exampleRest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-@ApplicationPath("/api")
+//@ApplicationPath("/api")
 public class HelloApplication extends Application {
 
 }

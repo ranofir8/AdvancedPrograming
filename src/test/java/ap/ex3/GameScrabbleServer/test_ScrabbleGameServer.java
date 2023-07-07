@@ -2,13 +2,15 @@ package ap.ex3.GameScrabbleServer;
 
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import ap.ex3.GameScrabbleServer.Saves.test_GameSave;
+import ap.ex3.GameScrabbleServer.db.GameNotFoundException;
+import ap.ex3.GameScrabbleServer.db.InvalidHostException;
 import org.junit.jupiter.api.Test;
 
-class ScrabbleGameServerTest {
+class test_ScrabbleGameServer {
 
     @Test
     void saveNewGame() {
-        ScrabbleGameServer server = new ScrabbleGameServer();
+        ScrabbleGameServer server = ScrabbleGameServer.getInstance();
         GameSave gs = test_GameSave.createDummyObject();
 
         int r = server.saveNewGame(gs);
@@ -19,7 +21,7 @@ class ScrabbleGameServerTest {
     void loadExistingGame() {
         int gameID = 8291;
         String hostName = "hostGilad";
-        ScrabbleGameServer server = new ScrabbleGameServer();
+        ScrabbleGameServer server = ScrabbleGameServer.getInstance();
 
         try {
             GameSave gs = server.loadExistingGame(gameID, hostName);

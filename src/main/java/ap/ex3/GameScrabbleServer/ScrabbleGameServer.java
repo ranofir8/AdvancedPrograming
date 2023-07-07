@@ -1,18 +1,20 @@
 package ap.ex3.GameScrabbleServer;
 
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
+import ap.ex3.GameScrabbleServer.db.GameNotFoundException;
+import ap.ex3.GameScrabbleServer.db.GameSaveMapper;
+import ap.ex3.GameScrabbleServer.db.InvalidHostException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 
 public class ScrabbleGameServer implements GameServer {
-    private HTTPServerManager httpServerManager; // the server of the http. we get from it actions
     private static final SessionFactory sF = new Configuration().configure().buildSessionFactory();
     private Session sesh = null;
     private GameSaveMapper map;
 
-    public ScrabbleGameServer() {
+    private ScrabbleGameServer() {
         try {
             this.sesh = sF.openSession();
             this.map = new GameSaveMapper(sesh);
@@ -20,6 +22,14 @@ public class ScrabbleGameServer implements GameServer {
             System.out.println("SQL server is not running.");
             e.printStackTrace();
         }
+    }
+
+    private static ScrabbleGameServer singleton;
+
+    public static ScrabbleGameServer getInstance() {
+        if (ScrabbleGameServer.singleton == null)
+            ScrabbleGameServer.singleton = new ScrabbleGameServer();
+        return singleton;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ap.ex3.GameScrabbleServer;
+package ap.ex3.GameScrabbleServer.db;
 
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import org.hibernate.Session;
@@ -16,8 +16,6 @@ public class GameSaveMapper {
         GameSave emp = (GameSave) this.sesh.get(GameSave.class, gameID);
         return emp;
     }
-
-
 
     public void saveGame(GameSave gameSave){
         this.sesh.save(gameSave);
