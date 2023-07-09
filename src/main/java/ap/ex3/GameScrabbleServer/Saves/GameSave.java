@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.google.gson.Gson;
+
 
 
 public class GameSave {
@@ -41,9 +43,14 @@ public class GameSave {
     public GameSave() {
     }
 
-    private String convertToJSON() {
-        // todo - from Moriya
-        return "";
+    public String convertToJSON() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public GameSave convertFromJSON(String gameGson) {
+        Gson gson = new Gson();
+        return gson.fromJson(gameGson , GameSave.class);
     }
 
     public void setGameID(int gameID) {

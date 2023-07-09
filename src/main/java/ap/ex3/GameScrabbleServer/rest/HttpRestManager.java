@@ -5,9 +5,7 @@ import ap.ex3.GameScrabbleServer.ScrabbleGameServer;
 import ap.ex3.GameScrabbleServer.db.GameNotFoundException;
 import ap.ex3.GameScrabbleServer.db.InvalidHostException;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 
@@ -17,16 +15,32 @@ public class HttpRestManager {
     @GET
     @Path ("/loadGame")
     @Produces("text/plain")
-    public Response getGame() {
+    public Response getGame(@QueryParam("ID") String ID, @QueryParam("HostName") String HostName) {
         try {
             ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
-            GameSave loadedGame = sgs.loadExistingGame(100, "Gilad");
+            GameSave loadedGame = sgs.loadExistingGame(Integer.parseInt(ID), HostName);
+            return Response.ok(loadedGame.convertToJSON()).build();
         } catch (GameNotFoundException e) {
             return Response.status(400, "Game does not exist.").build();
         } catch (InvalidHostException e) {
             return Response.status(400, "You are not the host for this game.").build();
         }
 
-        return Response.ok("Game loaded Successfully, here it is: ...").build();
     }
+
+//    @POST
+//    @Path ("/loadGame")
+//    @Produces("text/plain")
+//    @Consumes("application/json")
+//    public Response PostGame(GameSave gameData) {
+//        try {
+//            ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
+//            //calc id
+//            //send to save in database
+//            //return id
+//        } catch (GameNotFoundException e) {
+//            return Response.status(400, ).build();
+//
+//        return Response.ok(id.toString()).build();
+//    }
 }
