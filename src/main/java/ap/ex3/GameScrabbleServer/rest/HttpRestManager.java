@@ -11,11 +11,10 @@ import javax.ws.rs.core.Response;
 
 @Path ("/")
 public class HttpRestManager {
-    // todo - Moriya
     @GET
     @Path ("/loadGame")
     @Produces("text/plain")
-    public Response getGame(@PathParam("ID") String ID, @PathParam("HostName") String HostName) {
+    public Response getGame(@QueryParam("ID") String ID, @QueryParam("HostName") String HostName) {
         try {
             ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
             GameSave loadedGame = sgs.loadExistingGame(Integer.parseInt(ID), HostName);
@@ -28,11 +27,25 @@ public class HttpRestManager {
 
     }
 
-    @POST
-    @Path ("/loadGame")
+    @GET
+    @Path ("/androidLoadScore")
     @Produces("text/plain")
-    @Consumes("application/json")
-    //public Response PostGame(@PathParam("Game") String GameData){
+    public Response getScore(@QueryParam("ID") String ID, @QueryParam("HostName") String HostName) {
+        try {
+            ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
+            GameSave loadedGame = sgs.loadExistingGame(Integer.parseInt(ID), HostName);
+            return Response.ok(loadedGame.getListOfPlayers().toString()).build(); //TODO: send score list
+        } catch (GameNotFoundException e) {
+            return Response.status(400, "Game does not exist.").build();
+        } catch (InvalidHostException e) {
+            return Response.status(400, "You are not the host for this game.").build();
+        }
+
+    }
+
+    @POST
+    @Path ("/restoreGame")
+    @Produces("text/plain")
     public Response PostGame(String GameData) {
         ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
         int gameID = sgs.saveNewGame(GameSave.convertFromJSON(GameData));

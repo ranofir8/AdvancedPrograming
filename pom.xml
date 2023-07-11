@@ -125,11 +125,6 @@
             <artifactId>google-http-client-apache-v2</artifactId>
             <version>1.43.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.expath.http.client</groupId>
-            <artifactId>http-client</artifactId>
-            <version>1.4.1</version>
-        </dependency>
     </dependencies>
 
     <build>

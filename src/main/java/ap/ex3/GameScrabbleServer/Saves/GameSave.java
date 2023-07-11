@@ -77,4 +77,18 @@ public class GameSave {
     public Set<String> getSelectionSet() {
         return this.getListOfPlayers().stream().map(PlayerSave::getPlayerName).collect(Collectors.toSet());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameSave gameSave = (GameSave) o;
+
+        if (gameID != gameSave.gameID) return false;
+        if (!hostName.equals(gameSave.hostName)) return false;
+        if (!gameBoardString.equals(gameSave.gameBoardString)) return false;
+        return listOfPlayers.equals(gameSave.listOfPlayers);
+    }
+
 }
