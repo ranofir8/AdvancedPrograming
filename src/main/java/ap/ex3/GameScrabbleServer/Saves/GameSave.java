@@ -48,7 +48,7 @@ public class GameSave {
         return gson.toJson(this);
     }
 
-    public GameSave convertFromJSON(String gameGson) {
+    public static GameSave convertFromJSON(String gameGson) {
         Gson gson = new Gson();
         return gson.fromJson(gameGson , GameSave.class);
     }

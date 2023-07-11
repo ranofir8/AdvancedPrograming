@@ -15,7 +15,7 @@ public class HttpRestManager {
     @GET
     @Path ("/loadGame")
     @Produces("text/plain")
-    public Response getGame(@QueryParam("ID") String ID, @QueryParam("HostName") String HostName) {
+    public Response getGame(@PathParam("ID") String ID, @PathParam("HostName") String HostName) {
         try {
             ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
             GameSave loadedGame = sgs.loadExistingGame(Integer.parseInt(ID), HostName);
@@ -28,19 +28,14 @@ public class HttpRestManager {
 
     }
 
-//    @POST
-//    @Path ("/loadGame")
-//    @Produces("text/plain")
-//    @Consumes("application/json")
-//    public Response PostGame(GameSave gameData) {
-//        try {
-//            ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
-//            //calc id
-//            //send to save in database
-//            //return id
-//        } catch (GameNotFoundException e) {
-//            return Response.status(400, ).build();
-//
-//        return Response.ok(id.toString()).build();
-//    }
+    @POST
+    @Path ("/loadGame")
+    @Produces("text/plain")
+    @Consumes("application/json")
+    //public Response PostGame(@PathParam("Game") String GameData){
+    public Response PostGame(String GameData) {
+        ScrabbleGameServer sgs = ScrabbleGameServer.getInstance();
+        int gameID = sgs.saveNewGame(GameSave.convertFromJSON(GameData));
+        return Response.ok(String.valueOf(gameID)).build();
+    }
 }
