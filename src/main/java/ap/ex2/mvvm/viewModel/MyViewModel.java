@@ -28,6 +28,7 @@ public class MyViewModel extends ViewModel {
     public StringProperty hostPort;
     public StringProperty hostIP;
 
+    public StringProperty loadGameIDTextField;
     public StringProperty nicknamePropertyTextField;
     public StringProperty gameStatusStringProperty;
 
@@ -69,6 +70,7 @@ public class MyViewModel extends ViewModel {
                         notifyObservers(new guiMessage(args[1], Alert.AlertType.ERROR));
                         break;
 
+                    case "SAVE":
                     case "CRASH":
                         notifyObservers(args);
                         break;
@@ -105,14 +107,10 @@ public class MyViewModel extends ViewModel {
         });
     }
 
-
-    @Override
-    public void startGameModel() {
-        //nickName handling:
-        //port handling:
-
+    // when creating a new game, ID will be null
+    public void startGameModel(String savedGameID) {
         if (this.isHost.get()) {
-            this.myModel.startHostGameModel(this.nicknamePropertyTextField.get());
+            this.myModel.startHostGameModel(this.nicknamePropertyTextField.get(), savedGameID);
         } else {
             try {
                 int hostIntPort = Integer.parseInt(this.hostPort.get());
@@ -126,6 +124,11 @@ public class MyViewModel extends ViewModel {
 
         this.initGameModelBinds();
         this.gameInstanceProperty.get().gameStatusChangeEvent.alertChanged();
+    }
+
+    @Override
+    public void startGameModel() {
+        this.startGameModel(null);
     }
 
     @Override
@@ -174,5 +177,18 @@ public class MyViewModel extends ViewModel {
     @Override
     public void giveUpTurn() {
         this.myModel.getGameModel().requestGiveUpTurn();
+    }
+
+
+    public void saveGameClicked() {
+        if (isHost.get())
+            ((HostGameModel)this.myModel.getGameModel()).saveGame();
+        else
+            notifyObservers(new guiMessage("Only the host can save a game.", Alert.AlertType.ERROR));
+    }
+
+    @Override
+    public void loadGameClicked() {
+        this.startGameModel(this.loadGameIDTextField.get());
     }
 }

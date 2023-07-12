@@ -64,4 +64,7 @@ public abstract class ViewModel extends Observable implements Observer {
 
     protected abstract void giveUpTurn();
 
+    public abstract void saveGameClicked();
+
+    public abstract void loadGameClicked();
 }

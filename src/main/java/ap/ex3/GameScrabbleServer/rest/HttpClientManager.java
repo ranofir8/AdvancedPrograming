@@ -1,6 +1,7 @@
 package ap.ex3.GameScrabbleServer.rest;
 
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
+import ap.ex3.GameScrabbleServer.db.DBServerException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,9 +15,18 @@ import javax.ws.rs.core.UriBuilder;
 import static java.lang.Integer.parseInt;
 
 public class HttpClientManager {
-    public static GameSave httpGet(String server_url , int gameId , String HostName) throws IOException, InterruptedException, URISyntaxException {
+    static final String LOAD_GAME_URI = "scrabble/loadGame";
+    static final String SAVE_GAME_URI = "scrabble/saveGame";
+    private final URI baseUri;
 
-        UriBuilder uriBuilder = UriBuilder.fromUri(server_url + "/loadGame");
+    public HttpClientManager(String baseUrl) throws URISyntaxException {
+        this.baseUri = URI.create(baseUrl + "/");
+    }
+
+    public GameSave httpGet(int gameId , String HostName) throws IOException, DBServerException, GameServer400 {
+        URI u = this.baseUri.resolve("./" + LOAD_GAME_URI);
+
+        UriBuilder uriBuilder = UriBuilder.fromUri(u);
         uriBuilder.queryParam("ID", gameId);
         uriBuilder.queryParam("HostName", HostName);
 
@@ -26,20 +36,63 @@ public class HttpClientManager {
                 .build();
 
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (InterruptedException e) {
+            throw new IOException();
+        }
 
-        return GameSave.convertFromJSON(response.body());
+        switch (response.statusCode()) {
+            case 200:   // ok
+                return GameSave.convertFromJSON(response.body());
+            case 400:   // logical error in the request
+                this.throw400error(response);
+            case 500:  // internal server error
+                throw new DBServerException();
+            default:
+                System.out.println("Unhandled HTTP response: " + response.statusCode() + "\n\n" + response.body());
+        }
 
+        return null;
     }
 
-    public static int httpPost(String server_url, GameSave gameToSave) throws IOException, URISyntaxException, InterruptedException {
-        URI req_uri = new URI(server_url + "/restoreGame");
+    private void throw400error(HttpResponse<String> response) throws GameServer400 {
+        String[] errorBody = response.body().split("<p><b>Message</b> ");
+        if (errorBody.length < 2)
+            throw new GameServer400("Error in 400 parsing");
+        String[] errorMessage = errorBody[1].split("</p><p>");
+        if (errorMessage.length < 2)
+            throw new GameServer400("Error in 400 parsing");
+        throw new GameServer400(errorMessage[0]);
+    }
+
+    public int httpPost(GameSave gameToSave) throws IOException, DBServerException, GameServer400 {
+        UriBuilder uriBuilder = UriBuilder.fromUri(this.baseUri);
+        URI u = uriBuilder.build().resolve("./" + SAVE_GAME_URI);
+
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(req_uri)
+                .uri(u)
                 .POST(HttpRequest.BodyPublishers.ofString(gameToSave.convertToJSON()))
                 .build();
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        return parseInt(response.body());
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (InterruptedException e) {
+            throw new IOException();
+        }
+
+        switch (response.statusCode()) {
+            case 200:
+                return parseInt(response.body());
+            case 400:
+                this.throw400error(response);
+            case 500:  // internal server error
+                throw new DBServerException();
+            default:
+                System.out.println("Unhandled HTTP response: " + response.statusCode() + "\n\n" + response.body());
+        }
+        return -1;
     }
 }

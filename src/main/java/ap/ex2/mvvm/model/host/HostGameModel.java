@@ -1,6 +1,7 @@
 package ap.ex2.mvvm.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
+import ap.ex2.mvvm.Config;
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import ap.ex3.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.mvvm.common.Protocol;
@@ -8,17 +9,23 @@ import ap.ex2.mvvm.model.GameModel;
 import ap.ex2.scrabbleParts.Board;
 import ap.ex2.scrabbleParts.Tile;
 import ap.ex2.scrabbleParts.Word;
+import ap.ex3.GameScrabbleServer.db.DBServerException;
+import ap.ex3.GameScrabbleServer.rest.GameServer400;
+import ap.ex3.GameScrabbleServer.rest.HttpClientManager;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class HostGameModel extends GameModel implements Observer {
     private final BookScrabbleClient myBookScrabbleClient; //for Client
+    private final HttpClientManager httpClientManager;
+
     private final int hostPort;
     private HostServer hostServer;
     private List<String> playersTurn;  // a list in which the first player has the turn. at the end of his turn his name is moved to the end
@@ -47,6 +54,13 @@ public class HostGameModel extends GameModel implements Observer {
         this.ignoreDictionary = false;
         this.hostPort = hostPort;
         this.myBookScrabbleClient = new BookScrabbleClient(bookScrabbleSeverIP, bookScrabbleServerPort);
+        try {
+            this.httpClientManager = new HttpClientManager(Config.getInstance().get(Config.HTTP_BASE_URL));
+        } catch (URISyntaxException e) {
+            //todo display message , abort cerating the host
+            //todo done
+            throw new RuntimeException(e);
+        }
 
         this.tilesOfPlayer = new HashMap<>();
         this.myGameSave = gameSave;
@@ -279,15 +293,6 @@ public class HostGameModel extends GameModel implements Observer {
         this.hostServer.close();
     }
 
-    private void createGameSave() {
-        // todo - puts all things about the game in a new GameSave object
-
-    }
-
-    // sends data to all players about the new game, and continues the game
-    private void loadGameFromSave() {
-        // todo
-    }
 
     // *****************************
     //      Protocol handling
@@ -522,5 +527,39 @@ public class HostGameModel extends GameModel implements Observer {
     @Override
     protected Tile _onGotNewTilesHelper(char tileLetter) {
         return this.getGameInstance().getGameBag().getTileNoRemove(tileLetter);
+    }
+
+
+    // put new GameSave object in the private myGameSave datamember
+    private void createGameSave() {
+        List<PlayerSave> listOfPlayers = new ArrayList<>();
+        this.playersTurn.forEach(pName -> {
+            // create PlayerSave with nickname pName
+            int pScore = this.getGameInstance().getScoreOf(pName);
+            List<Tile> pTiles = this.tilesOfPlayer.get(pName);
+            String pTilesStr = pTiles.stream().map(t -> t.letter).map(String::valueOf).collect(Collectors.joining());
+            PlayerSave pSave = new PlayerSave(pName,pScore,pTilesStr);
+            // add it to listOfPlayers
+            listOfPlayers.add(pSave);
+        });
+        this.myGameSave = new GameSave(this.getGameInstance().getNickname(), this.getGameInstance().getGameBoard(), listOfPlayers);
+
+
+    }
+
+    // sends data to all players about the new game, and continues the game
+    private void loadGameFromSave() {
+        // todo
+    }
+
+    public void saveGame() {
+        this.createGameSave();
+        try {
+            int resultID = this.httpClientManager.httpPost(this.myGameSave);
+            notifyViewModel(new String[]{"SAVE", "Game saved successfully, with ID: " + resultID + ".\nRemember this ID lichshe' future play!"});
+            this.closeConnection();
+        } catch (Exception e) {
+            notifyViewModel(new String[]{"ERR", "HTTP server encountered an error:\n" + e.getMessage()});
+        }
     }
 }

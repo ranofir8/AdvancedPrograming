@@ -40,7 +40,8 @@ public class GameSave {
         this.listOfPlayers = listOfPlayers;
     }
 
-    public GameSave() {
+    public GameSave(String hostName, Board gameBoard, List<PlayerSave> listOfPlayers) {
+        this(-1, hostName, gameBoard, listOfPlayers);
     }
 
     public String convertToJSON() {

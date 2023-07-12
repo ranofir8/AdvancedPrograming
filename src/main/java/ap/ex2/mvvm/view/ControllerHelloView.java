@@ -49,6 +49,21 @@ public class ControllerHelloView extends GameView implements Initializable {
         this.myViewModel.hostIP.bind(this.joinGameIPTF.textProperty());
         this.myViewModel.isHost.bind(this.isHostHello);
         this.myViewModel.nicknamePropertyTextField.bind(this.nicknameTF.textProperty());
+        this.myViewModel.loadGameIDTextField.bind(this.hostSavedGameTF.textProperty());
+        addTextLimiter(this.hostSavedGameTF, 4);
+    }
+
+    // from https://stackoverflow.com/questions/15159988
+    private static void addTextLimiter(final TextField tf, final int maxLength) {
+        tf.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tf.getText().length() > maxLength) {
+                    String s = tf.getText().substring(0, maxLength);
+                    tf.setText(s);
+                }
+            }
+        });
     }
 
     @Override

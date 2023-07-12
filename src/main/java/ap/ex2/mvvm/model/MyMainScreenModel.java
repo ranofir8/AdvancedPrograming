@@ -1,22 +1,58 @@
 package ap.ex2.mvvm.model;
 
-import ap.ex3.GameScrabbleServer.Saves.test_GameSave;
+import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import ap.ex2.mvvm.Config;
 import ap.ex2.mvvm.common.Command;
 import ap.ex2.mvvm.common.Command2VM;
 import ap.ex2.mvvm.model.guest.GuestGameModel;
 import ap.ex2.mvvm.model.host.HostGameModel;
+import ap.ex3.GameScrabbleServer.db.DBServerException;
+import ap.ex3.GameScrabbleServer.rest.GameServer400;
+import ap.ex3.GameScrabbleServer.rest.HttpClientManager;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class MyMainScreenModel extends MainScreenModel {
-    @Override
-    public void startHostGameModel(String nickname) {
-        this.gameModel = new HostGameModel(nickname,
-                Integer.parseInt(Config.getInstance().get(Config.HOST_PORT_KEY)),
-                Config.getInstance().get(Config.BOOK_SCRABBLE_IP_KEY),
-                Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY)),
-                test_GameSave.createDummyObject() // todo replace with a REST request and such
-                );
-        this.gameModel.establishConnectionWithCallbackWrapper(this::startingModelCallback);
+
+    // if GameSave if null, ignore it
+    public void startHostGameModel(String nickname, String savedGameID) {
+        GameSave gameSave = null;
+        boolean canStartGame;
+
+        if (savedGameID != null) {
+            canStartGame = false;
+
+            try {
+                HttpClientManager hcm = new HttpClientManager(Config.getInstance().get(Config.HTTP_BASE_URL));
+                int intID = Integer.parseInt(savedGameID);
+                gameSave = hcm.httpGet(intID, nickname);
+                canStartGame = true;
+            } catch (NumberFormatException e) {
+                notifyViewModel(new String[]{"ERR", "Game ID isn't an integer."});
+            } catch (DBServerException e) {
+                notifyViewModel(new String[]{"ERR", "HTTP Internal server error: " + e.getMessage()});
+            } catch (URISyntaxException e) {
+                notifyViewModel(new String[]{"ERR", "HTTP base URL is invalid."});
+            } catch (Exception e) {
+                notifyViewModel(new String[]{"ERR", "HTTP encountered an exception: " + e.getMessage()});
+            }
+
+        } else {
+            //try to start a new game
+            canStartGame = true;
+        }
+
+        if (canStartGame) {
+            this.gameModel = new HostGameModel(nickname,
+                    Integer.parseInt(Config.getInstance().get(Config.HOST_PORT_KEY)),
+                    Config.getInstance().get(Config.BOOK_SCRABBLE_IP_KEY),
+                    Integer.parseInt(Config.getInstance().get(Config.BOOK_SCRABBLE_PORT_KEY)),
+                    gameSave
+            );
+            this.gameModel.establishConnectionWithCallbackWrapper(this::startingModelCallback);
+        }
+
     }
 
     private void startingModelCallback(Exception e) {

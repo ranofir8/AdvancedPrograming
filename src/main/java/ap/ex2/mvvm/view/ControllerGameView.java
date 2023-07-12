@@ -1,5 +1,6 @@
 package ap.ex2.mvvm.view;
 
+import ap.ex2.mvvm.R;
 import ap.ex2.mvvm.common.ChangeBooleanProperty;
 import ap.ex2.mvvm.common.Command;
 import ap.ex2.mvvm.common.guiMessage;
@@ -166,6 +167,7 @@ public class ControllerGameView extends GameView implements Initializable {
                         SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
                         break;
                     case SOUND_NEW_PLAYER_JOINED:
+                        System.out.println("trying to play sound: " + R.getResource("sounds/" + SoundManager.SOUND_PLAYER_JOINED));
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED, true);
                         break;
                     case SOUND_NEW_WORD:
@@ -191,6 +193,8 @@ public class ControllerGameView extends GameView implements Initializable {
                 String[] args = (String[]) arg;
                 if (args[0].equals("CRASH"))
                     this.displayCrash(args[1]);
+                else if (args[0].equals("SAVE"))
+                    this.displayGameSavedOK(args[1]);
             }
         }
     }
@@ -207,6 +211,18 @@ public class ControllerGameView extends GameView implements Initializable {
         });
     }
 
+    private void displayGameSavedOK(String msg) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            SoundManager.singleton.playSound(SoundManager.SOUND_OF_APPROVAL);
+            alert.setTitle("Game saved");
+            alert.setHeaderText("Game saved for later!");
+            alert.setContentText(msg);
+            alert.showAndWait();
+            exit(0);//bye bye
+        });
+    }
+
     private void displayWinner() {
         this.gameStatusLabel.textProperty().unbind();
         String winner = this.gameInstanceProperty.get().getWinner();
@@ -215,7 +231,7 @@ public class ControllerGameView extends GameView implements Initializable {
         alert.setTitle("Game End");
         alert.setHeaderText("The game has come to an end!");
         alert.setContentText("The winner is: " + winner +", Congrats!");
-        Optional<ButtonType> result = alert.showAndWait();
+        alert.showAndWait();
         exit(0);//bye bye
     }
 
@@ -585,6 +601,7 @@ public class ControllerGameView extends GameView implements Initializable {
         return this.isValidBoardPosition(this.selectedBoardRow, this.selectedBoardCol);
     }
 
-    public void saveGameButtonAction(ActionEvent actionEvent) {
+    public void saveGameButtonAction() {
+        this.myViewModel.saveGameClicked();
     }
 }

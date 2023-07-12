@@ -15,8 +15,9 @@ public class Config {
     public static final String HOST_PORT_KEY = "host_port";
     public static final String DEFAULT_GUEST_IP_KEY = "default_guest_ip";
     public static final String DEFAULT_GUEST_PORT_KEY = "default_guest_port";
+    public static final String HTTP_BASE_URL = "http_base_url";
 
-    private static final String[] myKeys = {BOOK_SCRABBLE_IP_KEY, BOOK_SCRABBLE_PORT_KEY, HOST_PORT_KEY, DEFAULT_GUEST_IP_KEY, DEFAULT_GUEST_PORT_KEY};
+    private static final String[] myKeys = {BOOK_SCRABBLE_IP_KEY, HTTP_BASE_URL, BOOK_SCRABBLE_PORT_KEY, HOST_PORT_KEY, DEFAULT_GUEST_IP_KEY, DEFAULT_GUEST_PORT_KEY};
 
     private Config() {
         this.configs = new HashMap<>();
