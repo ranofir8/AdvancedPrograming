@@ -2,6 +2,7 @@ package ap.ex2.mvvm.model.host;
 
 import ap.ex2.BookScrabbleServer.BookScrabbleClient;
 import ap.ex2.mvvm.Config;
+import ap.ex2.mvvm.common.Command;
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import ap.ex3.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex2.mvvm.common.Protocol;
@@ -94,8 +95,10 @@ public class HostGameModel extends GameModel implements Observer {
                         if (!val)
                             waitingFor.add(name);
                     });
-                    // test this todo
-                    return "Waiting for: " + waitingFor.stream().collect(Collectors.joining(", ")) + " to join..."; // todo
+                    String waitingForListStr = waitingFor.stream().collect(Collectors.joining(", "));
+                    if (waitingForListStr.length() > 0)
+                        return "Waiting for: " + waitingForListStr + " to join...";
+                    return "Ready to continue!";
             }
         }
         return superStatus;
@@ -318,6 +321,7 @@ public class HostGameModel extends GameModel implements Observer {
                 case HostServer.PLAYER_JOINED_NOTIFICATION:
                     //controllerGameView?
                     this.onNewPlayer(args[1]);
+                    notifyViewModel(Command.SOUND_NEW_PLAYER_JOINED);
                     break;
 
                 case HostServer.PLAYER_EXITED_NOTIFICATION:
@@ -336,6 +340,7 @@ public class HostGameModel extends GameModel implements Observer {
             setPlayerHasJoinedSavedGame(newPlayerName);
         }
         this.testIfGameCanStart();
+        this.gameInstanceProperty.get().gameStatusChangeEvent.alertChanged();
     }
 
     // when a player in the selection list has joined the game
@@ -353,10 +358,10 @@ public class HostGameModel extends GameModel implements Observer {
             canTheGameStart = !this.selectionMap.containsValue(false);
         }
         this.canTheGameStartProperty.set(canTheGameStart);
-        // todo listen to this property
     }
 
     private void onClientClosedConnection(String playerName) {
+        this.saveGame();
         this.hostServer.sendMsgToAll(Protocol.GAME_CRASH_ERROR + playerName);
         this.closeConnection();
     }
@@ -545,11 +550,6 @@ public class HostGameModel extends GameModel implements Observer {
         this.myGameSave = new GameSave(this.getGameInstance().getNickname(), this.getGameInstance().getGameBoard(), listOfPlayers);
 
 
-    }
-
-    // sends data to all players about the new game, and continues the game
-    private void loadGameFromSave() {
-        // todo
     }
 
     public void saveGame() {

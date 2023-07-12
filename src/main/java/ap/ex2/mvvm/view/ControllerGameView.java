@@ -100,7 +100,9 @@ public class ControllerGameView extends GameView implements Initializable {
         this.gameInstanceProperty.addListener((observableValue, g0, g1) -> {
             this.gameBoard = g1.getGameBoard();
             this.playerStatus = g1.getPlayerStatus();
-            this.tilesInHand = this.playerStatus.getTilesInHand();
+            synchronized (this.tilesInHand) {
+                this.tilesInHand = this.playerStatus.getTilesInHand();
+            }
             this.tilesPlacedLimbo = this.playerStatus.getTilesInLimbo();
 
             this.isPlayerTurn.bind(g1.getPlayerStatus().isMyTurnProperty);
@@ -120,6 +122,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.isHostGame.bind(this.myViewModel.isHost);
 
         this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
+        this.saveGameButton.visibleProperty().bind(this.isHostGame);
         //at start there are no client so disable start game button
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
@@ -128,7 +131,6 @@ public class ControllerGameView extends GameView implements Initializable {
         this.playersCount.bind(this.myViewModel.countPlayers);
         this.canStartGame.bind(this.myViewModel.canStartGame);
 
-        // todo - if the game continues, make sure every body joined
         this.startGameButton.disableProperty().bind(this.canStartGame.not());
 
 
@@ -167,7 +169,6 @@ public class ControllerGameView extends GameView implements Initializable {
                         SoundManager.singleton.playSound(SoundManager.SOUND_STARTING_GAME);
                         break;
                     case SOUND_NEW_PLAYER_JOINED:
-                        System.out.println("trying to play sound: " + R.getResource("sounds/" + SoundManager.SOUND_PLAYER_JOINED));
                         SoundManager.singleton.playSound(SoundManager.SOUND_PLAYER_JOINED, true);
                         break;
                     case SOUND_NEW_WORD:
@@ -423,28 +424,31 @@ public class ControllerGameView extends GameView implements Initializable {
         GraphicsContext gc = this.tilesCanvas.getGraphicsContext2D();
 
         this.tilesCanvas.setWidth(square * (1 + this.tilePadding) * tilesInHand.size() - tilePadding*square*0.5); // adapt canvas width
+        synchronized (this.tilesInHand) {
+            int i = 0;
+            for (Tile t : this.tilesInHand) {
+                double startX = i * (square * (1+tilePadding));
+                gc.setFill(Color.GRAY);
+                if (i == this.selectedTileIndex)
+                    gc.setFill(Color.PLUM);
 
-        int i = 0;
-        for (Tile t : this.tilesInHand) {
-            double startX = i * (square * (1+tilePadding));
-            gc.setFill(Color.GRAY);
-            if (i == this.selectedTileIndex)
-                gc.setFill(Color.PLUM);
+                gc.fillRect(startX, 0, square, square);
+                gc.strokeRect(startX, 0, square, square);
+                gc.setFill(Color.BLACK); // Set the text color to black
+                if (t == null) {
+                    continue;
+                }
+                gc.setFont(Font.font("Arial", square * 0.6)); // big letter font
+                gc.fillText(String.valueOf(t.letter), startX + letterMargin * square, (1-letterMargin) * square);
 
-            gc.fillRect(startX, 0, square, square);
-            gc.strokeRect(startX, 0, square, square);
-            gc.setFill(Color.BLACK); // Set the text color to black
+                gc.setFont(Font.font("Arial", square * 0.2)); // small letter font
+                double startXletter = startX + (1-letterMargin*0.6) * square;
+                if (t.score > 9)
+                    startXletter -= letterMargin * 0.5  * square;
+                gc.fillText(String.valueOf(t.score), startXletter, (1-letterMargin*0.5) * square);
 
-            gc.setFont(Font.font("Arial", square * 0.6)); // big letter font
-            gc.fillText(String.valueOf(t.letter), startX + letterMargin * square, (1-letterMargin) * square);
-
-            gc.setFont(Font.font("Arial", square * 0.2)); // small letter font
-            double startXletter = startX + (1-letterMargin*0.6) * square;
-            if (t.score > 9)
-                startXletter -= letterMargin * 0.5  * square;
-            gc.fillText(String.valueOf(t.score), startXletter, (1-letterMargin*0.5) * square);
-
-            i++;
+                i++;
+            }
         }
     }
 

@@ -255,7 +255,7 @@ public abstract class GameModel extends Model {
     public String getCurrentGameStatus() {
         switch (this.getGameInstance().getCurrentState()) {
             case WAITING_FOR_PLAYERS:
-                return "Waiting for players to join";
+                return "Waiting for players to join...";
             case PLAYING:
                 if (this.getGameInstance().isMyTurn())
                     return "It's your turn!";

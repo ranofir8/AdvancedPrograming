@@ -157,10 +157,6 @@ public class HostServer extends Observable implements Observer {
             } else {
                 // welcome him to the game
 
-                // add new player to host's screen (locally)
-                setChanged();
-                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname});
-
                 // send new player's name to the other players
                 this.sendMsgToAll(Protocol.PLAYER_UPLOAD + chosenNickname);
 
@@ -171,6 +167,9 @@ public class HostServer extends Observable implements Observer {
                     this.playersSockets.put(chosenNickname, client);
                 }
 
+                // add new player to host's screen (locally)
+                setChanged();
+                notifyObservers(new String[]{HostServer.PLAYER_JOINED_NOTIFICATION, chosenNickname});
 
                 // pass on the old players and send their names to the new player (for updating his scoreboard)
                 client.sendMsg(Protocol.HOST_LOGIN_ACCEPT + "");

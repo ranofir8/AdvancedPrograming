@@ -1,12 +1,15 @@
 package ap.ex3.GameScrabbleServer;
 
 import ap.ex3.GameScrabbleServer.Saves.GameSave;
+import ap.ex3.GameScrabbleServer.Saves.PlayerSave;
 import ap.ex3.GameScrabbleServer.db.GameNotFoundException;
 import ap.ex3.GameScrabbleServer.db.GameSaveMapper;
 import ap.ex3.GameScrabbleServer.db.InvalidHostException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
+import java.util.List;
 
 
 public class ScrabbleGameServer implements GameServer {
@@ -52,6 +55,14 @@ public class ScrabbleGameServer implements GameServer {
         } else {
             throw new InvalidHostException();
         }
+    }
+
+    @Override
+    public List<PlayerSave> loadScoresOfGame(int gameID) throws GameNotFoundException {
+        GameSave gs = this.map.getGameSave(gameID);
+        if (gs == null)
+            throw new GameNotFoundException();
+        return gs.getListOfPlayers();
     }
 
     public void finalize() {

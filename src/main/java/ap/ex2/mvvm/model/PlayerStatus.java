@@ -118,9 +118,6 @@ public class PlayerStatus {
 
         int wordLen = maxValue - minValue + 1;
 
-
-        //"_";// todo "_".repeat(wordLen);
-
         String s = IntStream.range(0, wordLen).mapToObj(x->"_").collect(Collectors.joining());
         StringBuilder sb = new StringBuilder(s);
         for (Map.Entry<Integer, Character> entry : relaventSet.entrySet()) {

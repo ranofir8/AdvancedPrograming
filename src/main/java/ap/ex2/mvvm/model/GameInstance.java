@@ -82,7 +82,6 @@ public class GameInstance {
         this.notLegalWords = null;
         this.playerListChangeEvent.addListener((observableValue, aBoolean, t1) -> {
             gameStatusChangeEvent.alertChanged();
-            // todo update CHECK NUM OF PLAYERS < 4 AND IF WAITING FOR SELECTION LIST OR NOT
         });
     }
 
