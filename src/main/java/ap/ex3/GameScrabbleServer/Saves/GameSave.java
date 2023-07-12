@@ -17,6 +17,10 @@ public class GameSave {
     // ordered by turns
     private List<PlayerSave> listOfPlayers = new ArrayList<>();
 
+    public GameSave() {
+
+    }
+
     public int getGameID() {
         return gameID;
     }

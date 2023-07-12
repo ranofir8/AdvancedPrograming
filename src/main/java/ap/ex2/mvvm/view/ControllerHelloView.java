@@ -5,6 +5,9 @@ import ap.ex2.mvvm.R;
 import ap.ex2.mvvm.common.Command;
 import ap.ex2.mvvm.common.guiMessage;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,6 +26,9 @@ public class ControllerHelloView extends GameView implements Initializable {
     protected final SimpleBooleanProperty isHostHello;
 
     @FXML
+    private TextField hostSavedGameTF;
+
+    @FXML
     private TextField joinGamePortTF;
 
     @FXML
@@ -35,6 +41,8 @@ public class ControllerHelloView extends GameView implements Initializable {
     private Button joinGameButton;
     @FXML
     private Button hostGameButton;
+    @FXML
+    private Button hostSavedGameButton;
 
     public ControllerHelloView() {
 
@@ -101,6 +109,7 @@ public class ControllerHelloView extends GameView implements Initializable {
             this.joinGamePortTF.setText(defaultGuestPort);
 
         this.joinGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
+        this.hostSavedGameButton.disableProperty().bind(this.hostGameButton.disableProperty());
 
         this.nicknameTF.textProperty().addListener((observableValue, oldNickname, newNickname) ->
                 this.hostGameButton.setDisable(newNickname.length() == 0));
@@ -121,7 +130,14 @@ public class ControllerHelloView extends GameView implements Initializable {
      */
     @FXML
     protected void joinExistingGameClick() {
-        this.isHostHello.set(false); //transmitted to vm and m(?)
+        this.isHostHello.set(false);
         this.myViewModel.startGameModel();
+    }
+
+    @FXML
+    protected void hostSavedGameClick() {
+        this.isHostHello.set(true);
+        // open dialog with the ID
+        this.myViewModel.loadGameClicked();
     }
 }

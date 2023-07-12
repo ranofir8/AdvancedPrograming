@@ -124,6 +124,7 @@ public class ControllerGameView extends GameView implements Initializable {
         this.startGameButton.visibleProperty().bind(this.isHostGame); //start game button is available only to the host
         this.saveGameButton.visibleProperty().bind(this.isHostGame);
         //at start there are no client so disable start game button
+        this.saveGameButton.setDisable(true);
 
         this.portNum.textProperty().bind(this.myViewModel.resultHostPort);
         this.gameStatusLabel.textProperty().bind(this.myViewModel.gameStatusStringProperty);
@@ -303,6 +304,8 @@ public class ControllerGameView extends GameView implements Initializable {
         // unbind visibility
         this.startGameButton.visibleProperty().unbind();
         this.startGameButton.visibleProperty().set(false); //bye button
+
+        this.saveGameButton.setDisable(false); // Ran added now
 
         this.myViewModel.startGame();
     }

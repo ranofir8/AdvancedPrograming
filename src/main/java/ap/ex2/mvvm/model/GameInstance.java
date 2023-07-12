@@ -27,6 +27,8 @@ public class GameInstance {
     private final PlayerStatus myPlayer;
     private String[] notLegalWords;
 
+
+
     public Word limboToWord() {
         return this.getPlayerStatus().limboToWord(this.gameBag);
     }
@@ -129,6 +131,10 @@ public class GameInstance {
         b.setDictioaryCheck(this.gameBoard.getDictionaryCheck());
         this.gameBoard = b;
         this.boardTilesChangeEvent.alertChanged();
+    }
+
+    public int getScoreOf(String pName) {
+        return this.scoreBoard.get(pName);
     }
 
     public String getWinner() {

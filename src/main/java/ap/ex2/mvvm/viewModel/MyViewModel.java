@@ -8,6 +8,7 @@ import ap.ex2.mvvm.model.GameModel;
 import ap.ex2.mvvm.model.MainScreenModel;
 import ap.ex2.mvvm.model.host.HostGameModel;
 import ap.ex2.mvvm.view.PlayerTableRow;
+import ap.ex3.GameScrabbleServer.Saves.GameSave;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -45,6 +46,7 @@ public class MyViewModel extends ViewModel {
         this.resultHostPort = new SimpleStringProperty();
         this.nicknamePropertyTextField = new SimpleStringProperty();
         this.gameStatusStringProperty = new SimpleStringProperty();
+        this.loadGameIDTextField = new SimpleStringProperty();
 
         this.playerScoreboard = new SimpleObjectProperty<>();
         this.gameInstanceProperty = new SimpleObjectProperty<>();

@@ -55,6 +55,7 @@ public class MyMainScreenModel extends MainScreenModel {
 
     }
 
+
     private void startingModelCallback(Exception e) {
         if (e == null) {
             if (this.gameModel instanceof HostGameModel) {
