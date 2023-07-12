@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<!--Oh no :(-->
+
+<BorderPane prefHeight="661.0" prefWidth="978.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ap.ex2.mvvm.view.ControllerGameView">
+    <top>
+        <VBox alignment="CENTER" prefHeight="86.0" prefWidth="648.0" style="-fx-background-color: #ff93a0;" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="gameStatusLabel" alignment="TOP_LEFT" contentDisplay="CENTER" text="Nickname\nNewline">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20.0" top="20.0" />
+                    </VBox.margin>
+                </Label>
+                <HBox alignment="CENTER" prefHeight="109.0" prefWidth="500.0">
+                    <children>
+                  <Button fx:id="saveGameButton" mnemonicParsing="false" onAction="#saveGameButtonAction" text="Save Game">
+                     <HBox.margin>
+                        <Insets right="50.0" />
+                     </HBox.margin>
+                  </Button>
+                        <Label fx:id="portNum" text="Port">
+                            <HBox.margin>
+                                <Insets left="50.0" right="50.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="startGameButton" mnemonicParsing="false" onAction="#startGameButtonAction" text="Start Game">
+                            <HBox.margin>
+                                <Insets left="50.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" style="-fx-background-color: pink;" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <VBox fx:id="legend" prefHeight="435.0" prefWidth="145.0" spacing="10.0">
+                            <HBox>
+                                <Rectangle fill="#009900FF" height="10" width="10" />
+                                <Label text="Standard">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#64CCFFFF" height="10" width="10" />
+                                <Label text="Double Letter">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#0099FFFF" height="10" width="10" />
+                                <Label text="Triple Letter">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#FFFF99FF" height="10" width="10" />
+                                <Label text="Double Word">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                            <HBox>
+                                <Rectangle fill="#FF3333FF" height="10" width="10" />
+                                <Label text="Triple Word">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Label>
+                            </HBox>
+                     <HBox.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </HBox.margin>
+                        </VBox>
+                        <Canvas fx:id="boardCanvas" height="450.0" onMouseClicked="#clickedOnCanvasEvent" width="450.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Canvas>
+                    </children>
+                </HBox>
+                <Separator prefHeight="36.0" prefWidth="500.0" />
+                <Button fx:id="shuffleTiles" disable="true" mnemonicParsing="false" onAction="#shuffleTilesAction" prefHeight="28.0" prefWidth="152.0" text="Suffle tiles" />
+                <Label alignment="CENTER" prefHeight="23.0" prefWidth="90.0" text="Your Tiles:" textAlignment="CENTER" textFill="#306fa1">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ScrollPane fx:id="tilesSP" fitToHeight="true" fitToWidth="true" prefHeight="38.0" prefWidth="426.0">
+                    <content>
+                        <Canvas fx:id="tilesCanvas" height="65.0" onMouseClicked="#clickedOnCanvasEvent" width="463.0" />
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </center>
+    <right>
+        <VBox alignment="TOP_CENTER" prefHeight="487.0" prefWidth="158.0" style="-fx-background-color: lightpink;" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="skipTurnButton" mnemonicParsing="false" onAction="#skipTurnAction" prefHeight="25.0" prefWidth="109.0" text="Skip turn">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin></Button>
+                <Button fx:id="sendWordButton" mnemonicParsing="false" onAction="#sendWordAction" prefHeight="25.0" prefWidth="109.0" text="Send Word">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin></Button>
+                <Label text="Volume">
+               <VBox.margin>
+                  <Insets bottom="2.0" top="5.0" />
+               </VBox.margin></Label>
+                <Slider fx:id="volumeSlider" blockIncrement="0.2" majorTickUnit="0.1" max="1.0" minorTickCount="0" showTickMarks="true" value="0.7">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </VBox.margin></Slider>
+            <Button fx:id="Instructions" mnemonicParsing="false" onAction="#ShowInstructions" prefHeight="28.0" prefWidth="152.0" text="Show Game Instructions" />
+                <TableView fx:id="scoreBoard" prefHeight="134.0" prefWidth="158.0">
+                    <columns>
+                    </columns>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
+               </VBox.margin>
+                </TableView>
+            </children>
+        </VBox>
+    </right>
+</BorderPane>

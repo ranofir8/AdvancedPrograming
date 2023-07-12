@@ -1,6 +1,6 @@
 package ap.ex2.BookScrabbleServer;
 
-import ap.ex2.bookscrabble.Config;
+import ap.ex2.mvvm.Config;
 
 import java.util.Scanner;
 

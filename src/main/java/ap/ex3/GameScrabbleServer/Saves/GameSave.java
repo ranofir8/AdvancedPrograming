@@ -1,6 +1,6 @@
 package ap.ex3.GameScrabbleServer.Saves;
 
-import ap.ex2.scrabble.Board;
+import ap.ex2.scrabbleParts.Board;
 
 import java.util.ArrayList;
 import java.util.List;

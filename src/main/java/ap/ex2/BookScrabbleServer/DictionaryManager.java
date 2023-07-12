@@ -1,6 +1,6 @@
 package ap.ex2.BookScrabbleServer;
 
-import ap.ex2.dictionary.Dictionary;
+import ap.ex2.BookScrabbleServer.dictionary.Dictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
