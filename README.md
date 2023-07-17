@@ -4,24 +4,16 @@ Bar-Ilan 83-677 Course, 2023
 
 
 
-This project is a full Book Scrabble game in a desktop application. 
+This project is a Book Scrabble game that contains some features:
 
-The application is a JavaFX project and includes the following components:
+A desktop game application in 2 modes: host and guest (JavaFX application). see more details [here](https://github.com/ranofir8/AdvancedPrograming/tree/e1845d74d64ee9decfad7e636d67820716fe0f44/src/main/java/ap/ex2)
 
-A server for Book queries.
+A server for Book queries (Java application).
 
-A desktop game application with two modes:
+A server for saving and restoring games from our DB (RESTful API, MYSQL using Hibernate and TomCat services)
 
-    Host mode: Allows users to connect to the server and invite friends to play.
+A smartphone application (Android and iOS) to view details of a saved game
 
-    Guest mode: Enables users to join an existing game using the host's properties (IP and port).
-
-
-The Books the server uses as a dictionary:
-
-Alice in wonderland | Frank Herbert - Dune | Harry Potter
-
-mobydick | scrubble-sowpods | shakespeare | The Matrix
 
 
 # How To Build:
@@ -52,8 +44,8 @@ To start or join a game, run
 
 # Watch the Demo:
 
-    https://www.youtube.com/watch?v=N-JbX_DCnog
-![image](https://github.com/ranofir8/AdvancedPrograming/assets/105561820/f314248e-49d7-4f0e-a151-1f793a1eb352)
+see our presentation, including design, project architecture and insights [here](https://youtu.be/C2lWpTFEHnA)
+    to see a full demo of the game application and how to build- [click here](https://www.youtube.com/watch?v=N-JbX_DCnog)
 
 
 # The Team:
@@ -66,15 +58,4 @@ Ofir Yehezkel
 
 Moriya Weitzman
 
-
-# Next Steps:
-
-Implement HTTP communication between the model and the server in REST style.
-
-Implement saving games in a database using an ORM layer.
-
-Develop an Android application for guest players.
-
-
-![image](https://github.com/ranofir8/AdvancedPrograming/assets/105561820/f00d5225-d1ce-427d-8ca0-4d3d0e66c46a)
 
