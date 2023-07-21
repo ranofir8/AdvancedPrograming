@@ -4,15 +4,18 @@ Bar-Ilan 83-677 Course, 2023
 
 
 
+## About the project
+
 This project is a Book Scrabble game that contains some features:
 
-    A desktop game application in 2 modes: host and guest (JavaFX application). see more details [here](https://github.com/ranofir8/AdvancedPrograming/tree/e1845d74d64ee9decfad7e636d67820716fe0f44/src/main/java/ap/ex2)
 
-    A server for Book queries (Java application).
+A desktop game application in 2 modes: host and guest (JavaFX application). see more details about this application [here](https://shorturl.at/qxNVZ).
 
-    A server for saving and restoring games from our DB (RESTful API, MYSQL using Hibernate and TomCat services)
+A server for Book queries (Java application).
 
-    A smartphone application (Android and iOS) to view details of a saved game
+A server for saving and restoring games from our DB (RESTful API, MYSQL using Hibernate and TomCat services).
+
+A smartphone application (Android and iOS) to view details of a saved game.
 
 
 
