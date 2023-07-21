@@ -18,11 +18,14 @@ This project is a Book Scrabble game that contains some features:
 
 # How To Build:
 
-## Prerequisites:
+## Prerequisites for playing as guest/host:
 
 Open JDK - version 11+
 
 JavaFX JDK - javafx.fxml, javafx.controls, javafx.media
+
+## Additional prerequisites for running the GameServer (3rd milestone):
+TomCat v9
 
 
 ## Follow the steps below to build the project:
@@ -33,21 +36,31 @@ Go to Files -> New -> Import Project.
 
 Import the project from this repository.
 
-To start the server, run 
+### Running the servers
+To start the BookServer, run
 
-    src\main\java\ap\ex2\BookScrabbleServer\MainScrabbleServer.java.
+    src\main\java\ap\ex2\BookScrabbleServer\MainScrabbleServer.java
+To start the GameServer, run
+
+    src\main\java\ap\ex3\ with TomCat (package to WAR)
     
-To start or join a game, run 
+and MySQL with the correct tabels and [user: JavaUser ; password: eli]
+### Playing the game
+To host or join a game, run 
 
-    src\main\java\ap\ex2\bookscrabble\ScrabbleGame.java.
+    src\main\java\ap\ex2\bookscrabble\ScrabbleGame.java
     
-
-# Watch the Demo:
-
-see our presentation, including design, project architecture and insights [![here](https://img.youtube.com/vi/C2lWpTFEHnA/maxresdefault.jpg)](https://youtu.be/C2lWpTFEHnA)
-
+or (if the above will not work - missing JavaFX components)
     
-to see a full demo of the game application and how to build- [click here](https://www.youtube.com/watch?v=N-JbX_DCnog)
+    src\main\java\ap\ex2\bookscrabble\JarMain.java
+
+# Watch the Demos:
+
+1. Full demo of the game + how to build it (Up to the second milestone):
+   
+   [![here](https://img.youtube.com/vi/N-JbX_DCnog/mqdefault.jpg)](https://youtu.be/N-JbX_DCnog)
+3. See our presentation, including design, project architecture and insights (milestones three and four):
+   [![here](https://img.youtube.com/vi/AeEG5uR77gM/mqdefault.jpg)](https://youtu.be/AeEG5uR77gM)
 
 
 # The Team:
